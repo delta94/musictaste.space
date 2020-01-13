@@ -21,10 +21,9 @@ const ProfileModal = props => {
         <button className="close" onClick={props.toggleModal}>
           <i className="tim-icons icon-simple-remove text-white" />
         </button>
-        <img
-          className="img-fluid rounded-circle shadow-lg"
-          src={currentUser.photoURL}
-          alt=""
+        <div
+          className="modal-img-div shadow-lg"
+          style={{ backgroundImage: `url(${currentUser.photoURL})` }}
         />
       </div>
       <div className="modal-body">

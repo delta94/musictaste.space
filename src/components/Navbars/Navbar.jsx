@@ -30,15 +30,15 @@ class PagesNavbar extends React.Component {
   }
   changeColor = () => {
     if (
-      document.documentElement.scrollTop > 99 ||
-      document.body.scrollTop > 99
+      document.documentElement.scrollTop > 89 ||
+      document.body.scrollTop > 89
     ) {
       this.setState({
         color: 'bg-info',
       })
     } else if (
-      document.documentElement.scrollTop < 100 ||
-      document.body.scrollTop < 100
+      document.documentElement.scrollTop < 90 ||
+      document.body.scrollTop < 90
     ) {
       this.setState({
         color: 'navbar-transparent',
@@ -72,13 +72,12 @@ class PagesNavbar extends React.Component {
           <div className="navbar-translate">
             <NavbarBrand
               data-placement="bottom"
-              to="/"
+              to="/dashboard"
               rel="noopener noreferrer"
-              title="Designed and Coded by Creative Tim"
+              title="Designed and Coded by @_kalpal"
               tag={Link}
             >
-              <span>Spotify Compatibility • </span>
-              by @_kalpal
+              <span>musictaste.space •</span> by @_kalpal
             </NavbarBrand>
             <button
               aria-expanded={this.state.collapseOpen}
@@ -101,7 +100,7 @@ class PagesNavbar extends React.Component {
               <Row>
                 <Col className="collapse-brand" xs="6">
                   <a href="#pablo" onClick={e => e.preventDefault()}>
-                    Compatibility •
+                    <span role="img" aria-label="coolboy">👨‍🎤</span> 
                   </a>
                 </Col>
                 <Col className="collapse-close text-right" xs="6">
@@ -116,7 +115,7 @@ class PagesNavbar extends React.Component {
               </Row>
             </div>
             <Nav navbar>
-              <NavItem className="p-0">
+              {/* <NavItem className="p-0">
                 <NavLink
                   data-placement="bottom"
                   href="https://twitter.com/CreativeTim"
@@ -151,10 +150,15 @@ class PagesNavbar extends React.Component {
                   <i className="fab fa-instagram" />
                   <p className="d-lg-none d-xl-none">Instagram</p>
                 </NavLink>
-              </NavItem>
+              </NavItem> */}
               <NavItem>
                 <NavLink tag={Link} to="/about">
                   About
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} to="/dashboard">
+                  Dashboard
                 </NavLink>
               </NavItem>
               <NavbarLoginStatus/>

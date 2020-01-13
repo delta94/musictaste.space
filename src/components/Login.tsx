@@ -1,6 +1,7 @@
 import React from 'react'
-
+import { Dot } from './Aux/Dot'
 import firebase from './Firebase'
+import { Helmet } from 'react-helmet'
 const qs = require('query-string')
 
 /**
@@ -8,16 +9,24 @@ const qs = require('query-string')
  */
 function tokenReceived(
   data: { token: string },
-  history: { replace: (arg0: string) => void }
+  history: { push: (arg0: string) => void }
 ) {
-  console.log('TOKEN RECEIVED.')
   if (data.token) {
     firebase.app
       .auth()
       .signInWithCustomToken(data.token)
       .then(() => {
-        history.replace('/')
-        // document.location.replace('/dashboard')
+        window.close()
+        history.push('/dashboard')
+        return (
+          <div className="spotify-login">
+            <p className="spotify-login">
+              Logged in!
+              <br />
+              You can close this page.
+            </p>
+          </div>
+        )
       })
   } else {
     console.error(data)
@@ -37,10 +46,17 @@ const Login = ({ location, history }, ...props) => {
       </div>
     )
   } else if (!code) {
-    console.log(firebase.app.auth().currentUser)
     if (firebase.app.auth().currentUser) {
-      history.replace('/dashboard')
-      return <></>
+      window.close()
+      return (
+        <div className="spotify-login">
+          <p className="spotify-login">
+            Logged in!
+            <br />
+            You can close this page.
+          </p>
+        </div>
+      )
     } else {
       // Start the auth flow.
       // window.location.replace('http://localhost:5001/spotify-compatibility/asia-northeast1/redirect')
@@ -48,7 +64,14 @@ const Login = ({ location, history }, ...props) => {
       window.location.replace(process.env.REACT_APP_FUNCTION_REDIRECT as string)
       return (
         <div className="spotify-login">
-          <p className="spotify-login">Talking to Spotify...</p>
+          <Helmet>
+            <title>Login - musictaste.space</title>
+          </Helmet>
+          <p className="spotify-login">
+            Talking to Spotify<Dot>.</Dot>
+            <Dot>.</Dot>
+            <Dot>.</Dot>
+          </p>
         </div>
       )
     }
@@ -69,12 +92,19 @@ const Login = ({ location, history }, ...props) => {
       { credentials: 'include' }
     )
       .then(async res => {
-        tokenReceived(await res.json(), history)
+        return tokenReceived(await res.json(), history)
       })
       .catch(err => console.log(err))
     return (
       <div className="spotify-login">
-        <p className="spotify-login">Talking to Spotify...</p>
+        <Helmet>
+          <title>Login - musictaste.space</title>
+        </Helmet>
+        <p className="spotify-login">
+          Talking to Spotify<Dot>.</Dot>
+          <Dot>.</Dot>
+          <Dot>.</Dot>
+        </p>
       </div>
     )
   }

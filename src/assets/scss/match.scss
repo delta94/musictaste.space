@@ -1,0 +1,128 @@
+.match {
+  &.main-div {
+    display: flex;
+    height: 95vh;
+    width: 100vw;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    @media (max-width: 600px) {
+        margin-top: 50px;
+        height: 90vh;
+    }
+  }
+
+  .profile-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .profile-img-div {
+    height: 150px;
+    width: 150px;
+    border-radius: 75px;
+    border: 3px solid white;
+    margin-left: 10px;
+    margin-right: 10px;
+    overflow: hidden;
+    background: #eee no-repeat center;
+    background-size: cover;
+    @media (max-width: 600px) {
+      height: 100px;
+      width: 100px;
+      border-radius: 50px;
+      border: 2px solid white;
+    }
+    .profile-img {
+      height: 150px;
+      @media (max-width: 600px) {
+        height: 100px;
+      }
+    }
+  }
+
+
+  .anon-profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    text-align: center;
+    font-size: 4em;
+    background-color: white;
+    @media (max-width: 600px) {
+      width: 100px;
+      font-size: 3em;
+    }
+  }
+
+  .confirm-text {
+    padding-top: 20px;
+    width: 400px;
+    @media (max-width: 600px) {
+      width: auto;
+      margin-left: 30px;
+      margin-right: 30px;
+    }
+    p {
+      color: black;
+      font-size: 1.3em;
+      text-align: center;
+    }
+    .user-name {
+      font-size: 2em;
+    }
+    .smaller-text {
+      font-size: 1.2em;
+    }
+  }
+
+  .below-button {
+      position: relative;
+      width: 500px;
+      @media (max-width: 600px) {
+          width: auto;
+        margin-left: 30px;
+        margin-right: 30px;
+      }
+      .smaller-text {
+          font-size: 0.8em;
+      }
+  }
+
+  .user1 {
+    animation-delay: 1s;
+  }
+
+  .user2 {
+    animation-delay: 1s;
+  }
+
+  .start-button {
+    animation-delay: 3s;
+  }
+
+  .above-button {
+      animation-delay: 1s;
+  }
+
+  .below-button {
+      animation-delay: 4s;
+  }
+  .sign-in-button {
+    // background-image: url('../img/spotify-button.png') !important;
+    margin-top: 10px;
+    background-color: #badc58 !important;
+    color: #130f40;
+    background-image: none !important;
+    &:active {
+      background-color: #badc58 !important;
+      color: #130f40;
+    }
+  }
+
+  .waiting-text {
+    display: flex;
+  }
+}

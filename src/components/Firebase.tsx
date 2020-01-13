@@ -130,11 +130,15 @@ class Firebase {
     }
   }
 
-  public async importSpotifyData(uid: string): Promise<boolean> {
+  public async importSpotifyData(uid: string, force = false): Promise<boolean> {
     const res = await fetch(
-      (process.env.REACT_APP_FUNCTION_GET_SPOTIFY_DATA as string) +
-        '?uid=' +
-        uid
+      force
+        ? (process.env.REACT_APP_FUNCTION_GET_SPOTIFY_DATA as string) +
+            '?force=true&uid=' +
+            uid
+        : (process.env.REACT_APP_FUNCTION_GET_SPOTIFY_DATA as string) +
+            '?uid=' +
+            uid
     ).catch(err => {
       console.log(err)
       return undefined
@@ -144,6 +148,35 @@ class Firebase {
         success: boolean
       }
       return data.success
+    } else {
+      return false
+    }
+  }
+
+  public async compareUsers(
+    user: string,
+    matchUser: string,
+    state: string
+  ): Promise<string | boolean> {
+    const res = await fetch(
+      (process.env.REACT_APP_FUNCTION_COMPARE_USERS as string) +
+        '?userId=' +
+        user +
+        '&compareUserId=' +
+        matchUser +
+        '&state=' +
+        state
+    ).catch(err => {
+      console.log(err)
+      return undefined
+    })
+    if (res) {
+      const data = (await res.json()) as {
+        success: boolean
+        matchId: string
+      }
+      console.log(data)
+      return data.matchId
     } else {
       return false
     }
@@ -204,6 +237,96 @@ class Firebase {
       }
     }
     return undefined
+  }
+
+  /**
+   * Returns info about a user based on a match id.
+   * @param id match id of a user
+   */
+  public async getUserFromID(
+    id: string
+  ): Promise<IUsersLookupData | undefined> {
+    const doc = await this.app
+      .firestore()
+      .collection('users-lookup')
+      .doc(id)
+      .get()
+    if (!doc.exists) {
+      return undefined
+    } else {
+      const data = doc.data() as IUsersLookupData
+      if (data) {
+        return data
+      }
+    }
+    return undefined
+  }
+
+  /**
+   * Returns whether a user has a pre-existing match with an id.
+   * @param id match id of a user
+   */
+  public async userHasMatchForId(
+    user: string,
+    id: string
+  ): Promise<IMatchData | boolean> {
+    const doc = await this.app
+      .firestore()
+      .collection('users')
+      .doc(user)
+      .collection('matches')
+      .doc(id)
+      .get()
+    if (doc.exists) {
+      const d = doc.data()
+      return d ? d.matchId : false
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * Returns information about a match from a given matchId
+   * @param matchId match id unique to two users
+   */
+  public async getMatch(matchId: string): Promise<IMatchData | undefined> {
+    const doc = await this.app
+      .firestore()
+      .collection('matches')
+      .doc(matchId)
+      .get()
+    if (!doc.exists) {
+      return undefined
+    } else {
+      const data = doc.data() as IMatchData
+      if (data) {
+        return data
+      }
+    }
+    return undefined
+  }
+
+  /**
+   * Returns whether a user has access to a certain matchId
+   * @param user userId of query
+   * @param matchId match id unique to two users
+   */
+  public async userHasMatchForMatchId(
+    user: string,
+    matchId: string
+  ): Promise<{ exists: boolean; id?: string }> {
+    const collection = await this.app
+      .firestore()
+      .collection('users')
+      .doc(user)
+      .collection('matches')
+      .where('matchId', '==', matchId)
+      .get()
+    if (collection.empty) {
+      return { exists: false }
+    } else {
+      return { exists: true, id: collection.docs[0].id }
+    }
   }
 }
 export default new Firebase()

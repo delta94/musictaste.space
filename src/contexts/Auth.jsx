@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   const [spotifyToken, setSpotifyToken] = useState('')
+  const [userData, setUserData] = useState({})
   useEffect(() => {
     let sub = () => {}
     if (currentUser) {
@@ -22,18 +23,20 @@ export const AuthProvider = ({ children }) => {
         const source = doc.metadata.hasPendingWrites
         if (!source) {
           checkAccessToken(doc.data().accessToken, currentUser.uid).then(val => val ? setSpotifyToken(doc.data().accessToken) : null)
-          console.log("GOT SPOTIFY TOKEN.")
+          setUserData(doc.data())
         }
       })
     }
     return sub
   }, [currentUser])
 
+
   return (
     <AuthContext.Provider
       value={{
         currentUser,
         spotifyToken,
+        userData
       }}
     >
       {' '}

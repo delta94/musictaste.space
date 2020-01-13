@@ -15,7 +15,6 @@ interface IStatus {
 
 const ImportStatus = (props: any) => {
   const i = props.importStatus as IStatus
-  console.log(i.status)
   if (i.status.genres) {
     return (
       <div className="import-status">

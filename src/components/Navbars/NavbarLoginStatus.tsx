@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { NavItem, Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import ProfileModal from './ProfileModal'
@@ -15,7 +14,9 @@ class NavbarLoginStatus extends React.Component<{}, { modalOpen: boolean }> {
   public toggleModal = () => {
     this.setState({ modalOpen: !this.state.modalOpen })
   }
-
+  public handleClickLogin() {
+    window.open('/login', '_blank', 'height=585,width=500')
+  }
   public render() {
     return (
       <AuthContext.Consumer>
@@ -23,12 +24,12 @@ class NavbarLoginStatus extends React.Component<{}, { modalOpen: boolean }> {
           if (props.currentUser) {
             return (
               <NavItem>
-                <img
-                  className="img-fluid rounded-circle shadow-lg profile-pic"
-                  src={props.currentUser.photoURL}
-                  // tslint:disable-next-line: jsx-no-lambda
+                <div
+                  className="profile-pic-div shadow-lg img-fluid"
+                  style={{
+                    backgroundImage: `url(${props.currentUser.photoURL})`,
+                  }}
                   onClick={this.toggleModal}
-                  alt=""
                 />
                 <ProfileModal
                   isOpen={this.state.modalOpen}
@@ -40,9 +41,8 @@ class NavbarLoginStatus extends React.Component<{}, { modalOpen: boolean }> {
             return (
               <NavItem>
                 <Button
-                  tag={Link}
-                  to="/login"
-                  className="nav-link d-none d-lg-block nav-login btn-round"
+                  onClick={this.handleClickLogin}
+                  className="nav-link d-lg-block nav-login btn-round"
                 >
                   Sign In
                 </Button>

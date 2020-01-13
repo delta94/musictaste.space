@@ -8,7 +8,7 @@ function LogInButton() {
   const { currentUser } = useContext(AuthContext)
 
   function handleClickLogin() {
-    history.push('/login')
+    window.open('/login', '_blank', 'height=585,width=500')
   }
 
   function handleClickDashboard() {

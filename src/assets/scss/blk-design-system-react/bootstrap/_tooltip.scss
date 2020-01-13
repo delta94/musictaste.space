@@ -38,7 +38,7 @@
     &::before {
       top: 0;
       border-width: $tooltip-arrow-height ($tooltip-arrow-width / 2) 0;
-      border-top-color: $tooltip-arrow-color;
+      border-top-color: #ecf0f1;
     }
   }
 }
@@ -54,7 +54,7 @@
     &::before {
       right: 0;
       border-width: ($tooltip-arrow-width / 2) $tooltip-arrow-height ($tooltip-arrow-width / 2) 0;
-      border-right-color: $tooltip-arrow-color;
+      border-right-color: #ecf0f1;
     }
   }
 }
@@ -68,7 +68,7 @@
     &::before {
       bottom: 0;
       border-width: 0 ($tooltip-arrow-width / 2) $tooltip-arrow-height;
-      border-bottom-color: $tooltip-arrow-color;
+      border-bottom-color: #ecf0f1;
     }
   }
 }
@@ -84,7 +84,7 @@
     &::before {
       left: 0;
       border-width: ($tooltip-arrow-width / 2) 0 ($tooltip-arrow-width / 2) $tooltip-arrow-height;
-      border-left-color: $tooltip-arrow-color;
+      border-left-color: #ecf0f1;
     }
   }
 }
@@ -108,8 +108,8 @@
 .tooltip-inner {
   max-width: $tooltip-max-width;
   padding: $tooltip-padding-y $tooltip-padding-x;
-  color: $tooltip-color;
+  color: #2c3e50;
   text-align: center;
-  background-color: $tooltip-bg;
+  background-color: #ecf0f1;
   @include border-radius($tooltip-border-radius);
 }

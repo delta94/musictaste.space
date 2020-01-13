@@ -22,7 +22,6 @@ export const ArtistFloaters = (props: {
   artistURIs.push(topArtists[m % 31])
   artistURIs.push(topArtists[((m % 31) + m) % 31])
   artistURIs.push(topArtists[((m % 31) + 2 * m) % 31])
-  console.log(artistURIs)
   const colors: { [x: string]: string } = {
     bg: 'none',
     title: '#130f40',
