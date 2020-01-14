@@ -328,5 +328,40 @@ class Firebase {
       return { exists: true, id: collection.docs[0].id }
     }
   }
+
+  public async createPlaylist(
+    matchId: string,
+    reqUser: string,
+    state: string
+  ): Promise<{
+    success: boolean
+    error?: string[]
+    tracks?: string[]
+  }> {
+    const res = await fetch(
+      (process.env.REACT_APP_FUNCTION_CREATE_PLAYLIST as string) +
+        '?matchId=' +
+        matchId +
+        '&userId=' +
+        reqUser +
+        '&state=' +
+        state
+    ).catch(err => {
+      console.log(err)
+      return undefined
+    })
+    if (res) {
+      const data = (await res.json()) as {
+        success: boolean
+        error?: string[]
+        tracks?: string[]
+      }
+      console.log(data)
+      return data
+    } else {
+      return { success: false }
+    }
+  }
 }
+
 export default new Firebase()
