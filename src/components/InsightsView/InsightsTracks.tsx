@@ -5,13 +5,17 @@ const InsightsTracks = ({ userData }: { userData: ISpotifyUserData }) => {
     <div>
       {userData.topTracksLongTerm.length ? (
         <TracksContainer
-          tracksData={userData.topTracksLongTerm.slice(50)}
+          tracksData={userData.topTracksLongTerm
+            .slice(0, 49)
+            .concat(userData.topTracksLongTerm[51])}
           textData={{ code: 'lt', title: 'Long Term', lowercase: 'long-term' }}
         />
       ) : null}
       {userData.topTracksMediumTerm.length ? (
         <TracksContainer
-          tracksData={userData.topTracksMediumTerm.slice(50)}
+          tracksData={userData.topTracksMediumTerm
+            .slice(0, 49)
+            .concat(userData.topTracksMediumTerm[51])}
           textData={{
             code: 'mt',
             title: 'Medium Term',
@@ -21,7 +25,9 @@ const InsightsTracks = ({ userData }: { userData: ISpotifyUserData }) => {
       ) : null}
       {userData.topTracksShortTerm.length ? (
         <TracksContainer
-          tracksData={userData.topTracksShortTerm.slice(50)}
+          tracksData={userData.topTracksShortTerm
+            .slice(0, 49)
+            .concat(userData.topTracksShortTerm[51])}
           textData={{
             code: 'st',
             title: 'Short Term',
