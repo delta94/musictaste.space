@@ -18,7 +18,11 @@ interface IUserMatchData {
 }
 
 const MatchCard = (
-  { history, matchData }: { history: any; matchData: any },
+  {
+    history,
+    matchData,
+    onClick,
+  }: { history: any; matchData: any; onClick: (e: any) => void },
   ...props: any
 ) => {
   const { spotifyToken } = useContext(AuthContext)
@@ -91,13 +95,9 @@ const MatchCard = (
       width: 92vw;
     }
   `
-
-  const onCardClick = (e: any) => {
-    history.push('/match/' + data.matchId)
-  }
   return (
     <>
-      <div className="a-match animated fadeInUp" onClick={onCardClick}>
+      <div className="a-match animated fadeInUp" onClick={onClick}>
         <div className="text-div">
           {data.anon ? (
             <i

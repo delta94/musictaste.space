@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react'
+import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
-import { AuthContext } from '../../contexts/Auth'
 import { Button } from 'reactstrap'
-import firebase from '../Firebase'
+import { AuthContext } from '../../contexts/Auth'
 import { Dot } from '../Aux/Dot'
+import firebase from '../Firebase'
 
 function ConfirmOrLogInButton(props: any) {
   const history = useHistory()
@@ -14,10 +15,14 @@ function ConfirmOrLogInButton(props: any) {
 
   function handleClickLogin() {
     window.open('login', '_blank', 'height=585,width=500')
+    GoogleAnalytics.event({
+      category: 'Log In',
+      action: 'Logged In From Match Page',
+    })
   }
 
   const startCompareUsers = async () => {
-    let t = firebase.compareUsers(
+    const t = firebase.compareUsers(
       !anon ? userData.matchCode : userData.anonMatchCode,
       props.compareUser,
       userData.serverState
@@ -39,6 +44,10 @@ function ConfirmOrLogInButton(props: any) {
   function handleClickContinue() {
     if (!started) {
       startCompareUsers()
+      GoogleAnalytics.event({
+        category: 'Interaction',
+        action: 'Match With a User',
+      })
     }
     setStarted(true)
   }

@@ -10,13 +10,11 @@ const Header = ({
   matchUser,
   matchUserId,
   userData,
-  createPlaylist,
 }: {
   matchData: IMatchData
   matchUser: IUsersLookupData
   matchUserId: string
   userData: IUserProfile
-  createPlaylist: (e: any) => void
 }) => {
   const percentageRef = useRef(null)
   const [artistBackgroundURL, setArtistBackgroundURL] = useState('')
@@ -101,7 +99,7 @@ const Header = ({
         <div className="flex-container">
           <div className="user-results-container">
             <div className="profile-container animated fadeInUp">
-              <div className="user1" onClick={createPlaylist}>
+              <div className="user1">
                 <div
                   style={{ backgroundImage: `url(${userData.photoURL})` }}
                   className="profile-img"

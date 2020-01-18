@@ -10,11 +10,10 @@ const Genres = ({
 }) => {
   const genres = matchData.matchedGenres.filter(v => v.rank > 0)
   const rest = genres.length ? genres.slice(3) : []
-
-  const maxCount = genres.length ? genres[0].rank : 0
   const handleReturn = (e: any) => {
     history.push('/compatibility#matches')
   }
+  const maxCount = genres.length ? genres[0].rank : 0
   return (
     <div className="genres">
       <div className="genres-header">Genres</div>
@@ -37,14 +36,14 @@ const Genres = ({
             </div>
           )
         })}
-        <Button
-          className="btn-round sign-in-button return-button"
-          size="lg"
-          onClick={handleReturn}
-        >
-          Return to Compatibility
-        </Button>
       </div>
+      <Button
+        className="btn-round sign-in-button return-button"
+        size="lg"
+        onClick={handleReturn}
+      >
+        Return to Compatibility
+      </Button>
     </div>
   )
 }

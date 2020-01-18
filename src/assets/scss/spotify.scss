@@ -183,42 +183,6 @@ div.spotify-login {
         display: none;
       }
     }
-
-    &.card4 {
-      animation: move-left-right 53s infinite;
-      height: 400px;
-      width: 400px;
-      opacity: 0.9;
-      right: 27%;
-      top: 70%;
-    }
-
-    &.card5 {
-      animation: move-left-right 35s infinite;
-      height: 300px;
-      width: 300px;
-      opacity: 0.7;
-      left: 32%;
-      bottom: 29%;
-    }
-
-    &.card6 {
-      animation: move-left-right 40s infinite;
-      left: 10%;
-      top: 35%;
-      height: 80px;
-      width: 80px;
-      opacity: 0.8;
-    }
-
-    &.card7 {
-      animation: move-left-right 32s infinite;
-      width: 300px;
-      height: 300px;
-      right: -5%;
-      bottom: 0%;
-      opacity: 0.7;
-    }
   }
 }
 
@@ -263,6 +227,11 @@ div.spotify-login {
     }
   }
 
+}
+
+.underline {
+  border-bottom: 1px solid #16a085;
+  color: #16a085 !important;
 }
 
 .modal-img-div {

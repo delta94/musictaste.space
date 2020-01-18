@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import firebase from '../components/Firebase'
 import SpotifyWebApi from 'spotify-web-api-js'
+import GoogleAnalytics from 'react-ga'
+
 
 export const AuthContext = React.createContext()
 
@@ -15,6 +17,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     let sub = () => {}
     if (currentUser) {
+      GoogleAnalytics.set({ userId : currentUser.uid })
     sub = firebase.app
       .firestore()
       .collection('users')

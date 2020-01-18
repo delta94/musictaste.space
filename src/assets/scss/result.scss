@@ -335,6 +335,7 @@
   }
   .return-button {
     margin: 50px;
+    margin-bottom: 100px;
   }
 }
 
@@ -369,5 +370,31 @@
   .button-div {
     display: flex;
     justify-content: center;
+  }
+}
+.playlist-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 600px;
+  @media (max-width: 600px) {
+    height: 450px;
+    justify-content: flex-start;
+  }
+  .canvas {
+    @media (max-width: 600px) {
+      margin-top: -50px;
+    }
+  }
+
+  .playlist-text {
+    width: 400px;
+    text-align: center;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    @media (max-width: 600px) {
+    width: 90vw;
+    }
   }
 }

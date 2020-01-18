@@ -175,7 +175,6 @@ class Firebase {
         success: boolean
         matchId: string
       }
-      console.log(data)
       return data.matchId
     } else {
       return false
@@ -329,7 +328,7 @@ class Firebase {
     }
   }
 
-  public async createPlaylist(
+  public async generatePlaylist(
     matchId: string,
     reqUser: string,
     state: string
@@ -361,6 +360,23 @@ class Firebase {
     } else {
       return { success: false }
     }
+  }
+
+  public async createPlaylistInUser(
+    userId: string,
+    matchUser: string,
+    playlistId: string,
+    data: any
+  ) {
+    return await this.app
+      .firestore()
+      .collection('users')
+      .doc(userId)
+      .collection('matches')
+      .doc(matchUser)
+      .collection('playlists')
+      .doc(playlistId)
+      .set({ data })
   }
 }
 

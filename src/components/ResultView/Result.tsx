@@ -8,6 +8,7 @@ import Artists from './Artists'
 import Genres from './Genres'
 import Header from './Header'
 import Tracks from './Tracks'
+import Playlist from './Playlist'
 import Spotify from 'spotify-web-api-js'
 // @ts-ignore
 const Result = ({ location, history }, ...props: any) => {
@@ -18,24 +19,6 @@ const Result = ({ location, history }, ...props: any) => {
   const [matchData, setMatchData] = useState({} as IMatchData)
   const { matchId } = useParams()
   const [error, setError] = useState({ state: false, message: '' })
-
-  const createPlaylist = async (e: any) => {
-    const s = new Spotify()
-    const res = await firebase.createPlaylist(
-      matchId as string,
-      currentUser.uid,
-      userData.serverState
-    )
-    console.log(res)
-    if (res.success && res.tracks) {
-      const d = await s.createPlaylist(userData.spotifyID, {
-        name: `${matchUser.displayName} × ${userData.displayName}`,
-      })
-      console.log(d)
-      s.addTracksToPlaylist(d.id, res.tracks.slice(0, 50))
-      window.open(d.external_urls.spotify)
-    }
-  }
 
   useEffect(() => {
     const getMatchData = async (id: string) => {
@@ -67,6 +50,10 @@ const Result = ({ location, history }, ...props: any) => {
       getMatchData(matchId)
     }
   }, [currentUser, matchId])
+
+  const handleClick = (e: any) => {
+    history.push('/playlist/' + matchId + '?from=match')
+  }
   return (
     <>
       <SpotifyApiContext.Provider value={spotifyToken}>
@@ -79,7 +66,6 @@ const Result = ({ location, history }, ...props: any) => {
                 matchUser={matchUser}
                 userData={userData ? userData : {}}
                 matchUserId={matchUserId}
-                createPlaylist={createPlaylist}
               />
               <Artists
                 matchData={matchData}
@@ -94,6 +80,21 @@ const Result = ({ location, history }, ...props: any) => {
                 matchUserId={matchUserId}
               />
               <Genres history={history} matchData={matchData} />
+              {matchData.score > 0.5 ? (
+                <Playlist
+                  token={userData.accessToken}
+                  artistID={
+                    matchData.matchedArtists[
+                      Math.floor(
+                        Math.random() * matchData.matchedArtists.length
+                      )
+                    ].id
+                  }
+                  matchName={matchUser.displayName}
+                  handleClick={handleClick}
+                  profileImage={matchUser.imageURL}
+                />
+              ) : null}
             </>
           ) : (
             <div className="coming-soon">

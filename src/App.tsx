@@ -8,6 +8,7 @@ import HomeView from './components/Home/HomeView'
 import Insights from './components/InsightsView/Insights'
 import Login from './components/Login'
 import Match from './components/MatchView/Match'
+import Create from './components/PlaylistView/Create'
 import Playlist from './components/PlaylistView/Playlist'
 import Result from './components/ResultView/Result'
 import { withTracker } from './contexts/Analytics'
@@ -58,6 +59,11 @@ export default function SpotifyCompatibility() {
             exact={true}
             path="/insights"
             component={withTracker(Insights)}
+          />
+          <Route
+            exact={true}
+            path="/playlist/:matchId"
+            component={withTracker(Create)}
           />
         </div>
       </Router>
