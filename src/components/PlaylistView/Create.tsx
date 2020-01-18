@@ -101,6 +101,10 @@ const Create = (props: any) => {
       }
       return { success: false, error: playlistError }
     }
+    setError({
+      state: true,
+      message: JSON.stringify(playlistError),
+    })
     return { success: false, error: playlistError }
   }
 
