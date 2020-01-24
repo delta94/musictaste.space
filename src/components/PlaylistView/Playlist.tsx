@@ -2,15 +2,11 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import Navbar from '../Navbars/Navbar'
-import { Button } from 'reactstrap'
 import MatchContainer from './MatchContainer'
 
 const Playlist = (props: any) => {
   const history = useHistory()
 
-  const handleBackToDashboard = (e: any) => {
-    history.push('/dashboard')
-  }
   return (
     <>
       <Navbar />

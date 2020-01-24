@@ -81,8 +81,8 @@ const Header = ({
                 className="insights-text animated fadeInUp"
                 style={{ color: altTextColor }}
               >
-                Based on the Spotify data you imported, here are some insights
-                about your top artists, tracks and genres.
+                Based on the Spotify data you imported, scroll down to see
+                insights about your top artists, tracks and genres.
               </div>
               <div className="button-div animated fadeInUp">
                 <Button

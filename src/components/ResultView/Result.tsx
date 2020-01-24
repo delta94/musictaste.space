@@ -39,11 +39,19 @@ const Result = ({ location, history }, ...props: any) => {
           setMatchData(d)
         }
       } else {
-        setError({
-          state: true,
-          message:
-            "You don't have access to this match or the match does not exist.",
-        })
+        if (matchId === 'false') {
+          setError({
+            state: true,
+            message:
+              'The cloud function responded with a weird response, please try again.',
+          })
+        } else {
+          setError({
+            state: true,
+            message:
+              "You don't have access to this match or the match does not exist.",
+          })
+        }
       }
     }
     if (currentUser && matchId) {

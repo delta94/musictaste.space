@@ -156,7 +156,8 @@ class Firebase {
   public async compareUsers(
     user: string,
     matchUser: string,
-    state: string
+    state: string,
+    tries = 0
   ): Promise<string | boolean> {
     const res = await fetch(
       (process.env.REACT_APP_FUNCTION_COMPARE_USERS as string) +
@@ -177,7 +178,10 @@ class Firebase {
       }
       return data.matchId
     } else {
-      return false
+      if (tries === 2) {
+        return false
+      }
+      return await this.compareUsers(user, matchUser, state, tries + 1)
     }
   }
 
@@ -268,7 +272,7 @@ class Firebase {
   public async userHasMatchForId(
     user: string,
     id: string
-  ): Promise<IMatchData | boolean> {
+  ): Promise<IPreviewMatchData | boolean> {
     const doc = await this.app
       .firestore()
       .collection('users')
@@ -278,7 +282,7 @@ class Firebase {
       .get()
     if (doc.exists) {
       const d = doc.data()
-      return d ? d.matchId : false
+      return d ? (d as IPreviewMatchData) : false
     } else {
       return false
     }

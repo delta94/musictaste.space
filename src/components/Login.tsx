@@ -114,7 +114,11 @@ const Login = (props: any) => {
         return tokenReceived(await res.json())
       })
       .catch(err => {
-        setErrorData({ state: true, error: 'Machine Broke 😢', object: err })
+        setErrorData({
+          state: true,
+          error: 'Machine Broke 😢',
+          object: err,
+        })
         console.log(err)
       })
     return (
@@ -132,7 +136,7 @@ const Login = (props: any) => {
           <div>
             <p className="spotify-login">{errorData.error}</p>
             <p className="spotify-login" style={{ fontSize: '0.5em' }}>
-              {errorData.object.toString()}
+              {JSON.stringify(errorData.object)}
             </p>
           </div>
         )}

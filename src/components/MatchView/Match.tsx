@@ -11,7 +11,8 @@ const Match = ({ location, history }, ...props: any) => {
   window.scrollTo(0, 0)
   const { currentUser, userData } = useContext(AuthContext)
   const [matchUser, setMatchUser] = useState({} as IUsersLookupData)
-
+  const [rematch, setRematch] = useState(false)
+  const [matchCode, setMatchCode] = useState('')
   const query = qs.parse(location.search)
   if (
     !query.request ||
@@ -27,7 +28,15 @@ const Match = ({ location, history }, ...props: any) => {
         setMatchUser(d)
         const m = await firebase.userHasMatchForId(currentUser.uid, id)
         if (m) {
-          history.push('/match/' + m)
+          const match = m as IPreviewMatchData
+          if (
+            match.matchDate.toDate() < userData.importData.lastImport.toDate()
+          ) {
+            setRematch(true)
+            setMatchCode(match.matchId)
+          } else {
+            history.push('/match/' + match.matchId)
+          }
         }
       } else {
         history.push('/compatibility')
@@ -49,6 +58,10 @@ const Match = ({ location, history }, ...props: any) => {
       setDataOnly(query.request as string)
     }
   }, [currentUser, userData])
+
+  const onGoToMatch = (e: any) => {
+    history.push(`/match/${matchCode}`)
+  }
   return (
     <>
       <Navbar />
@@ -109,7 +122,9 @@ const Match = ({ location, history }, ...props: any) => {
           {currentUser ? (
             <>
               <p>
-                You are comparing tastes with
+                You are{' '}
+                {rematch ? <strong>rematching</strong> : 'comparing tastes'}{' '}
+                with
                 {matchUser.anon ? ' anonymous user:' : ':'}
               </p>
               <p className="user-name">
@@ -132,13 +147,34 @@ const Match = ({ location, history }, ...props: any) => {
           <ConfirmOrLoginButton
             compareUser={query.request}
             anon={matchUser.anon}
+            rematch={{ rematch, matchCode }}
           />
         </div>
+        {rematch ? (
+          <div
+            style={{ marginTop: '10px' }}
+            className="start-button animated fadeInUp"
+          >
+            <a
+              style={{
+                cursor: 'pointer',
+                paddingTop: '10px',
+                borderBottom: '1px solid',
+              }}
+              onClick={onGoToMatch}
+            >
+              See previous match
+            </a>
+          </div>
+        ) : null}
+
         <div className="confirm-text below-button animated fadeInUp">
           {currentUser ? (
             <>
               <p className="smaller-text">
-                {matchUser.anon
+                {rematch
+                  ? 'Since you are rematching with new data, your previous match will be overwritten.'
+                  : matchUser.anon
                   ? 'Because this is an anonymous match, your profile will appear as ' +
                     userData.anonMatchCode +
                     '. Your name and profile photo are not shared.'

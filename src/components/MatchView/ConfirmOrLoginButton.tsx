@@ -53,13 +53,15 @@ function ConfirmOrLogInButton(props: any) {
   }
 
   return currentUser ? (
-    <Button
-      className="btn-round sign-in-button"
-      size="lg"
-      onClick={handleClickContinue}
-    >
-      {continueText}
-    </Button>
+    <>
+      <Button
+        className="btn-round sign-in-button"
+        size="lg"
+        onClick={handleClickContinue}
+      >
+        {continueText}
+      </Button>
+    </>
   ) : (
     <Button
       className="btn-round sign-in-button"

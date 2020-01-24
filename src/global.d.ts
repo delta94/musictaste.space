@@ -30,6 +30,19 @@ interface IGenreDict {
   }
 }
 
+interface IPreviewMatchData {
+  anon: boolean
+  bgCode: {
+    id: string
+    type: string
+  }
+  displayName: string
+  matchDate: Timestamp
+  matchId: string
+  photoURL: string
+  score: number
+}
+
 interface ISpotifyUserData {
   topRelatedArtists: IArtist[]
   topArtistsLongTerm: IArtist[]

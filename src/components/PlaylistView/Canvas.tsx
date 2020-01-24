@@ -1,5 +1,4 @@
 import Color from 'color'
-import Vibrant from 'node-vibrant'
 import React from 'react'
 
 class Canvas extends React.Component<

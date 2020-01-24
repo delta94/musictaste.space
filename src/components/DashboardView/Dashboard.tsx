@@ -222,10 +222,12 @@ export function Me() {
                             Make Me A Playlist
                           </Menu3>
                           <br />
-                          {differenceInDays(
-                            importStatus.lastImport.toDate() as Date,
-                            new Date()
-                          ) > 6 ? (
+                          {Math.abs(
+                            differenceInDays(
+                              importStatus.lastImport.toDate() as Date,
+                              new Date()
+                            )
+                          ) > 0 ? (
                             <>
                               <Menu3
                                 className="menu button3"

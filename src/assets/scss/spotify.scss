@@ -240,3 +240,39 @@ div.spotify-login {
   border-radius: 162.5px;
   overflow: hidden;
 }
+
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .text-box {
+    margin-top: 200px;
+    padding-left: 50px;
+    padding-right: 50px;
+    @media (max-width: 600px) {
+      width: 85vw;
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+  }
+  p {
+    font-size: 1.1em;
+    color: #30336b;
+    text-align: justify;
+  }
+
+  h2 {
+    color: #30336b;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .button-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}

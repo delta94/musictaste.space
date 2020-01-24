@@ -32,11 +32,15 @@ const LandingPage = (props: any) => {
                     (or strangers!)
                   </span>
                 </h1>
-                <p className="text-white mb-5">
+                <p className="text-white mb-2">
                   Log in with Spotify to find out how compatible your music
                   taste is with your friends. Get your code, and share it with
                   others to see how your taste stacks up against the rest of the
                   world!
+                </p>
+                <p className="text-white mb-4">
+                  Although this app uses the Spotify API, it is not affiliated
+                  with Spotify. Don't sue me!
                 </p>
                 <div className="btn-wrapper">
                   <LogInButton />

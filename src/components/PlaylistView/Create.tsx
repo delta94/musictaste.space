@@ -57,9 +57,9 @@ const Create = (props: any) => {
           }`,
           description: `A special playlist just for ${
             userData.displayName
-          } and , ${
+          } and ${
             matchUser.anon ? matchUserId : matchUser.displayName
-          } made on musictaste.space.`,
+          }, made on musictaste.space.`,
         })
         .then(res => res)
         .catch(err => {
@@ -71,24 +71,20 @@ const Create = (props: any) => {
           })
         })) as { id: string }
       await s.uploadCustomPlaylistCoverImage(d.id, playlistImage)
-      let attempt = 0
       let tracks = { total: 0 }
       let playlistData
-      do {
-        attempt++
-        s.addTracksToPlaylist(d.id, res.tracks.slice(0, 50))
-        playlistData = await s
-          .getPlaylist(d.id)
-          .catch(err => (playlistError = err))
-        tracks = await s
-          .getPlaylistTracks(d.id)
-          .catch(err => (playlistError = err))
-      } while (tracks.total === 0 && attempt < 3)
-      if (attempt !== 3) {
+      s.addTracksToPlaylist(d.id, res.tracks.slice(0, 50))
+      playlistData = await s
+        .getPlaylist(d.id)
+        .catch(err => (playlistError = err))
+      tracks = await s
+        .getPlaylistTracks(d.id)
+        .catch(err => (playlistError = err))
+      if (tracks.total !== 0) {
         firebase
           .createPlaylistInUser(
             currentUser.uid,
-            matchUser.userId,
+            matchUserId,
             d.id,
             playlistData
           )
@@ -188,7 +184,8 @@ const Create = (props: any) => {
                   />
                 ) : null}
                 <div className="playlist-names">
-                  {matchUser.displayName} × {userData.displayName}
+                  {matchUser.anon ? matchUserId : matchUser.displayName} ×{' '}
+                  {userData.displayName}
                 </div>
                 <CreatePlaylistButton createPlaylist={createPlaylist} />
                 <p style={{ marginTop: '10px', marginBottom: '10px' }}>
