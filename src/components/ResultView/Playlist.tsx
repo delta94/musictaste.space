@@ -7,13 +7,12 @@ import Color from 'color'
 import Vibrant from 'node-vibrant'
 
 export default function Playlist(props: any) {
-  const history = useHistory()
   const doNothing = (something: any) => false
 
   const [artistImage, setArtistImage] = useState({})
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
   const [textColor, setTextColor] = useState('black')
-  const [altTextColor, setAltTextColor] = useState('black')
+  const [altTextColor, setAltTextColor] = useState('#30336b')
   const [altBackgroundColor, setAltBackgroundColor] = useState('#dff9fb')
   const s = new Spotify()
   s.setAccessToken(props.token)
@@ -47,7 +46,7 @@ export default function Playlist(props: any) {
               d = Color('#ecf0f1')
             }
             setTextColor(t.hex())
-            setAltTextColor(u.hex())
+            // setAltTextColor(u.hex())
             setAltBackgroundColor(d.hex())
             setBackgroundColor(c.hex())
           }

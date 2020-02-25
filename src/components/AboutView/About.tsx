@@ -28,27 +28,31 @@ const About = (props: any) => {
             <span>
               <strong>musictaste.space</strong> is a web app created by{' '}
               <a href="https://kalana.io">Kalana Vithana</a> (that&rsquo;s me!)
-              utilising the Spotify API to allow you to gain insights into your
-              listening habits and compare your music taste with friends.
-              I&rsquo;ve always loved my music and consider it a big influencer
-              to my personality, so when I kept running into the same question
-              of: &ldquo;So what kind of music do you listen to?&rdquo;, I knew
-              there must be an easier (and more fun) way to see which tracks,
-              artists and genres you had in common. So that&rsquo;s when I
-              created <strong>musictaste.space</strong> as a summer project in
-              early 2020.
+              that helps you gain insights into your Spotify listening habits
+              and compare your music taste with friends. I&rsquo;ve always found
+              a person's music taste to be a great indicator of the kind of
+              person they are, so when I kept running into the same question of:
+              &ldquo;So what kind of music do you listen to?&rdquo;, I knew
+              there must be an easier (and more fun) way to see which aspects of
+              your music taste you had in common. So, as Summer project in early
+              2020, I created <strong>musictaste.space</strong>.
             </span>
           </p>
           <p>
             <span>
-              Once you log in, you&rsquo;ll be prompted to import your Spotify
-              data (which you can do once a week!), and after it&rsquo;s done
-              analysing it, you&rsquo;ll be able to see your top artists, tracks
-              and genres as part of your insights. With your code and URL,
-              you&rsquo;re able to match with friends (or even anonymously with
-              strangers) to get a score on how compatible you are, as well as a
-              breakdown on the specifics of what you had in common.
+              At the moment, after importing your Spotify data, you're able to
+              see your top artists, tracks and genres as part of your insights.
+              With your code and URL, you&rsquo;re can match with friends (or
+              even anonymously with strangers) to get a score on how compatible
+              you are, as well as a breakdown on which artists and songs you
+              have a common interest in.
             </span>
+          </p>
+          <p>
+            <strong>
+              UPDATE: You can now generate playlists of tracks you have in
+              common with friends. No more fighting over the aux!
+            </strong>
           </p>
           <p>
             <span>
@@ -76,14 +80,14 @@ const About = (props: any) => {
           </h2>
           <p>
             <span>
-              The match score algorithm is not just based on the number of
-              tracks and artists you have in common. The algorithm analyses all
-              your top tracks for the genres which each artist falls into, as
-              well as importing related artists to those in your top 50. Each
-              artist can be classified into multiple genres by Spotify, so the
-              algorithm sorts genres with heavier preference for matches in
-              nicher categories, such as &ldquo;indietronica&rdquo; over broad
-              ones such as &ldquo;pop&rdquo;.&nbsp;
+              The match algorithm first analyses all your top tracks (in the
+              short, medium and long term) for the genres which each
+              corresponding artist falls into. Each artist can be classified
+              into multiple genres by Spotify, so the algorithm sorts genres
+              with heavier preference for matches in nicher categories, such as
+              &ldquo;indietronica&rdquo; over broad ones such as
+              &ldquo;pop&rdquo;.&nbsp; It then looks at which top artists you
+              have in common, along with your top tracks.
             </span>
           </p>
           <p>
@@ -92,25 +96,42 @@ const About = (props: any) => {
               weighted significantly higher than matches in your top tracks,
               which I think makes sense. Even though you might not listen to the
               exact same songs, if you have a preference to the same genres
-              (especially those of niches), it&rsquo;s a greater indicator of
-              you two having a good musical compatibility.&nbsp;
+              (especially those of niches), it&rsquo;s probably a stronger
+              indicator of you two having a good musical compatibility.&nbsp;
             </span>
           </p>
           <p>
             <span>
-              The algorithm used for creating a playlist of tracks you have in
-              common also uses a similar thought process. It puts all of the
-              tracks you had in common into a bucket first, and then looks at
-              your matched artists (and the artists of the matched shared
-              tracks) and goes through both of your top track libraries to see
-              if there are other tracks by those artists which only one of you
-              might have discovered. After this, it attempts to extract niche
-              categories which you both had in common, and does a second pass
-              through both of your top track libraries to see if any tracks fall
-              into those niche categories. The end result is (hopefully) a
-              playlist which contains songs which both of you already love, in
-              combination with tracks that lie in either one of your top track
-              libraries which the other might also end up enjoying.
+              Playlist generation uses a similar thought process. It puts all of
+              the tracks you have in common into a bucket, and then looks at
+              your matched artists and goes through both of your top track
+              libraries to see if there are other tracks by those artists. After
+              this, it attempts to extract niche genres which you both had in
+              common, and does a second pass through both of your top track
+              libraries to see if any tracks fall into those niche categories.
+              The end result is (hopefully) a playlist which contains songs
+              which both of you already love, in combination with tracks that
+              lie in either one of your top track libraries which the other
+              might also end up enjoying.
+            </span>
+          </p>
+          <h2>
+            <span>Privacy & Your Data&nbsp;</span>
+          </h2>
+          <p>
+            <span>
+              Your account data (display name, profile image and Spotify
+              username) as well as your music data are stored and managed by{' '}
+              <a href="https://firebase.google.com/products/firestore/">
+                Firebase
+              </a>
+              . By matching with a user, you share your account data with them
+              for them to identify a match as you. Your data may also be used
+              for general statistical analysis or demographic comparisons (ie.
+              How many people have Taylor Swift in their Top 10 artists? Do more
+              females like her than males?). If you'd like your data deleted,
+              please message me on{' '}
+              <a href="https://www.twitter.com/_kalpal">Twitter</a>.
             </span>
           </p>
           <h2>
@@ -118,15 +139,29 @@ const About = (props: any) => {
           </h2>
           <p>
             <span>
-              <strong>musictaste.space</strong> is built on a React frontend,
-              with a serverless stack powered by Firebase Firestore and Firebase
-              Cloud Functions. The project&rsquo;s own API really only exists
-              because it&rsquo;s difficult to run the comparison algorithm
-              client-side when access tokens for both users are required to pull
-              in additional Spotify data. The majority of calls for data, and
-              even the state management is done using the Firestore. I would
-              link my repo here but the code is a bit of a mess right now
-              so&hellip; maybe someday.
+              <strong>musictaste.space</strong> is built with React (
+              <a href="https://create-react-app.dev/">create-react-app</a>),
+              with a serverless stack powered by{' '}
+              <a href="https://firebase.google.com/products/firestore/">
+                Firebase Firestore
+              </a>{' '}
+              and{' '}
+              <a href="https://firebase.google.com/products/functions/">
+                Firebase Cloud Functions
+              </a>
+              . Since this is a small project, the Firestore is being used for
+              both state management and as an API service using document
+              subscriptions, with Cloud Functions assisting in more complicated
+              functionality, such as OAuth2 authorisation with the
+              <a href="https://developer.spotify.com/documentation/web-api/">
+                Spotify API
+              </a>
+              , as well as the user-to-user matching and playlist creation .
+              Files are hosted statically using{' '}
+              <a href="https://firebase.google.com/products/hosting/">
+                Firebase Hosting
+              </a>
+              .
             </span>
           </p>
           <div className="button-div">

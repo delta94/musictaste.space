@@ -18,7 +18,7 @@ const Result = ({ location, history }, ...props: any) => {
   const [matchUserId, setMatchUserId] = useState('')
   const [matchData, setMatchData] = useState({} as IMatchData)
   const { matchId } = useParams()
-  const [error, setError] = useState({ state: false, message: '' })
+  const [error, setError] = useState({ state: false, message: <></> })
 
   useEffect(() => {
     const getMatchData = async (id: string) => {
@@ -33,7 +33,7 @@ const Result = ({ location, history }, ...props: any) => {
         if (!d) {
           setError({
             state: true,
-            message: 'Something went wrong retrieving this match.',
+            message: <>Something went wrong retrieving this match.</>,
           })
         } else {
           setMatchData(d)
@@ -42,14 +42,22 @@ const Result = ({ location, history }, ...props: any) => {
         if (matchId === 'false') {
           setError({
             state: true,
-            message:
-              'The cloud function responded with a weird response, please try again.',
+            message: (
+              <>
+                Oops, something went wrong with the match making bot. Try again,
+                or if it's still not working, find me on{' '}
+                <a href="https://www.twitter.com/_kalpal">Twitter</a>.
+              </>
+            ),
           })
         } else {
           setError({
             state: true,
-            message:
-              "You don't have access to this match or the match does not exist.",
+            message: (
+              <>
+                You don't have access to this match or the match does not exist.
+              </>
+            ),
           })
         }
       }
@@ -98,7 +106,11 @@ const Result = ({ location, history }, ...props: any) => {
                       )
                     ].id
                   }
-                  matchName={matchUser.displayName}
+                  matchName={
+                    matchUser.anon
+                      ? 'this mysterious person'
+                      : matchUser.displayName
+                  }
                   handleClick={handleClick}
                   profileImage={matchUser.imageURL}
                 />

@@ -32,7 +32,7 @@ function UserCodes(props: any) {
     copy(
       (process.env.REACT_APP_MATCH_URL_BASE as string) +
         '/match?request=' +
-        userData.matchCode
+        (anonIDDisplay ? userData.anonMatchCode : userData.matchCode)
     )
     document
       .getElementsByClassName('url-copy-icon')[0]
@@ -67,7 +67,9 @@ function UserCodes(props: any) {
                   userData.spotifyID
                     ? process.env.REACT_APP_MATCH_URL_BASE +
                       '/match?request=' +
-                      userData.matchCode
+                      (anonIDDisplay
+                        ? userData.anonMatchCode
+                        : userData.matchCode)
                     : ''
                 }
                 onChange={doNothing}

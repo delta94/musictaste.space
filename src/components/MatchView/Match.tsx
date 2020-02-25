@@ -50,6 +50,7 @@ const Match = ({ location, history }, ...props: any) => {
     }
     if (currentUser && query.request && Object.entries(userData).length !== 0) {
       if (typeof userData.importData === 'undefined') {
+        localStorage.setItem('redirectMatch', query.request as string)
         history.push(`/dashboard?callback=true&page=match&id=${query.request}`)
       } else {
         getInfo(query.request as string)
@@ -86,11 +87,13 @@ const Match = ({ location, history }, ...props: any) => {
               </div>
               <div className="user2 animated fadeInRightBig">
                 {matchUser.anon ? (
-                  <i
-                    className="fas fa-user-secret profile-img anon-profile"
-                    aria-hidden="true"
-                    style={{ color: '#130f40' }}
-                  />
+                  <div className="profile-img-div">
+                    <i
+                      className="fas fa-user-secret profile-img anon-profile"
+                      aria-hidden="true"
+                      style={{ color: '#130f40' }}
+                    />
+                  </div>
                 ) : (
                   <div
                     className="profile-img-div"
@@ -103,11 +106,13 @@ const Match = ({ location, history }, ...props: any) => {
             <>
               <div className="user2 animated fadeInRightBig">
                 {matchUser.anon ? (
-                  <i
-                    className="fas fa-user-secret profile-img anon-profile"
-                    aria-hidden="true"
-                    style={{ color: '#130f40' }}
-                  />
+                  <div className="profile-img-div">
+                    <i
+                      className="fas fa-user-secret profile-img anon-profile"
+                      aria-hidden="true"
+                      style={{ color: '#130f40' }}
+                    />
+                  </div>
                 ) : (
                   <div
                     className="profile-img-div"

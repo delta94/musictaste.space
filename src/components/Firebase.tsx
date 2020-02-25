@@ -382,6 +382,16 @@ class Firebase {
       .doc(playlistId)
       .set({ data })
   }
+
+  public async getDemoData(): Promise<IDemoData | undefined> {
+    const data = (await this.app
+      .firestore()
+      .collection('app')
+      .doc('demo')
+      .get()
+      .then(doc => doc.data())) as IDemoData
+    return data
+  }
 }
 
 export default new Firebase()

@@ -107,7 +107,7 @@ const InsightsTracksContainer = ({
                 className="tracks-text"
                 style={{ color: altBackgroundColor }}
               >
-                Here are your {textData.lowercase} top 50 tracks according to
+                Here are your {textData.lowercase} top 30 tracks according to
                 Spotify.
               </div>
             </div>

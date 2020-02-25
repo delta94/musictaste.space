@@ -70,11 +70,11 @@ export function Me() {
 
   const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
   useEffect(() => {
-    if (importStatus.exists && currentUser && query.callback) {
-      if (query.page === 'match') {
-        history.push('/match?request=' + query.id)
-      }
-    } else if (importStatus.exists && currentUser) {
+    const redirectMatch = localStorage.getItem('redirectMatch')
+    if (importStatus.exists && currentUser && redirectMatch) {
+      localStorage.removeItem('redirectMatch')
+      history.push('/match?request=' + redirectMatch)
+    } else if (!importStatus.exists && currentUser) {
       firebase.getSpotifyData(currentUser.uid).then(data => {
         if (data) {
           setSpotifyData(data)
@@ -149,11 +149,17 @@ export function Me() {
 
   const onGetSpotifyData = (e: any) => {
     e.stopPropagation()
-    firebase.importSpotifyData(currentUser.uid)
+    if (!importStatus.loading) {
+      firebase.importSpotifyData(currentUser.uid)
+      setImportStatus({ ...emptyImport, loading: true })
+    }
   }
   const onReimportSpotifyData = (e: any) => {
     e.stopPropagation()
-    firebase.importSpotifyData(currentUser.uid, true)
+    if (!importStatus.loading) {
+      firebase.importSpotifyData(currentUser.uid, true)
+      setImportStatus({ ...emptyImport, loading: true })
+    }
   }
 
   const onClickHandle = (route: string) => (e: any) => history.push(route)
@@ -227,15 +233,15 @@ export function Me() {
                               importStatus.lastImport.toDate() as Date,
                               new Date()
                             )
-                          ) > 0 ? (
+                          ) >= 0 ? (
                             <>
-                              <Menu3
+                              <Menu1
                                 className="menu button3"
                                 unselectable="on"
                                 onClick={onReimportSpotifyData}
                               >
                                 Re-import My Data
-                              </Menu3>
+                              </Menu1>
                               <br />
                             </>
                           ) : null}

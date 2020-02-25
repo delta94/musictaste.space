@@ -3,6 +3,7 @@ import { AuthContext } from '../../contexts/Auth'
 import firebase from '../Firebase'
 import MatchCard from './MatchCard'
 import { Button } from 'reactstrap'
+import { Timestamp } from '@firebase/firestore-types'
 
 const MatchContainer = ({ history }: { history: any }, ...props: any) => {
   const [matches, setMatches] = useState([] as any)
@@ -47,8 +48,18 @@ const MatchContainer = ({ history }: { history: any }, ...props: any) => {
   const handleLoadMore = (e: any) => {
     setLoadPage(loadPage + 1)
   }
-  const onCardClick = (matchId: string) => (e: any) => {
-    history.push('/match/' + matchId)
+  const onCardClick = (matchId: string, matchDate: Timestamp, id: string) => (
+    e: any
+  ) => {
+    if (Object.entries(userData).length) {
+      if (matchDate.toDate() < userData.importData.lastImport.toDate()) {
+        history.push('/match?request=' + id)
+      } else {
+        history.push('/match/' + matchId)
+      }
+    } else {
+      history.push('/match/' + matchId)
+    }
   }
 
   return (
@@ -61,7 +72,11 @@ const MatchContainer = ({ history }: { history: any }, ...props: any) => {
                 history={history}
                 matchData={doc}
                 key={doc.id}
-                onClick={onCardClick(doc.data().matchId)}
+                onClick={onCardClick(
+                  doc.data().matchId,
+                  doc.data().matchDate,
+                  doc.id
+                )}
               />
             )
           })}

@@ -73,14 +73,14 @@ const InsightsArtists = ({ userData }: { userData: ISpotifyUserData }) => {
       </div>
       <div className="artists-container">
         <div className="artists-text" style={{ color: altBackgroundColor }}>
-          Here are your favourite 50 artists of all time according to Spotify.
+          Here are your favourite 30 artists of all time according to Spotify.
         </div>
       </div>
       <div className="rank-text" style={{ color: altBackgroundColor }}>
         <em>Rank: Yours</em>
       </div>
       {userData.topArtistsLongTerm.length ? (
-        <Artist id={userData.topArtistsLongTerm.map(v => v.id)}>
+        <Artist id={userData.topArtistsLongTerm.slice(0, 30).map(v => v.id)}>
           {(
             artists: SpotifyApi.MultipleArtistsResponse,
             loading: boolean,

@@ -100,7 +100,9 @@ class PagesNavbar extends React.Component {
               <Row>
                 <Col className="collapse-brand" xs="6">
                   <a href="#pablo" onClick={e => e.preventDefault()}>
-                    <span role="img" aria-label="coolboy">👨‍🎤</span> 
+                    <span role="img" aria-label="coolboy">
+                      👨‍🎤
+                    </span>
                   </a>
                 </Col>
                 <Col className="collapse-close text-right" xs="6">
@@ -157,11 +159,17 @@ class PagesNavbar extends React.Component {
                 </NavLink>
               </NavItem>
               <NavItem>
+                <NavLink tag={Link} to="/compatibility">
+                  Match
+                </NavLink>
+              </NavItem>
+              <NavItem>
                 <NavLink tag={Link} to="/dashboard">
                   Dashboard
                 </NavLink>
               </NavItem>
-              <NavbarLoginStatus/>
+
+              <NavbarLoginStatus />
             </Nav>
           </Collapse>
         </Container>

@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import LogInButton from './LogInButton'
 import { Helmet } from 'react-helmet'
 import { Row, Col } from 'reactstrap'
+import DemoMatch from './DemoMatch'
+import Firebase from '../Firebase'
 
 // core components
 import Navbar from '../Navbars/Navbar'
@@ -10,6 +12,10 @@ import Navbar from '../Navbars/Navbar'
 // import bigChartData from 'variables/charts.jsx'
 
 const LandingPage = (props: any) => {
+  // const [demoData, setDemoData] = useState(false)
+  // useEffect(() => {
+  //   Firebase.getDemoData().then(setDemoData as any)
+  // }, [])
   return (
     <>
       <Navbar />
@@ -57,6 +63,11 @@ const LandingPage = (props: any) => {
           </div>
         </div>
       </div>
+      {/* <div className="demo">
+        <div className="result-container">
+          {demoData ? <DemoMatch demoData={demoData as any} /> : null}
+        </div>
+      </div> */}
     </>
   )
 }

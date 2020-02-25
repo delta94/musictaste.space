@@ -118,3 +118,32 @@ interface IUserProfile {
     loading?: boolean
   }
 }
+
+interface IDemoMatch {
+  score: number
+  topArtists: {
+    name: string
+    images: string[]
+    external_urls: {
+      spotify: string
+    }
+  }[]
+  topTrack: {
+    name: string
+    images: string[]
+    artist: string
+    external_urls: {
+      spotify: string
+    }
+  }
+}
+
+interface IDemoUser {
+  name: string
+  imageURL: string
+}
+
+interface IDemoData {
+  matches: IDemoMatch[]
+  users: IDemoUser[]
+}

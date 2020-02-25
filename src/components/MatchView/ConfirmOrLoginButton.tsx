@@ -14,11 +14,17 @@ function ConfirmOrLogInButton(props: any) {
   const anon = props.anon
 
   function handleClickLogin() {
-    window.open('login', '_blank', 'height=585,width=500')
+    const isMobile = window.matchMedia('only screen and (max-width: 760px)')
+      .matches
+    localStorage.setItem('redirectMatch', props.compareUser as string)
     GoogleAnalytics.event({
       category: 'Log In',
       action: 'Logged In From Match Page',
     })
+    // if mobile, redirect to login instead of pop up login
+    isMobile
+      ? history.push('/login')
+      : window.open('login', '_blank', 'height=585,width=500')
   }
 
   const startCompareUsers = async () => {
