@@ -17,6 +17,7 @@ function ConfirmOrLogInButton(props: any) {
     const isMobile = window.matchMedia('only screen and (max-width: 760px)')
       .matches
     localStorage.setItem('redirectMatch', props.compareUser as string)
+    localStorage.setItem('redirectTimestamp', new Date().toJSON())
     GoogleAnalytics.event({
       category: 'Log In',
       action: 'Logged In From Match Page',
@@ -59,15 +60,29 @@ function ConfirmOrLogInButton(props: any) {
   }
 
   return currentUser ? (
-    <>
-      <Button
-        className="btn-round sign-in-button"
-        size="lg"
-        onClick={handleClickContinue}
-      >
-        {continueText}
-      </Button>
-    </>
+    Object.entries(userData).length && props.compareUser ? (
+      <>
+        <Button
+          className="btn-round sign-in-button"
+          size="lg"
+          onClick={handleClickContinue}
+        >
+          {continueText}
+        </Button>
+      </>
+    ) : (
+      <>
+        <Button className="btn-round sign-in-button" size="lg">
+          <>
+            <div className="waiting-text">
+              <Dot>.</Dot>
+              <Dot>.</Dot>
+              <Dot>.</Dot>
+            </div>
+          </>
+        </Button>
+      </>
+    )
   ) : (
     <Button
       className="btn-round sign-in-button"
