@@ -2,6 +2,7 @@ import { DocumentData } from '@firebase/firestore-types'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/functions'
 
 interface IUserData extends DocumentData {
   data?: {
@@ -30,6 +31,9 @@ interface IUserData extends DocumentData {
 
 class Firebase {
   public app: firebase.app.App
+  private functions: {
+    httpsCallable: (s: string) => firebase.functions.HttpsCallable
+  }
   constructor() {
     this.app = firebase.initializeApp({
       apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -41,6 +45,11 @@ class Firebase {
       appId: process.env.REACT_APP_FIREBASE_APP_ID,
       measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
     })
+    this.functions = this.app.functions('asia-northeast1')
+    if (process.env.NODE_ENV === 'development') {
+      const functions = firebase.functions()
+      functions.useFunctionsEmulator('http://localhost:5001')
+    }
   }
 
   /**
@@ -49,11 +58,7 @@ class Firebase {
    * @returns access token or null
    */
   public async getSpotifyToken(uid: string): Promise<string | undefined> {
-    const doc = await this.app
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .get()
+    const doc = await this.app.firestore().collection('users').doc(uid).get()
     if (!doc.exists) {
       return undefined
     } else {
@@ -70,11 +75,7 @@ class Firebase {
    * @param uid User ID of a user
    */
   public async getDisplayName(uid: string): Promise<string | undefined> {
-    const doc = await this.app
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .get()
+    const doc = await this.app.firestore().collection('users').doc(uid).get()
     if (!doc.exists) {
       return undefined
     } else {
@@ -91,11 +92,7 @@ class Firebase {
    * @param uid User ID
    */
   public async getProfilePicture(uid: string): Promise<string | undefined> {
-    const doc = await this.app
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .get()
+    const doc = await this.app.firestore().collection('users').doc(uid).get()
     if (!doc.exists) {
       return undefined
     } else {
@@ -116,7 +113,7 @@ class Firebase {
       (process.env.REACT_APP_FUNCTION_REFRESH_CREDENTIALS as string) +
         '?uid=' +
         uid
-    ).catch(err => {
+    ).catch((err) => {
       console.log(err)
       return undefined
     })
@@ -131,26 +128,9 @@ class Firebase {
   }
 
   public async importSpotifyData(uid: string, force = false): Promise<boolean> {
-    const res = await fetch(
-      force
-        ? (process.env.REACT_APP_FUNCTION_GET_SPOTIFY_DATA as string) +
-            '?force=true&uid=' +
-            uid
-        : (process.env.REACT_APP_FUNCTION_GET_SPOTIFY_DATA as string) +
-            '?uid=' +
-            uid
-    ).catch(err => {
-      console.log(err)
-      return undefined
-    })
-    if (res) {
-      const data = (await res.json()) as {
-        success: boolean
-      }
-      return data.success
-    } else {
-      return false
-    }
+    const cf = this.functions.httpsCallable('getSpotifyData')
+    const call = await cf({ uid, force }).then((res) => res.data)
+    return call ? call.success : false
   }
 
   public async compareUsers(
@@ -159,24 +139,14 @@ class Firebase {
     state: string,
     tries = 0
   ): Promise<string | boolean> {
-    const res = await fetch(
-      (process.env.REACT_APP_FUNCTION_COMPARE_USERS as string) +
-        '?userId=' +
-        user +
-        '&compareUserId=' +
-        matchUser +
-        '&state=' +
-        state
-    ).catch(err => {
-      console.log(err)
-      return undefined
-    })
+    const cf = this.functions.httpsCallable('compareUsers')
+    const res = await cf({
+      userId: user,
+      compareUserId: matchUser,
+      state,
+    }).then((res) => res.data)
     if (res) {
-      const data = (await res.json()) as {
-        success: boolean
-        matchId: string
-      }
-      return data.matchId
+      return res.matchId
     } else {
       if (tries === 2) {
         return false
@@ -192,11 +162,7 @@ class Firebase {
   public async getImportStatus(
     uid: string
   ): Promise<IImportStatus | undefined> {
-    const doc = await this.app
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .get()
+    const doc = await this.app.firestore().collection('users').doc(uid).get()
     if (!doc.exists) {
       return undefined
     } else {
@@ -226,11 +192,7 @@ class Firebase {
    * @param uid User ID
    */
   public async getSpotifyData(uid: string) {
-    const doc = await this.app
-      .firestore()
-      .collection('spotify')
-      .doc(uid)
-      .get()
+    const doc = await this.app.firestore().collection('spotify').doc(uid).get()
     if (!doc.exists) {
       return undefined
     } else {
@@ -341,25 +303,11 @@ class Firebase {
     error?: string[]
     tracks?: string[]
   }> {
-    const res = await fetch(
-      (process.env.REACT_APP_FUNCTION_CREATE_PLAYLIST as string) +
-        '?matchId=' +
-        matchId +
-        '&userId=' +
-        reqUser +
-        '&state=' +
-        state
-    ).catch(err => {
-      console.log(err)
-      return undefined
-    })
-    if (res) {
-      const data = (await res.json()) as {
-        success: boolean
-        error?: string[]
-        tracks?: string[]
-      }
-      console.log(data)
+    const cf = this.functions.httpsCallable('createPlaylist')
+    const data = await cf({ matchId, userId: reqUser, state }).then(
+      (res) => res.data
+    )
+    if (data) {
       return data
     } else {
       return { success: false }
@@ -389,7 +337,7 @@ class Firebase {
       .collection('app')
       .doc('demo')
       .get()
-      .then(doc => doc.data())) as IDemoData
+      .then((doc) => doc.data())) as IDemoData
     return data
   }
 }
