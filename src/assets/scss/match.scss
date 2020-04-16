@@ -7,8 +7,8 @@
     align-items: center;
     justify-content: center;
     @media (max-width: 600px) {
-        margin-top: 50px;
-        height: 90vh;
+      margin-top: 50px;
+      height: 90vh;
     }
   }
 
@@ -40,7 +40,6 @@
       }
     }
   }
-
 
   .anon-profile {
     display: flex;
@@ -79,16 +78,16 @@
   }
 
   .below-button {
-      position: relative;
-      width: 500px;
-      @media (max-width: 600px) {
-          width: auto;
-        margin-left: 30px;
-        margin-right: 30px;
-      }
-      .smaller-text {
-          font-size: 0.8em;
-      }
+    position: relative;
+    width: 500px;
+    @media (max-width: 600px) {
+      width: auto;
+      margin-left: 30px;
+      margin-right: 30px;
+    }
+    .smaller-text {
+      font-size: 0.8em;
+    }
   }
 
   .user1 {
@@ -104,11 +103,11 @@
   }
 
   .above-button {
-      animation-delay: 1s;
+    animation-delay: 1s;
   }
 
   .below-button {
-      animation-delay: 4s;
+    animation-delay: 4s;
   }
   .sign-in-button {
     // background-image: url('../img/spotify-button.png') !important;
@@ -121,9 +120,32 @@
       color: #130f40;
     }
   }
+  .discord-link-button {
+    // background-image: url('../img/spotify-button.png') !important;
+    margin-top: 10px;
+    background-color: #7289da !important;
+    color: #ffffff;
+    background-image: none !important;
+    &:active {
+      background: #7289da !important;
+      background-color: #7289da !important;
+      color: #ffffff;
+    }
+  }
+  .discord-linked-button {
+    // background-image: url('../img/spotify-button.png') !important;
+    margin-top: 10px;
+    background-color: #99aab5 !important;
+    color: #ffffff;
+    background-image: none !important;
+    &:active {
+      background: #99aab5 !important;
+      background-color: #99aab5 !important;
+      color: #ffffff;
+    }
+  }
 }
 
 .waiting-text {
   display: flex;
 }
-
