@@ -4,8 +4,10 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import About from './components/AboutView/About'
 import Compatibility from './components/CompatibilityView/Compatibility'
 import Dashboard from './components/DashboardView/Dashboard'
+import Discord from './components/DiscordView/Discord'
 import HomeView from './components/Home/HomeView'
 import Insights from './components/InsightsView/Insights'
+import LinkDiscord from './components/LinkDiscord'
 import Login from './components/Login'
 import Match from './components/MatchView/Match'
 import Create from './components/PlaylistView/Create'
@@ -21,8 +23,9 @@ import './assets/css/nucleo-icons.css'
 import './assets/scss/blk-design-system-react.scss'
 
 export default function SpotifyCompatibility() {
-  GoogleAnalytics.initialize(process.env
-    .REACT_APP_FIREBASE_MEASUREMENT_ID as string)
+  GoogleAnalytics.initialize(
+    process.env.REACT_APP_FIREBASE_MEASUREMENT_ID as string
+  )
   return (
     <AuthProvider>
       <Helmet>
@@ -64,6 +67,16 @@ export default function SpotifyCompatibility() {
             exact={true}
             path="/playlist/:matchId"
             component={withTracker(Create)}
+          />
+          <Route
+            exact={true}
+            path="/discord"
+            component={withTracker(Discord)}
+          />
+          <Route
+            exact={true}
+            path="/discord/login"
+            component={withTracker(LinkDiscord)}
           />
         </div>
       </Router>
