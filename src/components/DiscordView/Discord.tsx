@@ -50,9 +50,23 @@ const Discord = () => {
                 ? !userData.discord
                   ? 'Link your Discord account to interact with the musictaste.space bot on servers!'
                   : 'You have already linked your Discord account, nice!'
-                : 'Compare music tastes with friends on musictaste.space. You can link your Discord once you log in!'}
+                : 'Compare music tastes with friends on musictaste.space and now on selected Discord servers. You can link your Discord once you log in!'}
             </p>
             <LinkDiscordButton />
+          </div>
+        </div>
+
+        <div className="discord-container discord-bot">
+          {/* <div className="description">Invite Discord Bot</div> */}
+
+          <div className="discord-bot-img" />
+          <div className="description">
+            The Discord Bot is currently in beta and is being tested selectively
+            on a few servers. Reach out to me on{' '}
+            <a className="discord-link" href="https://twitter.com/_kalpal">
+              Twitter
+            </a>{' '}
+            if you spot any bugs or would like to give it a go!
           </div>
         </div>
       </div>
