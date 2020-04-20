@@ -1,8 +1,9 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
-import Navbar from '../Navbars/Navbar'
+import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
+import Navbar from '../Navbars/Navbar'
 
 const About = (props: any) => {
   const history = useHistory()
@@ -30,7 +31,7 @@ const About = (props: any) => {
               <a href="https://kalana.io">Kalana Vithana</a> (that&rsquo;s me!)
               that helps you gain insights into your Spotify listening habits
               and compare your music taste with friends. I&rsquo;ve always found
-              a person's music taste to be a great indicator of the kind of
+              a &rsquo;s music taste to be a great indicator of the kind of
               person they are, so when I kept running into the same question of:
               &ldquo;So what kind of music do you listen to?&rdquo;, I knew
               there must be an easier (and more fun) way to see which aspects of
@@ -49,17 +50,18 @@ const About = (props: any) => {
             </span>
           </p>
           <p>
-            <strong>
-              UPDATE: You can now generate playlists of tracks you have in
-              common with friends. No more fighting over the aux!
-            </strong>
-          </p>
-          <p>
             <span>
               If you run into bugs, have any feature requests or just want to
               chat about music, feel free to reach out to me on{' '}
               <a href="https://www.twitter.com/_kalpal">my Twitter</a>.
             </span>
+          </p>
+          <p style={{ textAlign: 'center' }}>
+            <strong>
+              The musictaste Discord bot is now in beta! Click{' '}
+              <Link to="/discord">here</Link> to link your account or invite the
+              bot to your channel.
+            </strong>
           </p>
           <p>
             <span>
@@ -152,11 +154,11 @@ const About = (props: any) => {
               . Since this is a small project, the Firestore is being used for
               both state management and as an API service using document
               subscriptions, with Cloud Functions assisting in more complicated
-              functionality, such as OAuth2 authorisation with the
+              functionality, such as OAuth2 authorisation with the{' '}
               <a href="https://developer.spotify.com/documentation/web-api/">
                 Spotify API
               </a>
-              , as well as the user-to-user matching and playlist creation .
+              , as well as the user-to-user matching and playlist creation.
               Files are hosted statically using{' '}
               <a href="https://firebase.google.com/products/hosting/">
                 Firebase Hosting
@@ -164,15 +166,22 @@ const About = (props: any) => {
               .
             </span>
           </p>
-          <div className="button-div">
-            <Button
-              className="btn-round sign-in-button"
-              size="md"
-              onClick={handleBackToDashboard}
-            >
-              Back To Dashboard
-            </Button>
-          </div>
+        </div>
+        <div className="about-logo">
+          <img
+            alt="musictaste.space logo"
+            className="img-fluid"
+            src={'/logo-sml.png'}
+          />
+        </div>
+        <div className="button-div">
+          <Button
+            className="btn-round sign-in-button"
+            size="md"
+            onClick={handleBackToDashboard}
+          >
+            Back To Dashboard
+          </Button>
         </div>
       </div>
     </>

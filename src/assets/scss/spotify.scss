@@ -17,7 +17,7 @@ nav {
       // align-items: center;
       // justify-content: center;
     }
-    }
+  }
   .profile-pic-div {
     height: 50px;
     width: 50px;
@@ -33,7 +33,6 @@ nav {
       height: 50px;
     }
   }
-
 
   .nav-login {
     background-color: #badc58 !important;
@@ -96,44 +95,43 @@ div.spotify-login {
       user-select: none;
       // transition: 2s !important;
       @media (max-width: 600px) {
-          font-size: 1.5em !important;
+        font-size: 1.5em !important;
       }
       @media (max-width: 480px) {
-          padding: 2px 4px;
+        padding: 2px 4px;
       }
     }
   }
 
   .menu-text {
     text-decoration: none;
-      padding: 2px 6px;
-      font-size: 1.5em !important;
-      letter-spacing: -1px;
-      transition: background-color 0.08s ease-in-out, color 0.08s ease-in-out;
-      font-weight: 700;
-      cursor: pointer;
-      user-select: none;
-      color:#30336b; 
-      // transition: 2s !important;
-      @media (max-width: 600px) {
-          font-size: 1.2em !important;
-      }
-      @media (max-width: 480px) {
-          padding: 2px 4px;
-      }
+    padding: 2px 6px;
+    font-size: 1.5em !important;
+    letter-spacing: -1px;
+    transition: background-color 0.08s ease-in-out, color 0.08s ease-in-out;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    color: #30336b;
+    // transition: 2s !important;
+    @media (max-width: 600px) {
+      font-size: 1.2em !important;
+    }
+    @media (max-width: 480px) {
+      padding: 2px 4px;
+    }
   }
 
-
   .import-status {
-      font-size: 2em;
-      font-weight: 700;
-      @media (max-width: 600px) {
-        font-size: 1.5em !important;
+    font-size: 2em;
+    font-weight: 700;
+    @media (max-width: 600px) {
+      font-size: 1.5em !important;
     }
   }
 
   .spotify-cards {
-         animation: fadein 2s;
+    animation: fadein 2s;
     // @include linear-gradient($primary-states, $primary);
     position: absolute;
     transition: 5s ease-out;
@@ -186,10 +184,13 @@ div.spotify-login {
   }
 }
 
-
 @keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .waiting {
@@ -199,8 +200,8 @@ div.spotify-login {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-    .sign-in {
-      animation-delay: 3s;
+  .sign-in {
+    animation-delay: 3s;
   }
 }
 
@@ -226,7 +227,6 @@ div.spotify-login {
       }
     }
   }
-
 }
 
 .underline {
@@ -274,5 +274,10 @@ div.spotify-login {
     justify-content: center;
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+  .about-logo {
+    margin: 50px 50px;
+    justify-self: center;
+    align-self: center;
   }
 }

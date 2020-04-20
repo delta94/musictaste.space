@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
-import { Helmet } from 'react-helmet'
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router'
+import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import Navbar from '../Navbars/Navbar'
 import LinkDiscordButton from './LinkDiscordButton'
 
 const Discord = () => {
   const { currentUser, userData } = useContext(AuthContext)
+  const history = useHistory()
   return (
     <>
       <Navbar />
@@ -50,7 +51,7 @@ const Discord = () => {
                 ? !userData.discord
                   ? 'Link your Discord account to interact with the musictaste.space bot on servers!'
                   : 'You have already linked your Discord account, nice!'
-                : 'Compare music tastes with friends on musictaste.space and now on selected Discord servers. You can link your Discord once you log in!'}
+                : 'Compare music tastes with friends on musictaste.space and now on selected Discord servers. You can link your Discord account here once you log in!'}
             </p>
             <LinkDiscordButton />
           </div>
@@ -61,12 +62,26 @@ const Discord = () => {
 
           <div className="discord-bot-img" />
           <div className="description">
-            The Discord Bot is currently in beta and is being tested selectively
-            on a few servers. Reach out to me on{' '}
+            The Discord Bot is currently in <i>beta</i> and is being tested
+            selectively on a few servers. Want to give it a go? Click{' '}
+            <a
+              className="discord-link"
+              href="https://discordapp.com/oauth2/authorize?client_id=699855489487470594&scope=bot"
+            >
+              here
+            </a>{' '}
+            to invite the bot to a server you manage. Use '!mt help' to see all
+            commands.
+            <br /> <br />
+            <strong>
+              Please keep in mind that some functionality may be unstable and
+              availability is not guaranteed.
+            </strong>{' '}
+            If you spot bugs or have feature request, please reach out to me on{' '}
             <a className="discord-link" href="https://twitter.com/_kalpal">
               Twitter
-            </a>{' '}
-            if you spot any bugs or would like to give it a go!
+            </a>
+            !
           </div>
         </div>
       </div>
