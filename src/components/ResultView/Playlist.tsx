@@ -1,19 +1,15 @@
-import Canvas from '../PlaylistView/Canvas'
-import React, { useState, useEffect } from 'react'
-import { Button } from 'reactstrap'
-import { useHistory } from 'react-router'
-import Spotify from 'spotify-web-api-js'
 import Color from 'color'
 import Vibrant from 'node-vibrant'
+import React, { useEffect, useState } from 'react'
+import { Button } from 'reactstrap'
+import Spotify from 'spotify-web-api-js'
+import Canvas from '../PlaylistView/Canvas'
 
 export default function Playlist(props: any) {
-  const doNothing = (something: any) => false
+  const doNothing = () => false
 
   const [artistImage, setArtistImage] = useState({})
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
-  const [textColor, setTextColor] = useState('black')
-  const [altTextColor, setAltTextColor] = useState('#30336b')
-  const [altBackgroundColor, setAltBackgroundColor] = useState('#dff9fb')
   const s = new Spotify()
   s.setAccessToken(props.token)
 
@@ -21,7 +17,7 @@ export default function Playlist(props: any) {
     const setColors = async (image: any) => {
       await Vibrant.from(image)
         .getPalette()
-        .then(palette => {
+        .then((palette) => {
           if (
             palette.LightVibrant &&
             palette.DarkMuted &&
@@ -45,9 +41,6 @@ export default function Playlist(props: any) {
             if (d.contrast(u) < 4) {
               d = Color('#ecf0f1')
             }
-            setTextColor(t.hex())
-            // setAltTextColor(u.hex())
-            setAltBackgroundColor(d.hex())
             setBackgroundColor(c.hex())
           }
         })
@@ -59,14 +52,14 @@ export default function Playlist(props: any) {
       const getArtistImage = async () => {
         await s
           .getArtist(props.artistID)
-          .then(res => setArtistImage(res.images[0]))
+          .then((res) => setArtistImage(res.images[0]))
       }
       getArtistImage()
     }
   }, [artistImage])
 
   return (
-    <div className="playlist-area" style={{ backgroundColor: backgroundColor }}>
+    <div className="playlist-area" style={{ backgroundColor }}>
       {Object.entries(artistImage).length !== 0 ? (
         <Canvas
           text="Hello world!"
@@ -75,7 +68,7 @@ export default function Playlist(props: any) {
           setPlaylistImage={doNothing}
         />
       ) : null}
-      <div className="playlist-text" style={{ color: altTextColor }}>
+      <div className="playlist-text" style={{ color: '#30336b' }}>
         We made you a playlist of the tracks you have in common with{' '}
         {props.matchName}, and tracks that you might like from their tastes!
       </div>

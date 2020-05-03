@@ -1,11 +1,11 @@
 import Color from 'color'
 import differenceInDays from 'date-fns/differenceInDays'
-import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
-import { Col, Row, UncontrolledTooltip } from 'reactstrap'
+import { useToasts } from 'react-toast-notifications'
+import { Col, Row } from 'reactstrap'
 import styled from 'styled-components'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../Firebase'
@@ -53,12 +53,12 @@ const emptyImport = {
 export function Me() {
   const { currentUser, spotifyToken, userData } = useContext(AuthContext)
   const history = useHistory()
-  const location = useLocation()
   const [importStatus, setImportStatus] = useState({
     exists: false,
     loading: false,
   } as IImportStatus)
-  const query = qs.parse(location.search)
+  const [loading, setLoading] = useState(false)
+  const { addToast } = useToasts()
 
   useEffect(() => {
     if (typeof userData.importData === 'undefined') {
@@ -70,12 +70,24 @@ export function Me() {
 
   const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
   useEffect(() => {
+    if (
+      importStatus.exists &&
+      currentUser &&
+      differenceInDays(new Date(), importStatus.lastImport.toDate() as Date) >=
+        7
+    ) {
+      if (!loading) {
+        setLoading(true)
+        firebase.importSpotifyData(currentUser.uid)
+        setImportStatus({ ...emptyImport, loading: true })
+      }
+    }
     const redirectMatch = localStorage.getItem('redirectMatch')
     if (importStatus.exists && currentUser && redirectMatch) {
       localStorage.removeItem('redirectMatch')
       history.push('/match?request=' + redirectMatch)
     } else if (!importStatus.exists && currentUser) {
-      firebase.getSpotifyData(currentUser.uid).then(data => {
+      firebase.getSpotifyData(currentUser.uid).then((data) => {
         if (data) {
           setSpotifyData(data)
         }

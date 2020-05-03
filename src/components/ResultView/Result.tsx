@@ -9,7 +9,7 @@ import Genres from './Genres'
 import Header from './Header'
 import Tracks from './Tracks'
 import Playlist from './Playlist'
-import Spotify from 'spotify-web-api-js'
+
 // @ts-ignore
 const Result = ({ location, history }, ...props: any) => {
   window.scrollTo(0, 0)

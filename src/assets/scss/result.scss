@@ -67,8 +67,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 5px;
     width: 400px;
     border-radius: 10px;
     @media (max-width: 900px) {
@@ -90,6 +89,15 @@
       }
     }
   }
+}
+
+.card-container {
+  max-width: 1230px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .tracks {
@@ -208,8 +216,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 5px;
     width: 400px;
     border-radius: 10px;
     @media (max-width: 900px) {

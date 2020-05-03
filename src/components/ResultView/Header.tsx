@@ -1,9 +1,13 @@
 import Color from 'color'
+import differenceInDays from 'date-fns/differenceInDays'
 import Vibrant from 'node-vibrant'
+import qs from 'query-string'
 import React, { useEffect, useRef, useState } from 'react'
 import CountUp from 'react-countup'
 import Reward from 'react-rewards'
+import { useLocation } from 'react-router'
 import { Artist, Track } from 'react-spotify-api'
+import { useToasts } from 'react-toast-notifications'
 
 const Header = ({
   matchData,
@@ -22,12 +26,14 @@ const Header = ({
   const [textColor, setTextColor] = useState('black')
   const [altTextColor, setAltTextColor] = useState('black')
   const [altBackgroundColor, setAltBackgroundColor] = useState('#dff9fb')
-
+  const [toastSent, setToastSent] = useState(false)
+  const query = qs.parse(useLocation().search)
+  const { addToast } = useToasts()
   useEffect(() => {
     const setColors = async (image: any) => {
       await Vibrant.from(image)
         .getPalette()
-        .then(palette => {
+        .then((palette) => {
           if (
             palette.LightVibrant &&
             palette.DarkMuted &&
@@ -59,6 +65,25 @@ const Header = ({
       setColors(artistBackgroundURL)
     }
   }, [artistBackgroundURL])
+
+  useEffect(() => {
+    if (!toastSent && query.rp && Object.entries(matchData).length > 0) {
+      setToastSent(true)
+      const difference = differenceInDays(
+        new Date(),
+        matchData.matchDate.toDate()
+      )
+      if (difference > 14) {
+        addToast(
+          `This match was created ${difference} ${
+            difference === 1 ? 'day' : 'days'
+          } ago. \
+          If you both have imported new data, you can enter their code again for new results!`,
+          { appearance: 'warning', autoDismiss: false }
+        )
+      }
+    }
+  }, [toastSent, query.rp, matchData])
 
   const shootConfetti = (e: any) => {
     if (matchData.score > 0.7) {
@@ -131,7 +156,11 @@ const Header = ({
             </div>
             <div className="top-tiles">
               {matchData.matchedArtists.length ? (
-                <div className="top-box animated fadeInUp">
+                <div
+                  className={` {top-box } animated fadeInUp ${
+                    query.r ? 'return' : 'initial'
+                  }`}
+                >
                   <p className="top-title" style={{ color: altTextColor }}>
                     Top Artist In Common
                   </p>
@@ -171,7 +200,11 @@ const Header = ({
                 </div>
               ) : null}
               {topTrack.id !== '' ? (
-                <div className="top-box animated fadeInUp">
+                <div
+                  className={`top-box animated fadeInUp ${
+                    query.r ? 'return' : 'initial'
+                  }`}
+                >
                   <p className="top-title" style={{ color: altTextColor }}>
                     Top Track In Common
                   </p>
@@ -200,7 +233,7 @@ const Header = ({
                               {track.name}
                               <br />
                               <strong>
-                                {track.artists.map(v => v.name).join(', ')}
+                                {track.artists.map((v) => v.name).join(', ')}
                               </strong>
                             </p>
                           </div>
@@ -294,10 +327,10 @@ const Header = ({
               <span>
                 <Reward type="emoji" config={config} ref={percentageRef}>
                   <CountUp
-                    delay={5}
+                    delay={query.r ? 0 : 5}
                     start={0}
                     end={Math.round(matchData.score * 100)}
-                    duration={5}
+                    duration={query.r ? 1 : 5}
                     onEnd={shootConfetti}
                   />
                   <span className="percent-symbol">%</span>

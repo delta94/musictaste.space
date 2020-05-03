@@ -72,7 +72,7 @@ class PagesNavbar extends React.Component {
           <div className="navbar-translate">
             <NavbarBrand
               data-placement="bottom"
-              to="/dashboard"
+              to="/"
               rel="noopener noreferrer"
               title="Designed and Coded by @_kalpal"
               tag={Link}
