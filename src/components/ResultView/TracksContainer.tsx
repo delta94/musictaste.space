@@ -27,7 +27,7 @@ const TracksContainer = ({
     const setColors = async (image: any) => {
       await Vibrant.from(image)
         .getPalette()
-        .then(palette => {
+        .then((palette) => {
           if (
             palette.LightVibrant &&
             palette.DarkMuted &&
@@ -65,8 +65,11 @@ const TracksContainer = ({
 
   const position = users[0] === uid ? 0 : 1
 
-  const onClickHandle = (url: string) => (e: any) => window.open(url, 'name')
-
+  const onClickHandle = (uri: string) => (e: any) =>
+    window.open(
+      `https://open.spotify.com/go?uri=${encodeURIComponent(uri)}`,
+      'name'
+    )
   return (
     <>
       <div className="tracks" style={{ backgroundColor: altTextColor }}>
@@ -93,11 +96,7 @@ const TracksContainer = ({
           className="tracks-header"
           style={{
             color: altBackgroundColor,
-            textShadow:
-              '2px 2px 3px' +
-              Color(altTextColor)
-                .darken(0.3)
-                .hex(),
+            textShadow: '2px 2px 3px' + Color(altTextColor).darken(0.3).hex(),
           }}
         >
           Tracks
@@ -126,55 +125,57 @@ const TracksContainer = ({
             <div className="rank-text" style={{ color: altBackgroundColor }}>
               <em>Rank: Yours / Theirs</em>
             </div>
-            {tracksData.length ? (
-              <Track id={tracksData.map(v => v.id)}>
-                {(
-                  tracks: SpotifyApi.MultipleTracksResponse,
-                  loading: boolean,
-                  error: SpotifyApi.ErrorObject
-                ) => {
-                  if (tracks && tracks.tracks) {
-                    if (tracks.tracks.length) {
-                      setArtistBackgroundURL(
-                        tracks.tracks[0].album.images[0].url
-                      )
-                    }
-                    return tracks.tracks.map((track, index) => (
-                      <div
-                        className="spotify-container shadow-lg"
-                        style={{ backgroundColor: textColor }}
-                        key={track.id}
-                        onClick={onClickHandle(track.external_urls.spotify)}
-                      >
-                        <img
-                          src={track.album.images[0].url}
-                          className="top-image"
-                          alt=""
-                        />
-                        <p
-                          className="artist-name"
-                          style={{ color: backgroundColor }}
+            <div className="card-container">
+              {tracksData.length ? (
+                <Track id={tracksData.map((v) => v.id)}>
+                  {(
+                    tracks: SpotifyApi.MultipleTracksResponse,
+                    loading: boolean,
+                    error: SpotifyApi.ErrorObject
+                  ) => {
+                    if (tracks && tracks.tracks) {
+                      if (tracks.tracks.length) {
+                        setArtistBackgroundURL(
+                          tracks.tracks[0].album.images[0].url
+                        )
+                      }
+                      return tracks.tracks.map((track, index) => (
+                        <div
+                          className="spotify-container shadow-lg"
+                          style={{ backgroundColor: textColor }}
+                          key={track.id}
+                          onClick={onClickHandle(track.uri)}
                         >
-                          {track.name}
-                          <br />
-                          {track.artists.map(a => a.name).join(', ')}
-                          <br />
-                          {position
-                            ? tracksData[index].indexB + 1
-                            : tracksData[index].indexA + 1}{' '}
-                          /{' '}
-                          {position
-                            ? tracksData[index].indexA + 1
-                            : tracksData[index].indexB + 1}
-                        </p>
-                      </div>
-                    ))
-                  } else {
-                    return null
-                  }
-                }}
-              </Track>
-            ) : null}{' '}
+                          <img
+                            src={track.album.images[0].url}
+                            className="top-image"
+                            alt=""
+                          />
+                          <p
+                            className="artist-name"
+                            style={{ color: backgroundColor }}
+                          >
+                            {track.name}
+                            <br />
+                            {track.artists.map((a) => a.name).join(', ')}
+                            <br />
+                            {position
+                              ? tracksData[index].indexB + 1
+                              : tracksData[index].indexA + 1}{' '}
+                            /{' '}
+                            {position
+                              ? tracksData[index].indexA + 1
+                              : tracksData[index].indexB + 1}
+                          </p>
+                        </div>
+                      ))
+                    } else {
+                      return null
+                    }
+                  }}
+                </Track>
+              ) : null}{' '}
+            </div>
           </>
         ) : null}
         <div className="after-tracks" />

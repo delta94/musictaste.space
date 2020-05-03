@@ -1,9 +1,9 @@
+import { Timestamp } from '@firebase/firestore-types'
 import React, { useContext, useEffect, useState } from 'react'
+import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../Firebase'
 import MatchCard from './MatchCard'
-import { Button } from 'reactstrap'
-import { Timestamp } from '@firebase/firestore-types'
 
 const MatchContainer = ({ history }: { history: any }, ...props: any) => {
   const [matches, setMatches] = useState([] as any)
@@ -13,7 +13,7 @@ const MatchContainer = ({ history }: { history: any }, ...props: any) => {
   const [loadPage, setLoadPage] = useState(0)
   useEffect(() => {
     const loadMatches = async (user: any) => {
-      const LIMIT = 5
+      const LIMIT = 10
       if (typeof user.importData !== 'undefined') {
         let matchRef
         if (!lastDoc) {
@@ -53,12 +53,12 @@ const MatchContainer = ({ history }: { history: any }, ...props: any) => {
   ) => {
     if (Object.entries(userData).length) {
       if (matchDate.toDate() < userData.importData.lastImport.toDate()) {
-        history.push('/match?request=' + id)
+        history.push('/match/' + matchId + '?r=1&rp=0')
       } else {
-        history.push('/match/' + matchId)
+        history.push('/match/' + matchId + '?r=1')
       }
     } else {
-      history.push('/match/' + matchId)
+      history.push('/match/' + matchId + '?r=1')
     }
   }
 

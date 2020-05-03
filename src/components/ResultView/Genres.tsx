@@ -8,8 +8,7 @@ const Genres = ({
   history: any
   matchData: IMatchData
 }) => {
-  const genres = matchData.matchedGenres.filter(v => v.rank > 0)
-  const rest = genres.length ? genres.slice(3) : []
+  const genres = matchData.matchedGenres.filter((v) => v.rank > 0)
   const handleReturn = (e: any) => {
     history.push('/compatibility#matches')
   }
@@ -23,7 +22,7 @@ const Genres = ({
             ? 'These are the genres you had most in common:'
             : 'You had no genres in common.'}
         </div>
-        {genres.map(genre => {
+        {genres.map((genre) => {
           return (
             <div className="genre-container" key={genre.genre}>
               <div

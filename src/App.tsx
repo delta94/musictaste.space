@@ -1,6 +1,8 @@
 import React from 'react'
 import GoogleAnalytics from 'react-ga'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { ToastProvider } from 'react-toast-notifications'
+
 import About from './components/AboutView/About'
 import Compatibility from './components/CompatibilityView/Compatibility'
 import Dashboard from './components/DashboardView/Dashboard'
@@ -27,59 +29,61 @@ export default function SpotifyCompatibility() {
     process.env.REACT_APP_FIREBASE_MEASUREMENT_ID as string
   )
   return (
-    <AuthProvider>
-      <Helmet>
-        <title>Compare Your Music Taste! - musictaste.space</title>
-        <meta name="theme-color" content="#f6e58d" />
-      </Helmet>
-      <Router>
-        <div>
-          <Route exact={true} path="/" component={withTracker(HomeView)} />
-          <Route exact={true} path="/about" component={withTracker(About)} />
-          <Route
-            exact={true}
-            path="/dashboard"
-            component={withTracker(Dashboard)}
-          />
-          <Route exact={true} path="/login" component={withTracker(Login)} />
-          <Route
-            exact={true}
-            path="/compatibility"
-            component={withTracker(Compatibility)}
-          />
-          <Route exact={true} path="/match" component={withTracker(Match)} />
-          <Route
-            exact={true}
-            path="/playlist"
-            component={withTracker(Playlist)}
-          />
-          <Route
-            exact={true}
-            path="/match/:matchId"
-            component={withTracker(Result)}
-          />
-          <Route
-            exact={true}
-            path="/insights"
-            component={withTracker(Insights)}
-          />
-          <Route
-            exact={true}
-            path="/playlist/:matchId"
-            component={withTracker(Create)}
-          />
-          <Route
-            exact={true}
-            path="/discord"
-            component={withTracker(Discord)}
-          />
-          <Route
-            exact={true}
-            path="/discord/login"
-            component={withTracker(LinkDiscord)}
-          />
-        </div>
-      </Router>
-    </AuthProvider>
+    <ToastProvider placement="bottom-right">
+      <AuthProvider>
+        <Helmet>
+          <title>Compare Your Music Taste! - musictaste.space</title>
+          <meta name="theme-color" content="#f6e58d" />
+        </Helmet>
+        <Router>
+          <div>
+            <Route exact={true} path="/" component={withTracker(HomeView)} />
+            <Route exact={true} path="/about" component={withTracker(About)} />
+            <Route
+              exact={true}
+              path="/dashboard"
+              component={withTracker(Dashboard)}
+            />
+            <Route exact={true} path="/login" component={withTracker(Login)} />
+            <Route
+              exact={true}
+              path="/compatibility"
+              component={withTracker(Compatibility)}
+            />
+            <Route exact={true} path="/match" component={withTracker(Match)} />
+            <Route
+              exact={true}
+              path="/playlist"
+              component={withTracker(Playlist)}
+            />
+            <Route
+              exact={true}
+              path="/match/:matchId"
+              component={withTracker(Result)}
+            />
+            <Route
+              exact={true}
+              path="/insights"
+              component={withTracker(Insights)}
+            />
+            <Route
+              exact={true}
+              path="/playlist/:matchId"
+              component={withTracker(Create)}
+            />
+            <Route
+              exact={true}
+              path="/discord"
+              component={withTracker(Discord)}
+            />
+            <Route
+              exact={true}
+              path="/discord/login"
+              component={withTracker(LinkDiscord)}
+            />
+          </div>
+        </Router>
+      </AuthProvider>
+    </ToastProvider>
   )
 }

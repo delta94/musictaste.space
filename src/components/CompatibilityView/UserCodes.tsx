@@ -47,7 +47,7 @@ function UserCodes(props: any) {
       <div className="user-code-area">
         <Row className="row-grid text-left">
           <Col lg="1" md="1" />
-          <Col lg="3" md="3" className="profile-col">
+          <Col lg="4" md="4" className="profile-col">
             {currentUser ? (
               <div
                 className="profile-img-div shadow-lg"

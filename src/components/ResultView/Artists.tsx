@@ -23,7 +23,7 @@ const Artists = ({
     const setColors = async (image: any) => {
       await Vibrant.from(image)
         .getPalette()
-        .then(palette => {
+        .then((palette) => {
           if (
             palette.LightVibrant &&
             palette.DarkMuted &&
@@ -61,7 +61,11 @@ const Artists = ({
 
   const position = matchData.users[0] === uid ? 0 : 1
 
-  const onClickArtist = (url: string) => (e: any) => window.open(url, 'name')
+  const onClickArtist = (uri: string) => (e: any) =>
+    window.open(
+      `https://open.spotify.com/go?uri=${encodeURIComponent(uri)}`,
+      'name'
+    )
 
   return (
     <div
@@ -74,11 +78,7 @@ const Artists = ({
         className="artists-header"
         style={{
           color: altBackgroundColor,
-          textShadow:
-            '2px 2px 3px' +
-            Color(altTextColor)
-              .darken(0.3)
-              .hex(),
+          textShadow: '2px 2px 3px' + Color(altTextColor).darken(0.3).hex(),
         }}
       >
         Artists
@@ -94,50 +94,55 @@ const Artists = ({
       <div className="rank-text" style={{ color: altBackgroundColor }}>
         <em>Rank: Yours / Theirs</em>
       </div>
-      {matchData.matchedArtists.length ? (
-        <Artist id={matchData.matchedArtists.map(v => v.id)}>
-          {(
-            artists: SpotifyApi.MultipleArtistsResponse,
-            loading: boolean,
-            error: SpotifyApi.ErrorObject
-          ) => {
-            if (artists && artists.artists) {
-              if (artists.artists.length > 1) {
-                setArtistBackgroundURL(artists.artists[1].images[0].url)
+      <div className="card-container">
+        {matchData.matchedArtists.length ? (
+          <Artist id={matchData.matchedArtists.map((v) => v.id)}>
+            {(
+              artists: SpotifyApi.MultipleArtistsResponse,
+              loading: boolean,
+              error: SpotifyApi.ErrorObject
+            ) => {
+              if (artists && artists.artists) {
+                if (artists.artists.length > 1) {
+                  setArtistBackgroundURL(artists.artists[1].images[0].url)
+                } else {
+                  setArtistBackgroundURL(artists.artists[0].images[0].url)
+                }
+                return artists.artists.map((artist, index) => (
+                  <div
+                    className="spotify-container shadow-lg"
+                    style={{ backgroundColor: textColor }}
+                    key={artist.id}
+                    onClick={onClickArtist(artist.uri)}
+                  >
+                    <img
+                      src={artist.images[0].url}
+                      className="top-image"
+                      alt=""
+                    />
+                    <p
+                      className="artist-name"
+                      style={{ color: backgroundColor }}
+                    >
+                      {artist.name}
+                      <br />
+                      {position
+                        ? matchData.matchedArtists[index].indexB + 1
+                        : matchData.matchedArtists[index].indexA + 1}{' '}
+                      /{' '}
+                      {position
+                        ? matchData.matchedArtists[index].indexA + 1
+                        : matchData.matchedArtists[index].indexB + 1}
+                    </p>
+                  </div>
+                ))
               } else {
-                setArtistBackgroundURL(artists.artists[0].images[0].url)
+                return null
               }
-              return artists.artists.map((artist, index) => (
-                <div
-                  className="spotify-container shadow-lg"
-                  style={{ backgroundColor: textColor }}
-                  key={artist.id}
-                  onClick={onClickArtist(artist.external_urls.spotify)}
-                >
-                  <img
-                    src={artist.images[0].url}
-                    className="top-image"
-                    alt=""
-                  />
-                  <p className="artist-name" style={{ color: backgroundColor }}>
-                    {artist.name}
-                    <br />
-                    {position
-                      ? matchData.matchedArtists[index].indexB + 1
-                      : matchData.matchedArtists[index].indexA + 1}{' '}
-                    /{' '}
-                    {position
-                      ? matchData.matchedArtists[index].indexA + 1
-                      : matchData.matchedArtists[index].indexB + 1}
-                  </p>
-                </div>
-              ))
-            } else {
-              return null
-            }
-          }}
-        </Artist>
-      ) : null}
+            }}
+          </Artist>
+        ) : null}
+      </div>
       <div className="after-artists" />
     </div>
   )

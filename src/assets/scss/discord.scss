@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  margin-top: 100px;
 }
 
 .discord-logo {
@@ -16,12 +17,34 @@
 }
 
 .discord-container {
+  display: flex;
+  flex-direction: column;
   border-radius: 15px;
-  max-width: 500px;
+  max-width: 400px;
   min-width: 300px;
-  margin: 100px 20px 0px 20px;
+  margin: 0px 20px 20px 20px;
   background-color: #2c2f33;
   overflow: hidden;
+}
+
+.discord-bot {
+  background-color: #7289da;
+  max-width: 500px;
+  .description {
+    color: #ffffff;
+  }
+}
+
+.discord-bot-img {
+  margin-top: 20px;
+  align-self: center;
+  background-image: url('../../assets/img/discord-bot.png');
+  width: 226px;
+  height: 119px;
+}
+
+.discord-link {
+  color: #dfe6e9;
 }
 
 .profile-images {

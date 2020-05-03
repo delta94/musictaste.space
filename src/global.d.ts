@@ -92,6 +92,7 @@ interface IMatchData {
   }
   score: number
   users: string[]
+  matchDate: Timestamp
 }
 
 interface IUserProfile {

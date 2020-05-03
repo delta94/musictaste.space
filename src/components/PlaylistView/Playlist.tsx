@@ -1,12 +1,9 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { useHistory } from 'react-router-dom'
 import Navbar from '../Navbars/Navbar'
 import MatchContainer from './MatchContainer'
 
-const Playlist = (props: any) => {
-  const history = useHistory()
-
+const Playlist = () => {
   return (
     <>
       <Navbar />

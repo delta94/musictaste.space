@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useToasts } from 'react-toast-notifications'
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
 import firebase from '../Firebase'
 
@@ -10,6 +11,7 @@ const EnterCode = (
   const [exists, setExists] = useState(true)
   const [backgroundColor, setBackgroundColor] = useState('#dff9fb')
   const [fails, setFails] = useState(0)
+  const { addToast } = useToasts()
 
   const changeCode = (e: any) => {
     const val = (e.target.value as string)
@@ -55,8 +57,16 @@ const EnterCode = (
       } else {
         setExists(false)
         setFails(fails + 1)
+        addToast('Invalid match code 😓', {
+          appearance: 'error',
+          autoDismiss: true,
+        })
       }
     } else {
+      addToast('Invalid match code 😓', {
+        appearance: 'error',
+        autoDismiss: true,
+      })
       setExists(false)
       setFails(fails + 1)
     }
