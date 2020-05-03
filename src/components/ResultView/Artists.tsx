@@ -61,7 +61,11 @@ const Artists = ({
 
   const position = matchData.users[0] === uid ? 0 : 1
 
-  const onClickArtist = (url: string) => (e: any) => window.open(url, 'name')
+  const onClickArtist = (uri: string) => (e: any) =>
+    window.open(
+      `https://open.spotify.com/go?uri=${encodeURIComponent(uri)}`,
+      'name'
+    )
 
   return (
     <div
@@ -109,7 +113,7 @@ const Artists = ({
                     className="spotify-container shadow-lg"
                     style={{ backgroundColor: textColor }}
                     key={artist.id}
-                    onClick={onClickArtist(artist.external_urls.spotify)}
+                    onClick={onClickArtist(artist.uri)}
                   >
                     <img
                       src={artist.images[0].url}

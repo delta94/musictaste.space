@@ -65,8 +65,11 @@ const TracksContainer = ({
 
   const position = users[0] === uid ? 0 : 1
 
-  const onClickHandle = (url: string) => (e: any) => window.open(url, 'name')
-
+  const onClickHandle = (uri: string) => (e: any) =>
+    window.open(
+      `https://open.spotify.com/go?uri=${encodeURIComponent(uri)}`,
+      'name'
+    )
   return (
     <>
       <div className="tracks" style={{ backgroundColor: altTextColor }}>
@@ -141,7 +144,7 @@ const TracksContainer = ({
                           className="spotify-container shadow-lg"
                           style={{ backgroundColor: textColor }}
                           key={track.id}
-                          onClick={onClickHandle(track.external_urls.spotify)}
+                          onClick={onClickHandle(track.uri)}
                         >
                           <img
                             src={track.album.images[0].url}
