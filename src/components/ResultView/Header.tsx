@@ -123,7 +123,11 @@ const Header = ({
       <div className="header-container" style={{ backgroundColor }}>
         <div className="flex-container">
           <div className="user-results-container">
-            <div className="profile-container animated fadeInUp">
+            <div
+              className={`profile-container animated fadeInUp ${
+                query.r ? 'return' : 'initial'
+              }`}
+            >
               <div className="user1">
                 <div
                   style={{ backgroundImage: `url(${userData.photoURL})` }}
@@ -147,7 +151,9 @@ const Header = ({
             </div>
             <div>
               <p
-                className="profile-names animated fadeInUp"
+                className={`profile-names animated fadeInUp ${
+                  query.r ? 'return' : 'initial'
+                }`}
                 style={{ color: textColor }}
               >
                 {userData.displayName} ×{' '}
@@ -157,7 +163,7 @@ const Header = ({
             <div className="top-tiles">
               {matchData.matchedArtists.length ? (
                 <div
-                  className={` {top-box } animated fadeInUp ${
+                  className={`top-box animated fadeInUp ${
                     query.r ? 'return' : 'initial'
                   }`}
                 >

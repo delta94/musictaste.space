@@ -139,7 +139,12 @@
         font-weight: 400;
         font-size: 1.5em;
         text-align: center;
-        animation-delay: 2s;
+        &.initial {
+          animation-delay: 2s;
+        }
+        &.return {
+          animation-delay: 0s;
+        }
         @media (max-width: 600px) {
           font-size: 1.2em;
         }
@@ -150,7 +155,12 @@
         flex-direction: row;
         width: 250px;
         justify-content: space-around;
-        animation-delay: 2s;
+        &.initial {
+          animation-delay: 2s;
+        }
+        &.return {
+          animation-delay: 0s;
+        }
         @media (max-width: 600px) {
           width: 200px;
         }
