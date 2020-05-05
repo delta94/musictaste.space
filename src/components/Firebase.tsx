@@ -49,6 +49,7 @@ class Firebase {
     if (process.env.NODE_ENV === 'development') {
       const functions = firebase.functions()
       functions.useFunctionsEmulator('http://localhost:5001')
+      this.functions = functions
     }
   }
 
@@ -339,6 +340,30 @@ class Firebase {
       .get()
       .then((doc) => doc.data())) as IDemoData
     return data
+  }
+
+  public async getAverages(
+    region: string
+  ): Promise<{ hasRegion: boolean; data: INationalAverage }> {
+    const regionalData = await this.app
+      .firestore()
+      .collection('app')
+      .doc('averages')
+      .collection('countries')
+      .doc(region)
+      .get()
+      .then((d) => (d.exists ? d.data() : undefined))
+    if (regionalData) {
+      return { hasRegion: true, data: regionalData as INationalAverage }
+    } else {
+      const globalData = await this.app
+        .firestore()
+        .collection('app')
+        .doc('averages')
+        .get()
+        .then((d) => d.data())
+      return { hasRegion: false, data: globalData as INationalAverage }
+    }
   }
 }
 

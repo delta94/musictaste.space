@@ -165,7 +165,12 @@ class PagesNavbar extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} to="/compatibility">
-                  Match
+                  Compatibility
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} to="/insights">
+                  Insights
                 </NavLink>
               </NavItem>
               <NavItem>

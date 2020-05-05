@@ -2,27 +2,29 @@ import Color from 'color'
 import Vibrant from 'node-vibrant'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import { Artist } from 'react-spotify-api'
-import { Button } from 'reactstrap'
+
+import { HashLink as Link } from 'react-router-hash-link'
 
 const Header = ({
   spotifyData,
   userData,
+  showMenu,
 }: {
   spotifyData: ISpotifyUserData
   userData: IUserProfile
+  showMenu: boolean
 }) => {
-  const [artistBackgroundURL, setArtistBackgroundURL] = useState('')
+  const [backgroundURL, setBackgroundURL] = useState('')
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
-  const [textColor, setTextColor] = useState('black')
-  const [altTextColor, setAltTextColor] = useState('black')
+  const [textColor, setTextColor] = useState('#c7ecee')
+  const [altTextColor, setAltTextColor] = useState('#c7ecee')
   const history = useHistory()
 
   useEffect(() => {
     const setColors = async (image: any) => {
       await Vibrant.from(image)
         .getPalette()
-        .then(palette => {
+        .then((palette) => {
           if (
             palette.LightVibrant &&
             palette.DarkMuted &&
@@ -49,125 +51,80 @@ const Header = ({
           }
         })
     }
-    if (artistBackgroundURL !== '') {
-      setColors(artistBackgroundURL)
+    if (backgroundURL !== '') {
+      setColors(backgroundURL)
     }
-  }, [artistBackgroundURL])
+  }, [backgroundURL])
+
+  useEffect(() => {
+    if (Object.entries(userData).length) {
+      setBackgroundURL(userData.photoURL)
+    }
+  }, [userData])
 
   const handleReturn = (e: any) => {
     history.push('/dashboard')
   }
   return (
     <>
-      <div className="result">
-        <div className="header-container" style={{ backgroundColor }}>
-          <div className="flex-container">
-            <div className="user-results-container">
-              <div className="profile-container animated fadeInUp">
-                <div className="user1">
-                  <div
-                    style={{ backgroundImage: `url(${userData.photoURL})` }}
-                    className="profile-img"
-                  />
-                </div>
-              </div>
-              <p
-                className="profile-names animated fadeInUp"
-                style={{ color: textColor }}
-              >
-                {userData.displayName}
-              </p>
+      <div className="insights-header" style={{ backgroundColor }}>
+        <div className="user-insights-header row">
+          <div className="profile-container animated fadeInUp col-md-4">
+            <div className="user1">
               <div
-                className="insights-text animated fadeInUp"
-                style={{ color: altTextColor }}
-              >
-                Based on the Spotify data you imported, scroll down to see
-                insights about your top artists, tracks and genres.
-              </div>
-              <div className="button-div animated fadeInUp">
-                <Button
-                  className="btn-round sign-in-button return-button "
-                  size="lg"
-                  onClick={handleReturn}
-                >
-                  Return to Dashboard
-                </Button>
-              </div>
-            </div>
-
-            <div className="score-and-artist">
-              <div className="top-artist">
-                <Artist id={spotifyData.topArtistsLongTerm[1].id}>
-                  {(
-                    artist: SpotifyApi.SingleArtistResponse,
-                    loading: boolean,
-                    error: SpotifyApi.ErrorObject
-                  ) => {
-                    if (artist) {
-                      setArtistBackgroundURL(
-                        artist.images[0].url ? artist.images[0].url : ''
-                      )
-                      return (
-                        <img
-                          src={artist.images[0].url}
-                          className="artist"
-                          alt=""
-                        />
-                      )
-                    } else {
-                      return null
-                    }
-                  }}
-                </Artist>
-              </div>
-              <div className="top-artist-2">
-                <Artist id={spotifyData.topArtistsLongTerm[2].id}>
-                  {(
-                    artist: SpotifyApi.SingleArtistResponse,
-                    loading: boolean,
-                    error: SpotifyApi.ErrorObject
-                  ) => {
-                    if (artist) {
-                      return (
-                        <img
-                          src={artist.images[0].url}
-                          className="artist"
-                          alt=""
-                        />
-                      )
-                    } else {
-                      return null
-                    }
-                  }}
-                </Artist>
-              </div>
-              <div className="top-artist-3">
-                {spotifyData.topArtistsLongTerm.length > 3 ? (
-                  <Artist id={spotifyData.topArtistsLongTerm[3].id}>
-                    {(
-                      artist: SpotifyApi.SingleArtistResponse,
-                      loading: boolean,
-                      error: SpotifyApi.ErrorObject
-                    ) => {
-                      if (artist) {
-                        return (
-                          <img
-                            src={artist.images[0].url}
-                            className="artist"
-                            alt=""
-                          />
-                        )
-                      } else {
-                        return null
-                      }
-                    }}
-                  </Artist>
-                ) : null}
-              </div>
+                style={{ backgroundImage: `url(${userData.photoURL})` }}
+                className="profile-img"
+              />
             </div>
           </div>
+          <div className="header-text col-md-8" style={{ color: textColor }}>
+            Hey {userData.displayName}, check out your stats below.
+          </div>
         </div>
+        {showMenu ? (
+          <div className="insights-menu d-flex flex-row justify-content-center">
+            <Link
+              className="menu-link"
+              smooth={true}
+              to="#artists"
+              style={{ color: altTextColor }}
+            >
+              Artists
+            </Link>
+            <Link
+              className="menu-link"
+              smooth={true}
+              to="#tracks"
+              style={{ color: altTextColor }}
+            >
+              Tracks
+            </Link>
+            <Link
+              className="menu-link"
+              smooth={true}
+              to="#genres"
+              style={{ color: altTextColor }}
+            >
+              Genres
+            </Link>
+            {/* <Link className="menu-link" href="#" style={{ color: altTextColor }}>
+            Mood
+          </Link> */}
+          </div>
+        ) : null}
+
+        {/* <div className="button-div animated fadeInUp">
+          <Button
+            className="btn-round sign-in-button return-button "
+            size="lg"
+            onClick={handleReturn}
+          >
+            Return to Dashboard
+          </Button>
+        </div> */}
       </div>
+
+      <div className="score-and-artist" />
     </>
   )
 }

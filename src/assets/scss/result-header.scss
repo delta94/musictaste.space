@@ -27,24 +27,10 @@
         width: 720px;
       }
       @media (max-width: 600px) {
+        justify-content: center;
         width: 100%;
         padding-left: 30px;
         padding-right: 30px;
-      }
-
-      .user-results-container {
-        width: 500px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        z-index: 10;
-        @media (max-width: 900px) {
-          width: 100vw;
-          justify-content: center;
-        }
-        @media (max-width: 600px) {
-          z-index: 5;
-        }
       }
 
       .top-tiles {
@@ -149,6 +135,12 @@
           font-size: 1.2em;
         }
       }
+      .user-results-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
       .profile-container {
         margin-top: -70px;
         display: flex;
@@ -225,7 +217,7 @@
           top: 150px;
         }
         @media (max-width: 1140px) {
-          left: 300px;
+          left: 400px;
           top: 150px;
         }
         @media (max-width: 900px) {
@@ -253,8 +245,8 @@
         z-index: 1;
         @media (max-width: 900px) {
           font-size: 10em;
-          top: 100px;
-          left: 350px;
+          top: calc(#{'50vh - 300px'});
+          left: calc(#{'100vw - 300px'});
         }
         @media (max-width: 600px) {
           font-size: 10em;
@@ -270,9 +262,11 @@
         width: 400px;
         border-radius: 10px;
         animation-delay: 3s;
-        @media (max-width: 900px) {
+        @media (max-width: 1140px) {
           height: 300px;
           width: 300px;
+          top: 100px;
+          left: 100px;
         }
         @media (max-width: 600px) {
           animation-delay: 5s;
