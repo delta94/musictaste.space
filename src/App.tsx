@@ -21,10 +21,8 @@ import { AuthProvider } from './contexts/Auth'
 
 /// <reference path="./global.d.ts" />
 import { Helmet } from 'react-helmet'
-import './assets/css/animate/animate.css'
 import './assets/css/nucleo-icons.css'
 import './assets/scss/blk-design-system-react.scss'
-
 export default function SpotifyCompatibility() {
   GoogleAnalytics.initialize(
     process.env.REACT_APP_FIREBASE_MEASUREMENT_ID as string
