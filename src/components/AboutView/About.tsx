@@ -28,25 +28,26 @@ const About = (props: any) => {
             </h2>
             <span>
               <strong>musictaste.space</strong> is a web app created by{' '}
-              <a href="https://kalana.io">Kalana Vithana</a> (that&rsquo;s me!)
-              that helps you gain insights into your Spotify listening habits
-              and compare your music taste with friends. I&rsquo;ve always found
-              a &rsquo;s music taste to be a great indicator of the kind of
-              person they are, so when I kept running into the same question of:
-              &ldquo;So what kind of music do you listen to?&rdquo;, I knew
-              there must be an easier (and more fun) way to see which aspects of
-              your music taste you had in common. So, as Summer project in early
-              2020, I created <strong>musictaste.space</strong>.
+              <a href="https://kalana.io">Kalana Vithana</a> (that's me, hi
+              there!) which helps users gain insights into their Spotify
+              listening habits and compare their music taste with friends.
+              I&rsquo;ve always found a person&rsquo;s music taste to be a great
+              indicator of the kind of person they are, so when I kept running
+              into the same question when meeting new people of: &ldquo;So what
+              kind of music do you listen to?&rdquo;, I knew there must be an
+              easier (and more fun) way to see which aspects of your music taste
+              you had in common. So, as Summer project in early 2020, I created{' '}
+              <strong>musictaste.space</strong>.
             </span>
           </p>
           <p>
             <span>
-              At the moment, after importing your Spotify data, you're able to
-              see your top artists, tracks and genres as part of your insights.
-              With your code and URL, you&rsquo;re can match with friends (or
-              even anonymously with strangers) to get a score on how compatible
-              you are, as well as a breakdown on which artists and songs you
-              have a common interest in.
+              After importing your Spotify data, you're able to see your top
+              artists, tracks and genres as part of your insights. With your
+              code and URL, you&rsquo;re can match with friends (or even
+              anonymously by sharing your anon code with strangers) to get a
+              score on how compatible you are, as well as a breakdown on which
+              artists and songs you have a common interest in.
             </span>
           </p>
           <p>
@@ -123,16 +124,17 @@ const About = (props: any) => {
           <p>
             <span>
               Your account data (display name, profile image and Spotify
-              username) as well as your music data are stored and managed by{' '}
+              username) as well as your music data are stored securely on{' '}
               <a href="https://firebase.google.com/products/firestore/">
                 Firebase
               </a>
-              . By matching with a user, you share your account data with them
-              for them to identify a match as you. Your data may also be used
-              for general statistical analysis or demographic comparisons (ie.
-              How many people have Taylor Swift in their Top 10 artists? Do more
-              females like her than males?). If you'd like your data deleted,
-              please message me on{' '}
+              . By matching with a user, you agree to share identifiable account
+              data with them, such as your display name and profile photo, in
+              order for your match partner to identify a match as from you. Your
+              data may also be used for general statistical analysis or
+              demographic comparisons (ie. How many people have Taylor Swift in
+              their Top 10 artists? Do more females like her than males?). If
+              you'd like your data deleted, please message me on{' '}
               <a href="https://www.twitter.com/_kalpal">Twitter</a>.
             </span>
           </p>
@@ -151,15 +153,15 @@ const About = (props: any) => {
               <a href="https://firebase.google.com/products/functions/">
                 Firebase Cloud Functions
               </a>
-              . Since this is a small project, the Firestore is being used for
-              both state management and as an API service using document
-              subscriptions, with Cloud Functions assisting in more complicated
-              functionality, such as OAuth2 authorisation with the{' '}
+              . The Firestore is being used both as a database and as state
+              management using document subscriptions, with Cloud Functions
+              assisting in more complicated functionality, such as OAuth2
+              authorisation with the{' '}
               <a href="https://developer.spotify.com/documentation/web-api/">
                 Spotify API
               </a>
-              , as well as the user-to-user matching and playlist creation.
-              Files are hosted statically using{' '}
+              , as well as facilitating user-to-user matching and playlist
+              creation. Files are hosted statically using{' '}
               <a href="https://firebase.google.com/products/hosting/">
                 Firebase Hosting
               </a>

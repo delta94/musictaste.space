@@ -9,6 +9,7 @@ import Dashboard from './components/DashboardView/Dashboard'
 import Discord from './components/DiscordView/Discord'
 import HomeView from './components/Home/HomeView'
 import Insights from './components/InsightsView/Insights'
+import InsightsAll from './components/InsightsView/InsightsAll'
 import LinkDiscord from './components/LinkDiscord'
 import Login from './components/Login'
 import Match from './components/MatchView/Match'
@@ -65,6 +66,11 @@ export default function SpotifyCompatibility() {
               exact={true}
               path="/insights"
               component={withTracker(Insights)}
+            />
+            <Route
+              exact={true}
+              path="/insights/all"
+              component={withTracker(InsightsAll)}
             />
             <Route
               exact={true}

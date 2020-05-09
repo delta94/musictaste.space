@@ -1,5 +1,15 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css');
-
+a {
+  transition: 0.1s;
+}
+a.nav-link {
+  &:hover {
+    @media (min-width: 600px) {
+      border-bottom: 1px solid #191414;
+      color: #1db954 !important;
+    }
+  }
+}
 .page-header {
   .sign-in-button {
     // background-image: url('../img/spotify-button.png') !important;
@@ -72,7 +82,18 @@ div.spotify-login {
   }
 }
 
+.nav-logo {
+  width: 100px;
+  height: 80%;
+  // overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
 .me {
+  .me-max {
+    max-width: 800px;
+  }
   h1 {
     font-size: 6em;
     @media only screen and (max-width: 1250px) {
@@ -148,7 +169,18 @@ div.spotify-login {
       right: 5%;
       top: 15%;
 
+      @media screen and (max-width: 1100px) {
+        animation: none;
+        height: 300px;
+        width: 300px;
+      }
+
+      @media screen and (max-width: 900px) {
+        display: none;
+      }
+
       @media screen and (max-width: 600px) {
+        display: block;
         animation: none;
         height: 200px;
         width: 200px;
@@ -161,7 +193,19 @@ div.spotify-login {
       opacity: 1;
       right: 30%;
       top: 50%;
+
+      @media screen and (max-width: 1100px) {
+        animation: none;
+        height: 250px;
+        width: 250px;
+      }
+
+      @media screen and (max-width: 900px) {
+        display: none;
+      }
+
       @media screen and (max-width: 600px) {
+        display: block;
         animation: none;
         height: 180px;
         width: 180px;
@@ -176,7 +220,11 @@ div.spotify-login {
       opacity: 1;
       right: 18%;
       top: 60%;
+      @media screen and (max-width: 900px) {
+        display: none;
+      }
       @media screen and (max-width: 600px) {
+        display: block;
         animation: none;
         display: none;
       }
@@ -266,6 +314,18 @@ div.spotify-login {
     font-weight: 600;
     margin-top: 20px;
     margin-bottom: 10px;
+  }
+
+  a {
+    font-weight: 400;
+    border-bottom: 1px solid #1db954;
+    color: #191414 !important;
+    cursor: pointer;
+    padding: 0em 0.1em;
+    &:hover {
+      background: #1db954;
+      color: #ffffff !important;
+    }
   }
 
   .button-div {

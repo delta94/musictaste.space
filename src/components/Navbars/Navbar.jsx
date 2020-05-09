@@ -77,7 +77,8 @@ class PagesNavbar extends React.Component {
               title="Designed and Coded by @_kalpal"
               tag={Link}
             >
-              <span>musictaste.space •</span> by @_kalpal
+              <span>musictaste.space</span>
+              {/* <span>musictaste.space •</span> by @_kalpal */}
             </NavbarBrand>
             <button
               aria-expanded={this.state.collapseOpen}
@@ -100,9 +101,16 @@ class PagesNavbar extends React.Component {
               <Row>
                 <Col className="collapse-brand" xs="6">
                   <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    <span role="img" aria-label="coolboy">
-                      👨‍🎤
-                    </span>
+                    <div
+                      role="img"
+                      className="nav-logo"
+                      style={{
+                        backgroundImage: 'url(/logo-sml.png)',
+                      }}
+                      aria-label="coolboy"
+                    />
+                    {/* 👨‍🎤
+                    </span> */}
                   </a>
                 </Col>
                 <Col className="collapse-close text-right" xs="6">
@@ -165,7 +173,12 @@ class PagesNavbar extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} to="/compatibility">
-                  Match
+                  Compatibility
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} to="/insights">
+                  Insights
                 </NavLink>
               </NavItem>
               <NavItem>

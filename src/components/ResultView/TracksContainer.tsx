@@ -65,11 +65,7 @@ const TracksContainer = ({
 
   const position = users[0] === uid ? 0 : 1
 
-  const onClickHandle = (uri: string) => (e: any) =>
-    window.open(
-      `https://open.spotify.com/go?uri=${encodeURIComponent(uri)}`,
-      'name'
-    )
+  const onClickHandle = (uri: string) => (e: any) => window.open(uri, 'name')
   return (
     <>
       <div className="tracks" style={{ backgroundColor: altTextColor }}>

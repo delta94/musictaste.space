@@ -32,7 +32,8 @@ function ConfirmOrLogInButton(props: any) {
     const t = firebase.compareUsers(
       !anon ? userData.matchCode : userData.anonMatchCode,
       props.compareUser,
-      userData.serverState
+      userData.serverState,
+      currentUser.uid
     )
     setContinueText(
       <>
@@ -44,7 +45,7 @@ function ConfirmOrLogInButton(props: any) {
         </div>
       </>
     )
-    t.then(code => {
+    t.then((code) => {
       history.push('/match/' + code)
     })
   }

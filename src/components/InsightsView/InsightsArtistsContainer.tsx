@@ -3,16 +3,12 @@ import Vibrant from 'node-vibrant'
 import React, { useEffect, useState } from 'react'
 import { Artist } from 'react-spotify-api'
 
-const Artists = ({
-  matchData,
-  matchUser,
-  matchUserId,
-  uid,
+const InsightsArtistsContainer = ({
+  data,
+  textData,
 }: {
-  matchData: IMatchData
-  matchUser: IUsersLookupData
-  matchUserId: string
-  uid: string
+  data: IArtist[]
+  textData: { title: string; description: string }
 }) => {
   const [artistBackgroundURL, setArtistBackgroundURL] = useState('')
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
@@ -59,13 +55,11 @@ const Artists = ({
     }
   }, [artistBackgroundURL])
 
-  const position = matchData.users[0] === uid ? 0 : 1
-
-  const onClickArtist = (uri: string) => (e: any) => window.open(uri, 'name')
-
+  const onClickArtist = (uri: string) => (e: any) => window.open(uri)
   return (
     <div
       className="artists"
+      id="artists"
       style={{
         backgroundColor: altTextColor,
       }}
@@ -79,20 +73,25 @@ const Artists = ({
       >
         Artists
       </div>
-      <div className="artists-container">
+      <div
+        className={'artist-sub-header'}
+        style={{
+          color: altBackgroundColor,
+        }}
+      >
+        {textData.title}
+      </div>
+      <div style={{ marginTop: '100px' }} className="artists-container">
         <div className="artists-text" style={{ color: altBackgroundColor }}>
-          You and {matchUser.anon ? matchUserId : matchUser.displayName} have{' '}
-          <strong>{matchData.matchedArtists.length}</strong>{' '}
-          {matchData.matchedArtists.length === 1 ? 'artist' : 'artists'} in
-          common in your top 100.
+          Here are your {textData.description} according to Spotify.
         </div>
       </div>
       <div className="rank-text" style={{ color: altBackgroundColor }}>
-        <em>Rank: Yours / Theirs</em>
+        <em>Rank: Yours</em>
       </div>
       <div className="card-container">
-        {matchData.matchedArtists.length ? (
-          <Artist id={matchData.matchedArtists.map((v) => v.id)}>
+        {data.length ? (
+          <Artist id={data.slice(0, 30).map((v) => v.id)}>
             {(
               artists: SpotifyApi.MultipleArtistsResponse,
               loading: boolean,
@@ -122,13 +121,7 @@ const Artists = ({
                     >
                       {artist.name}
                       <br />
-                      {position
-                        ? matchData.matchedArtists[index].indexB + 1
-                        : matchData.matchedArtists[index].indexA + 1}{' '}
-                      /{' '}
-                      {position
-                        ? matchData.matchedArtists[index].indexA + 1
-                        : matchData.matchedArtists[index].indexB + 1}
+                      {index + 1}
                     </p>
                   </div>
                 ))
@@ -144,4 +137,4 @@ const Artists = ({
   )
 }
 
-export default Artists
+export default InsightsArtistsContainer

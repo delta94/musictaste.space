@@ -207,7 +207,7 @@ export function Me() {
               )}
               <NameBox className="me">
                 <NameDiv>
-                  <Row className="row-grid text-left">
+                  <Row className="row-grid text-left me-max">
                     <Col lg="7" md="8">
                       <h1 className="mb-8" style={{ color: `${titleColor}` }}>
                         <strong>{currentUser.displayName}</strong>

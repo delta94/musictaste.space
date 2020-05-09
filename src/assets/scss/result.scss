@@ -4,6 +4,7 @@
   align-items: center;
   width: 100vw;
   .artists-header {
+    font-family: 'Montserrat', sans-serif;
     position: absolute;
     font-size: 6em;
     padding-right: 10px;
@@ -62,6 +63,28 @@
   .after-artists {
     margin: 100px;
   }
+  .artist-sub-header {
+    margin-top: 150px;
+    position: absolute;
+    font-size: 4em;
+    padding-right: 10px;
+    font-weight: 700;
+    text-align: center;
+    width: 1140px;
+    @media (max-width: 1140px) {
+      width: 948px;
+    }
+    @media (max-width: 990px) {
+      width: 720px;
+    }
+    @media (max-width: 600px) {
+      width: 100%;
+      font-size: 3em;
+      padding-left: 30px;
+      padding-right: 30px;
+      text-align: right;
+    }
+  }
 
   .spotify-container {
     display: flex;
@@ -106,6 +129,7 @@
   align-items: center;
   width: 100vw;
   .tracks-header {
+    font-family: 'Montserrat', sans-serif;
     position: absolute;
     font-size: 6em;
     padding-right: 10px;
@@ -178,20 +202,27 @@
     border-radius: 10px;
     animation-delay: 1s;
     top: -125px;
-    left: 27vw;
+    left: 450px;
 
-    @media (max-width: 900px) {
+    @media (max-width: 1100px) {
       height: 300px;
       width: 300px;
       top: -125px;
-      left: 15vw;
+      left: 300px;
+    }
+
+    @media (max-width: 900px) {
+      height: 250px;
+      width: 250px;
+      top: -125px;
+      left: 250px;
     }
     @media (max-width: 600px) {
       animation-delay: 10s;
       height: 250px;
       width: 250px;
       top: -125px;
-      left: 15vw;
+      left: 100px;
     }
   }
 
@@ -244,13 +275,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
-  background-color: #305f72;
+  width: 100%;
+  background-color: #ffffff;
   text-align: center;
-  margin-top: -100px;
   .genres-header {
-    color: #f5f6fa;
-    text-shadow: 2px 2px 3px #f18c8e !important;
+    font-family: 'Montserrat', sans-serif;
+    color: #1db954;
     position: absolute;
     font-size: 6em;
     padding-right: 10px;
@@ -275,7 +305,7 @@
     flex-direction: column;
     align-items: center;
     .genres-text {
-      color: #f5f6fa;
+      color: #191414;
       margin-top: 120px;
       font-size: 1.3em;
       text-align: center;
@@ -284,6 +314,17 @@
       margin-bottom: 30px;
       font-weight: 500;
       line-height: 1.4em;
+    }
+
+    .genre-columns {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .genre-bar-container {
+      display: flex;
+      flex-direction: column;
     }
 
     .genre-container {
@@ -297,13 +338,13 @@
         height: 30px;
         margin-top: 5px;
         margin-bottom: 5px;
-        background-color: #f18c8e;
+        background-color: #1db954;
         @media (max-width: 600px) {
           margin-left: -30px;
         }
       }
       .genre-text {
-        color: #f5f6fa;
+        color: #191414;
         font-size: 1.2em;
         text-align: left;
         margin-left: 5px;
@@ -315,29 +356,8 @@
       }
 
       .genre-title {
-        color: #f0b7a4 !important;
+        color: #1db954 !important;
       }
-    }
-
-    .genres-top-1 {
-      font-size: 4em;
-      color: #f18c8e;
-      text-shadow: 2px 2px #f0b7a4 !important;
-    }
-    .genres-top-2 {
-      font-size: 3em;
-      color: #f18c8e;
-      text-shadow: 2px 2px #f0b7a4 !important;
-    }
-    .genres-top-3 {
-      font-size: 2em;
-      color: #f18c8e;
-      text-shadow: 2px 2px #f0b7a4 !important;
-    }
-    .genres-top {
-      font-size: 1.5em;
-      color: #f18c8e;
-      text-shadow: 1px 1px #f0b7a4 !important;
     }
   }
   .return-button {

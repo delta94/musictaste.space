@@ -1,5 +1,6 @@
 declare module 'react-spotify-api'
 declare module 'react-rewards'
+declare module 'react-double-marquee'
 
 interface IImportStatus {
   exists: boolean
@@ -46,11 +47,16 @@ interface IPreviewMatchData {
 interface ISpotifyUserData {
   topRelatedArtists: IArtist[]
   topArtistsLongTerm: IArtist[]
+  topArtistsShortTerm: IArtist[]
   topGenres: IGenreDict
   topGenresRelated: IGenreDict
   topTracksLongTerm: ITrack[]
   topTracksMediumTerm: ITrack[]
   topTracksShortTerm: ITrack[]
+  longTermAudioFeatures: IUserAudioFeatures
+  shortTermAudioFeatures: IUserAudioFeatures
+  obscurifyScoreLongTerm: number
+  obscurifyScoreShortTerm: number
 }
 
 interface IUsersLookupData {
@@ -147,4 +153,32 @@ interface IDemoUser {
 interface IDemoData {
   matches: IDemoMatch[]
   users: IDemoUser[]
+}
+
+interface IUserAudioFeatures {
+  acousticness: number
+  danceability: number
+  energy: number
+  instrumentalness: number
+  liveness: number
+  loudness: number
+  tempo: number
+  valence: number
+  maxVals: {
+    acousticness: [string, number]
+    danceability: [string, number]
+    energy: [string, number]
+    instrumentalness: [string, number]
+    liveness: [string, number]
+    loudness: [string, number]
+    tempo: [string, number]
+    valence: [string, number]
+  }
+}
+
+interface INationalAverage {
+  features: IUserAudioFeatures
+  score: number
+  total: number
+  lastUpdated: Date
 }

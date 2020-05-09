@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Dot } from './Aux/Dot'
-import firebase from './Firebase'
 import { Helmet } from 'react-helmet'
 import { useHistory, useLocation } from 'react-router-dom'
+import { Dot } from './Aux/Dot'
+import firebase from './Firebase'
 const qs = require('query-string')
 
 const Login = (props: any) => {
@@ -12,6 +12,8 @@ const Login = (props: any) => {
   const code = typeof query.code != 'undefined' ? query.code : undefined
   const state = typeof query.state != 'undefined' ? query.state : undefined
   const error = typeof query.error != 'undefined' ? query.state : undefined
+
+  const [tried, setTried] = useState(false)
   const [errorData, setErrorData] = useState({
     state: false,
     error: '',
@@ -21,7 +23,7 @@ const Login = (props: any) => {
   /**
    * This callback is called by the JSONP callback of the 'token' Firebase Function with the Firebase auth token.
    */
-  function tokenReceived(data: { token: string }) {
+  function tokenReceived(data: { token: string; error: string }) {
     if (data.token) {
       firebase.app
         .auth()
@@ -39,7 +41,7 @@ const Login = (props: any) => {
             </div>
           )
         })
-        .catch(err =>
+        .catch((err) =>
           setErrorData({
             state: true,
             error: 'Could not create an account.',
@@ -47,6 +49,13 @@ const Login = (props: any) => {
           })
         )
     } else {
+      if (data.error) {
+        setErrorData({
+          state: true,
+          error: data.error,
+          object: data.error,
+        })
+      }
       console.error(data)
     }
   }
@@ -100,27 +109,31 @@ const Login = (props: any) => {
     // Use JSONP to load the 'token' Firebase Function to exchange the auth code against a Firebase custom token.
     // This is the URL to the HTTP triggered 'token' Firebase Function.
     const tokenFunctionURL = process.env.REACT_APP_FUNCTION_TOKEN as string
-    fetch(
-      tokenFunctionURL +
-        '?code=' +
-        encodeURIComponent(code) +
-        '&state=' +
-        encodeURIComponent(state) +
-        '&callback=' +
-        tokenReceived.name,
-      { credentials: 'include' }
-    )
-      .then(async res => {
-        return tokenReceived(await res.json())
-      })
-      .catch(err => {
-        setErrorData({
-          state: true,
-          error: 'Machine Broke 😢',
-          object: err,
+    if (!tried) {
+      setTried(true)
+      fetch(
+        tokenFunctionURL +
+          '?code=' +
+          encodeURIComponent(code) +
+          '&state=' +
+          encodeURIComponent(state) +
+          '&callback=' +
+          tokenReceived.name,
+        { credentials: 'include' }
+      )
+        .then(async (res) => {
+          return tokenReceived(await res.json())
         })
-        console.log(err)
-      })
+        .catch((err) => {
+          setErrorData({
+            state: true,
+            error: 'Machine Broke 😢',
+            object: err,
+          })
+          console.log(err)
+        })
+    }
+
     return (
       <div className="spotify-login">
         <Helmet>

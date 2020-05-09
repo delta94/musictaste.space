@@ -49,6 +49,7 @@ class Firebase {
     if (process.env.NODE_ENV === 'development') {
       const functions = firebase.functions()
       functions.useFunctionsEmulator('http://localhost:5001')
+      this.functions = functions
     }
   }
 
@@ -137,6 +138,7 @@ class Firebase {
     user: string,
     matchUser: string,
     state: string,
+    uid: string,
     tries = 0
   ): Promise<string | boolean> {
     const cf = this.functions.httpsCallable('compareUsers')
@@ -144,6 +146,7 @@ class Firebase {
       userId: user,
       compareUserId: matchUser,
       state,
+      uid,
     }).then((res) => res.data)
     if (res) {
       return res.matchId
@@ -151,7 +154,7 @@ class Firebase {
       if (tries === 2) {
         return false
       }
-      return await this.compareUsers(user, matchUser, state, tries + 1)
+      return await this.compareUsers(user, matchUser, state, uid, tries + 1)
     }
   }
 
@@ -339,6 +342,34 @@ class Firebase {
       .get()
       .then((doc) => doc.data())) as IDemoData
     return data
+  }
+
+  public async getAverages(
+    region: string
+  ): Promise<{ hasRegion: boolean; region?: string; data: INationalAverage }> {
+    const regionalData = await this.app
+      .firestore()
+      .collection('app')
+      .doc('averages')
+      .collection('countries')
+      .doc(region)
+      .get()
+      .then((d) => (d.exists ? d.data() : undefined))
+    if (regionalData) {
+      return {
+        hasRegion: true,
+        region,
+        data: regionalData as INationalAverage,
+      }
+    } else {
+      const globalData = await this.app
+        .firestore()
+        .collection('app')
+        .doc('averages')
+        .get()
+        .then((d) => d.data())
+      return { hasRegion: false, data: globalData as INationalAverage }
+    }
   }
 }
 
