@@ -202,20 +202,27 @@
     border-radius: 10px;
     animation-delay: 1s;
     top: -125px;
-    left: 27vw;
+    left: 450px;
 
-    @media (max-width: 900px) {
+    @media (max-width: 1100px) {
       height: 300px;
       width: 300px;
       top: -125px;
-      left: 15vw;
+      left: 300px;
+    }
+
+    @media (max-width: 900px) {
+      height: 250px;
+      width: 250px;
+      top: -125px;
+      left: 250px;
     }
     @media (max-width: 600px) {
       animation-delay: 10s;
       height: 250px;
       width: 250px;
       top: -125px;
-      left: 15vw;
+      left: 100px;
     }
   }
 

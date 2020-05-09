@@ -78,11 +78,13 @@ const Header = ({
             </div>
           </div>
           <div className="header-text col-md-8" style={{ color: textColor }}>
-            Hey {userData.displayName}, check out your stats below.
+            Hey {userData.displayName}, check out your{' '}
+            {showMenu ? 'favourite tracks & artists' : 'stats & insights'}{' '}
+            below.
           </div>
         </div>
         {showMenu ? (
-          <div className="insights-menu d-flex flex-row justify-content-center">
+          <div className="col d-flex flex-row justify-content-center nav-link flex-wrap">
             <Link
               className="menu-link"
               smooth={true}
@@ -99,19 +101,18 @@ const Header = ({
             >
               Tracks
             </Link>
-            <Link
-              className="menu-link"
-              smooth={true}
-              to="#genres"
-              style={{ color: altTextColor }}
-            >
-              Genres
-            </Link>
             {/* <Link className="menu-link" href="#" style={{ color: altTextColor }}>
             Mood
           </Link> */}
           </div>
-        ) : null}
+        ) : (
+          <div className="row">
+            <div className="col d-flex flex-row justify-content-center nav-link flex-wrap">
+              <Link to="/dashboard">Back To Dashboard</Link>
+              <Link to="/insights/all">Top Tracks & Artists</Link>
+            </div>
+          </div>
+        )}
 
         {/* <div className="button-div animated fadeInUp">
           <Button

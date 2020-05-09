@@ -54,10 +54,12 @@ const Genres = ({ genreData }: { genreData: IGenreDict }) => {
             })}
           </div>
         </div>
-        <div className="row mb-5 mt-5">
-          <div className="col d-flex flex-row justify-content-end full-button">
-            <Link to="/dashboard">← Back To Dashboard</Link>
-            <Link to="/insights/all">See All Top Tracks & Artists →</Link>
+        <div className="container">
+          <div className="row mb-5 mt-5">
+            <div className="col d-flex flex-row justify-content-center full-button flex">
+              <Link to="/dashboard">Back To Dashboard ←</Link>
+              <Link to="/insights/all">Top Tracks & Artists →</Link>
+            </div>
           </div>
         </div>
       </div>

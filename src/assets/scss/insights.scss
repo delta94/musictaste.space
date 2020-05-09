@@ -3,11 +3,11 @@
   display: flex;
   flex-direction: column;
   .insights-header {
-    padding: 10em 0em;
+    padding: 10em 0em 5em 0em;
     height: 100%;
     display: flex;
     @media (max-width: 600px) {
-      padding: 10em 2em 10em 2em;
+      padding: 10em 2em 5em 2em;
     }
   }
   .header-text {
@@ -80,6 +80,10 @@
     .artist-image {
       width: 100%;
       height: auto;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      height: clamp(250px, 40vw, 500px);
       border-radius: 50px;
       margin: 5em 0em;
     }
@@ -94,7 +98,7 @@
           font-size: 1.5em;
         }
       }
-      .artist-image {
+      .artist-image-small {
         width: 100%;
         height: auto;
         border-radius: 50px;
@@ -128,7 +132,7 @@
     padding-bottom: 4em;
     flex-direction: column;
     align-items: center;
-    min-height: 300px;
+    min-height: 400px;
     @media (max-width: 1240px) {
       height: 425px;
     }
@@ -154,7 +158,7 @@
   .marquee-overlay {
     z-index: 10;
     position: absolute;
-    height: 200px;
+    height: 300px;
     padding: 1em;
     padding-right: 2em;
     // width: clamp(345px, 88vw, 1200px);
@@ -175,6 +179,9 @@
     font-size: 4em;
     font-weight: 800;
     margin-top: 0;
+    @media (max-width: 1100px) {
+      font-size: 3.2em;
+    }
     @media (max-width: 600px) {
       font-size: 3.2em;
     }
@@ -191,6 +198,9 @@
     font-weight: 400;
     margin-top: 0;
     margin-bottom: 1em;
+    @media (max-width: 1100px) {
+      font-size: 1.3em;
+    }
   }
 
   .spotify-container {
@@ -265,7 +275,24 @@
   .genres {
     a {
       font-size: 1.2em;
-      margin: 2em;
+      margin: 0.4em 1.7em;
+      padding: 0.1em 0.3em;
+      border-radius: 5px;
+      border-bottom: 1px solid #1db954;
+      color: #191414 !important;
+      cursor: pointer;
+      &:hover {
+        background: #1db954;
+        color: #ffffff !important;
+      }
+    }
+  }
+
+  .nav-link {
+    a {
+      font-size: 1.2em;
+      margin: 0.4em 1.7em;
+      padding: 0.1em 0.3em;
       border-bottom: 1px solid #1db954;
       color: #191414 !important;
       cursor: pointer;
@@ -277,6 +304,8 @@
   }
 
   .loading {
-    font-size: 3em;
+    font-size: 2em;
+    padding: 3em;
+    color: #ffffff;
   }
 }

@@ -8,7 +8,7 @@ interface HappyProps {
   features: IUserAudioFeatures
   loaded: boolean
   track: { track: SpotifyApi.TrackObjectFull; score: number }
-  averages: { hasRegion: boolean; data: INationalAverage }
+  averages: { hasRegion: boolean; region?: string; data: INationalAverage }
   emoji: string
 }
 const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
@@ -103,16 +103,20 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
                       className="mood-score-average"
                       style={{ color: backgroundColor }}
                     >
-                      {Math.round(score - averageScore) < 3 ? (
-                        'On Average'
+                      {Math.round(Math.abs(score - averageScore) * 100) < 2 ? (
+                        `Right on the ${
+                          averages.hasRegion
+                            ? `${averages.region} average!`
+                            : 'global average!'
+                        }`
                       ) : (
                         <span>
-                          {Math.abs(Math.round(score - averageScore))}%{' '}
-                          {score > averageScore ? 'lower' : 'higher'} than
-                          others{' '}
+                          That&apos;s{' '}
+                          {Math.round(Math.abs(score - averageScore) * 100)}%{' '}
+                          {score > averageScore ? 'lower' : 'higher'} than{' '}
                           {averages.hasRegion
-                            ? 'in your region'
-                            : 'in the world'}
+                            ? `the ${averages.region} average`
+                            : 'the global average'}
                           .
                         </span>
                       )}

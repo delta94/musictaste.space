@@ -89,14 +89,19 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                 </div>
               </div>
               <div className="col-md-5 d-flex flex-row justify-content-start">
-                <img className="artist-image" src={artists[0].images[0].url} />
+                <div
+                  className="artist-image"
+                  style={{
+                    backgroundImage: `url(${artists[0].images[0].url})`,
+                  }}
+                />
               </div>
             </div>
             <div className="mt-3 mb-3">
               <div className="row sub-artists">
                 <div className="col-md-3 col-4 mt-2">
                   <img
-                    className="artist-image"
+                    className="artist-image-small"
                     src={artists[1].images[0].url}
                   />
                 </div>
@@ -109,7 +114,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                 </div>
                 <div className="col-md-3 col-4 mt-2">
                   <img
-                    className="artist-image"
+                    className="artist-image-small"
                     src={artists[2].images[0].url}
                   />
                 </div>
@@ -124,7 +129,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
               <div className="row sub-artists">
                 <div className="col-md-3 col-4 mt-2">
                   <img
-                    className="artist-image"
+                    className="artist-image-small"
                     src={artists[3].images[0].url}
                   />
                 </div>
@@ -137,7 +142,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                 </div>
                 <div className="col-md-3 col-4 mt-2">
                   <img
-                    className="artist-image"
+                    className="artist-image-small"
                     src={artists[4].images[0].url}
                   />
                 </div>

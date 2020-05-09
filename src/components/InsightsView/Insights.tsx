@@ -89,8 +89,11 @@ const Insights = (props: any) => {
       }
       const region = await s
         .getMe()
-        .then((d) => d.country)
-        .catch(() => 'undefined')
+        .then((d) => (d.country ? d.country : 'world'))
+        .catch(() => {
+          window.location.reload(false)
+          return 'world'
+        })
       const avgData = await firebase.getAverages(region)
       setAverages(avgData)
       setLoading(false)
@@ -138,8 +141,7 @@ const Insights = (props: any) => {
               </>
             ) : (
               <div className="col d-flex flex-row justify-content-center mt-5 mb-5 loading text-center">
-                Please log in again to grant additional priviledges then
-                re-import your data.
+                Please (re-)import your data!
               </div>
             )}
           </div>
@@ -155,7 +157,7 @@ const Insights = (props: any) => {
                   : userData &&
                     userData.importData &&
                     userData.importData.exists
-                  ? 'Please import your Spotify data from the Dashboard.'
+                  ? ''
                   : 'Please log in to discover your Spotify insights.'}
               </div>
             </div>

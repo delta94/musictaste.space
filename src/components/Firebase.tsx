@@ -138,6 +138,7 @@ class Firebase {
     user: string,
     matchUser: string,
     state: string,
+    uid: string,
     tries = 0
   ): Promise<string | boolean> {
     const cf = this.functions.httpsCallable('compareUsers')
@@ -145,6 +146,7 @@ class Firebase {
       userId: user,
       compareUserId: matchUser,
       state,
+      uid,
     }).then((res) => res.data)
     if (res) {
       return res.matchId
@@ -152,7 +154,7 @@ class Firebase {
       if (tries === 2) {
         return false
       }
-      return await this.compareUsers(user, matchUser, state, tries + 1)
+      return await this.compareUsers(user, matchUser, state, uid, tries + 1)
     }
   }
 
@@ -344,7 +346,7 @@ class Firebase {
 
   public async getAverages(
     region: string
-  ): Promise<{ hasRegion: boolean; data: INationalAverage }> {
+  ): Promise<{ hasRegion: boolean; region?: string; data: INationalAverage }> {
     const regionalData = await this.app
       .firestore()
       .collection('app')
@@ -354,7 +356,11 @@ class Firebase {
       .get()
       .then((d) => (d.exists ? d.data() : undefined))
     if (regionalData) {
-      return { hasRegion: true, data: regionalData as INationalAverage }
+      return {
+        hasRegion: true,
+        region,
+        data: regionalData as INationalAverage,
+      }
     } else {
       const globalData = await this.app
         .firestore()

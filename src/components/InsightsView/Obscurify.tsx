@@ -2,7 +2,7 @@ import React from 'react'
 
 interface ObscurifyProps {
   score: number
-  average: { hasRegion: boolean; data: INationalAverage }
+  average: { hasRegion: boolean; region?: string; data: INationalAverage }
 }
 const Obscurify = ({ score, average }: ObscurifyProps) => {
   return (
@@ -20,7 +20,10 @@ const Obscurify = ({ score, average }: ObscurifyProps) => {
               <div className="col-md-6">
                 <div className="d-flex flex-column align-items-center justify-content-center">
                   <div className="sub-heading">
-                    Average {average.hasRegion ? 'In Your Region' : 'Globally'}
+                    Average{' '}
+                    {average.hasRegion
+                      ? `In ${average.region} Region`
+                      : 'Globally'}
                     <br />
                   </div>
                   <div className="average-score">
