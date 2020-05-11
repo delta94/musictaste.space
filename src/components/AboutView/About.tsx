@@ -161,11 +161,8 @@ const About = (props: any) => {
                 Spotify API
               </a>
               , as well as facilitating user-to-user matching and playlist
-              creation. Files are hosted statically using{' '}
-              <a href="https://firebase.google.com/products/hosting/">
-                Firebase Hosting
-              </a>
-              .
+              creation. React PWA hosted by{' '}
+              <a href="https://vercel.com/">Vercel</a>.
             </span>
           </p>
         </div>
