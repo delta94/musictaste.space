@@ -24,6 +24,7 @@
     "firebase": "^7.6.1",
     "node-sass": "^4.13.0",
     "node-vibrant": "^3.1.5",
+    "normal-distribution": "^0.0.9",
     "nouislider": "^14.1.1",
     "perfect-scrollbar": "^1.4.0",
     "prop-types": "^15.5.0",

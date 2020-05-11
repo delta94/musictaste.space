@@ -1,6 +1,7 @@
 declare module 'react-spotify-api'
 declare module 'react-rewards'
 declare module 'react-double-marquee'
+declare module 'normal-distribution'
 
 interface IImportStatus {
   exists: boolean
@@ -181,4 +182,5 @@ interface INationalAverage {
   score: number
   total: number
   lastUpdated: Date
+  stdDev?: number
 }

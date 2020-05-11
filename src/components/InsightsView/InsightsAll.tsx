@@ -3,7 +3,8 @@ import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import { AuthContext } from '../../contexts/Auth'
-import firebase from '../Firebase'
+import createPlaylist from '../../util/createPlaylist'
+import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 import Artists from './InsightsArtists'
 import Header from './InsightsHeader'
@@ -23,6 +24,14 @@ const Insights = (props: any) => {
     }
   }, [currentUser, userData])
 
+  const onCreatePlaylist = (tracks: string[], name: string) => () => {
+    return createPlaylist(userData.accessToken, userData.spotifyID, {
+      name,
+      description: 'Insights discovered on musictaste.space.',
+      tracks: tracks.map((t: string) => `spotify:track:${t}`),
+    })
+  }
+
   return (
     <>
       <Navbar />
@@ -32,14 +41,17 @@ const Insights = (props: any) => {
       <SpotifyApiContext.Provider value={spotifyToken}>
         {Object.entries(spotifyData).length > 0 ? (
           <>
-            <div className="insights">
+            <div className="insights" style={{ overflow: 'hidden' }}>
               <Header
                 spotifyData={spotifyData}
                 userData={userData}
                 showMenu={true}
               />
               <Artists userData={spotifyData} />
-              <Tracks userData={spotifyData} />
+              <Tracks
+                userData={spotifyData}
+                createPlaylist={onCreatePlaylist}
+              />
               <div className="genres">
                 <div className="row mb-5 mt-5">
                   <div className="col d-flex flex-row justify-content-end full-button">

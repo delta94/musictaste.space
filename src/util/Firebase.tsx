@@ -110,20 +110,9 @@ class Firebase {
    * @param uid User ID
    */
   public async refreshSpotifyToken(uid: string): Promise<string | undefined> {
-    const res = await fetch(
-      (process.env.REACT_APP_FUNCTION_REFRESH_CREDENTIALS as string) +
-        '?uid=' +
-        uid
-    ).catch((err) => {
-      console.log(err)
-      return undefined
-    })
-    if (res) {
-      const data = (await res.json()) as {
-        token?: string
-        uid: string
-        error?: any
-      }
+    const cf = this.functions.httpsCallable('refreshCredentials')
+    const data = await cf({}).then((res) => res.data)
+    if (data) {
       return data.token
     }
   }
@@ -139,6 +128,7 @@ class Firebase {
     matchUser: string,
     state: string,
     uid: string,
+    region: string,
     tries = 0
   ): Promise<string | boolean> {
     const cf = this.functions.httpsCallable('compareUsers')
@@ -147,6 +137,7 @@ class Firebase {
       compareUserId: matchUser,
       state,
       uid,
+      region,
     }).then((res) => res.data)
     if (res) {
       return res.matchId
@@ -154,7 +145,14 @@ class Firebase {
       if (tries === 2) {
         return false
       }
-      return await this.compareUsers(user, matchUser, state, uid, tries + 1)
+      return await this.compareUsers(
+        user,
+        matchUser,
+        state,
+        uid,
+        region,
+        tries + 1
+      )
     }
   }
 
@@ -334,42 +332,52 @@ class Firebase {
       .set({ data })
   }
 
-  public async getDemoData(): Promise<IDemoData | undefined> {
-    const data = (await this.app
-      .firestore()
-      .collection('app')
-      .doc('demo')
-      .get()
-      .then((doc) => doc.data())) as IDemoData
-    return data
-  }
-
   public async getAverages(
     region: string
-  ): Promise<{ hasRegion: boolean; region?: string; data: INationalAverage }> {
-    const regionalData = await this.app
+  ): Promise<{
+    hasRegion: boolean
+    region?: string
+    data: INationalAverage
+    stdDev: number
+  }> {
+    const globalData = await this.app
+      .firestore()
+      .collection('app')
+      .doc('averages')
+      .get()
+      .then((d) => d.data())
+    const regionalData = (await this.app
       .firestore()
       .collection('app')
       .doc('averages')
       .collection('countries')
       .doc(region)
       .get()
-      .then((d) => (d.exists ? d.data() : undefined))
-    if (regionalData) {
+      .then((d) => (d.exists ? d.data() : undefined))) as INationalAverage
+    if (regionalData && regionalData.total > 100) {
       return {
         hasRegion: true,
         region,
         data: regionalData as INationalAverage,
+        stdDev: (globalData as INationalAverage).stdDev || 20,
       }
     } else {
-      const globalData = await this.app
-        .firestore()
-        .collection('app')
-        .doc('averages')
-        .get()
-        .then((d) => d.data())
-      return { hasRegion: false, data: globalData as INationalAverage }
+      return {
+        hasRegion: false,
+        data: globalData as INationalAverage,
+        stdDev: (globalData as INationalAverage).stdDev || 20,
+      }
     }
+  }
+
+  public async deleteMatch(uid: string, id: string) {
+    await this.app
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('matches')
+      .doc(id)
+      .delete()
   }
 }
 

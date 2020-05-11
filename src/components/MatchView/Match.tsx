@@ -2,7 +2,7 @@ import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { AuthContext } from '../../contexts/Auth'
-import firebase from '../Firebase'
+import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 import ConfirmOrLoginButton from './ConfirmOrLoginButton'
 

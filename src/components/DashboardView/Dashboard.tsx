@@ -1,5 +1,6 @@
 import Color from 'color'
 import differenceInDays from 'date-fns/differenceInDays'
+import { differenceInMinutes } from 'date-fns/esm'
 import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
@@ -8,7 +9,7 @@ import { useToasts } from 'react-toast-notifications'
 import { Col, Row } from 'reactstrap'
 import styled from 'styled-components'
 import { AuthContext } from '../../contexts/Auth'
-import firebase from '../Firebase'
+import firebase from '../../util/Firebase'
 import LogInButton from '../Home/LogInButton'
 import Navbar from '../Navbars/Navbar'
 import { ArtistFloaters } from './Floaters'
@@ -100,6 +101,7 @@ export function Me() {
   const [menuColor1, setMenuColor1] = useState('#130f40')
   const [menuColor2, setMenuColor2] = useState('#130f40')
   const [menuColor3, setMenuColor3] = useState('#130f40')
+  const [importClick, setImportClick] = useState(false)
 
   const Menu1 = styled.a`
     border-bottom: ${'1px solid ' + menuColor1};
@@ -161,7 +163,12 @@ export function Me() {
 
   const onGetSpotifyData = (e: any) => {
     e.stopPropagation()
-    if (!importStatus.loading) {
+    const brokenImport =
+      importStatus.loading &&
+      importStatus.lastImport &&
+      differenceInMinutes(new Date(), importStatus.lastImport.toDate()) >= 1
+    if (!importStatus.loading || brokenImport) {
+      setImportClick(true)
       firebase.importSpotifyData(currentUser.uid)
       setImportStatus({ ...emptyImport, loading: true })
     }
@@ -169,6 +176,7 @@ export function Me() {
   const onReimportSpotifyData = (e: any) => {
     e.stopPropagation()
     if (!importStatus.loading) {
+      setImportClick(true)
       firebase.importSpotifyData(currentUser.uid, true)
       setImportStatus({ ...emptyImport, loading: true })
     }
@@ -258,12 +266,21 @@ export function Me() {
                             </>
                           ) : null}
                         </>
-                      ) : importStatus.loading ? (
+                      ) : importStatus.loading &&
+                        importStatus.lastImport &&
+                        differenceInMinutes(
+                          new Date(),
+                          importStatus.lastImport.toDate()
+                        ) < 1 ? (
+                        <ImportStatus importStatus={importStatus} />
+                      ) : importStatus.loading && importClick ? (
                         <ImportStatus importStatus={importStatus} />
                       ) : (
                         <>
                           <p className="menu menu-text">
-                            Hey, first timer! Before we continue...
+                            {importStatus.loading
+                              ? "Looks like something may have gone wrong, let's try that again..."
+                              : 'Hey, first timer! Before we continue...'}
                           </p>
                           <Menu1
                             className="menu button1"

@@ -114,7 +114,7 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
                         <span>
                           That&apos;s{' '}
                           {Math.round(Math.abs(score - averageScore) * 100)}%{' '}
-                          {score > averageScore ? 'lower' : 'higher'} than{' '}
+                          {score > averageScore ? 'higher' : 'lower'} than{' '}
                           {averages.hasRegion
                             ? `the ${averages.region} average`
                             : 'the global average'}

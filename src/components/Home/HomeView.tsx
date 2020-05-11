@@ -6,8 +6,8 @@ import { Col, Row } from 'reactstrap'
 import LogInButton from './LogInButton'
 
 // core components
+import Footer from '../Footer/Footer.jsx'
 import Navbar from '../Navbars/Navbar'
-// import Footer from 'components/Footer/Footer.jsx'
 
 // import bigChartData from 'variables/charts.jsx'
 
@@ -53,7 +53,7 @@ const LandingPage = () => {
                 </p>
                 <p className="text-white mb-4">
                   Although this app uses the Spotify API, it is not affiliated
-                  with Spotify. Don't sue me!
+                  with Spotify.
                 </p>
                 <div className="btn-wrapper">
                   <LogInButton />
@@ -61,6 +61,10 @@ const LandingPage = () => {
               </Col>
             </Row>
           </div>
+        </div>
+        <div className="container" style={{ marginTop: '-5em' }}>
+          <hr />
+          Made with ❤️ in Melbourne, Australia.
         </div>
       </div>
       {/* <div className="demo" style={{ zIndex: 1000 }}>

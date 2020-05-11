@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
-import firebase from '../Firebase'
+import firebase from '../../util/Firebase'
 
 const EnterCode = (
   { history, userData }: { history: any; userData: IUserProfile },

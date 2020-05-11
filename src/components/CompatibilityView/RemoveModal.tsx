@@ -1,20 +1,13 @@
-import React, { useContext } from 'react'
-import { useHistory } from 'react-router-dom'
+import React from 'react'
 import { Button, Modal } from 'reactstrap'
-import { AuthContext } from '../../contexts/Auth'
-import firebase from '../../util/Firebase'
 
-// @ts-ignore
-const ProfileModal = (props) => {
-  const history = useHistory()
-  const { currentUser } = useContext(AuthContext)
-
-  const signOut = () => {
-    firebase.app.auth().signOut()
-  }
-
-  const toTally = () => history.push('/tally')
-
+interface RemoveModalProps {
+  isOpen: boolean
+  toggleModal: () => void
+  matchUser: string
+  deleteMatch: () => void
+}
+const RemoveModal = (props: RemoveModalProps) => {
   return (
     <Modal
       modalClassName="modal-mini modal-primary"
@@ -25,26 +18,21 @@ const ProfileModal = (props) => {
         <button className="close" onClick={props.toggleModal}>
           <i className="tim-icons icon-simple-remove text-white" />
         </button>
-        <div
-          className="modal-img-div shadow-lg"
-          style={{ backgroundImage: `url(${currentUser.photoURL})` }}
-          onClick={toTally}
-        />
       </div>
       <div className="modal-body">
         <p>
-          <b>{currentUser.displayName}</b>
+          <b>Are you sure you want to delete your match with</b>
         </p>
-        <p>{currentUser.uid}</p>
+        <p>{props.matchUser}</p>
       </div>
       <div className="modal-footer">
         <Button
           className="btn-neutral"
           color="link"
           type="button"
-          onClick={signOut}
+          onClick={props.deleteMatch}
         >
-          Sign Out
+          Delete
         </Button>
         <Button
           className="btn-neutral"
@@ -59,4 +47,4 @@ const ProfileModal = (props) => {
   )
 }
 
-export default ProfileModal
+export default RemoveModal

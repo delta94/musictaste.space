@@ -3,8 +3,8 @@ import React, { useContext, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useHistory, useLocation } from 'react-router-dom'
 import { AuthContext } from '../contexts/Auth'
+import firebase from '../util/Firebase'
 import { Dot } from './Aux/Dot'
-import firebase from './Firebase'
 
 const Login = () => {
   const history = useHistory()

@@ -30,15 +30,15 @@ class PagesNavbar extends React.Component {
   }
   changeColor = () => {
     if (
-      document.documentElement.scrollTop > 89 ||
-      document.body.scrollTop > 89
+      document.documentElement.scrollTop > 69 ||
+      document.body.scrollTop > 69
     ) {
       this.setState({
         color: 'bg-info',
       })
     } else if (
-      document.documentElement.scrollTop < 90 ||
-      document.body.scrollTop < 90
+      document.documentElement.scrollTop < 70 ||
+      document.body.scrollTop < 70
     ) {
       this.setState({
         color: 'navbar-transparent',
@@ -166,6 +166,11 @@ class PagesNavbar extends React.Component {
                   About
                 </NavLink>
               </NavItem>
+              {/* <NavItem>
+                <NavLink tag={Link} to="/tally">
+                  Tally
+                </NavLink>
+              </NavItem> */}
               <NavItem>
                 <NavLink tag={Link} to="/discord">
                   Discord
