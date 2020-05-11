@@ -2,7 +2,7 @@ import { Timestamp } from '@firebase/firestore-types'
 import React, { useContext, useEffect, useState } from 'react'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
-import firebase from '../Firebase'
+import firebase from '../../util/Firebase'
 import MatchCard from './MatchCard'
 
 const MatchContainer = ({ history }: { history: any }, ...props: any) => {
@@ -45,6 +45,11 @@ const MatchContainer = ({ history }: { history: any }, ...props: any) => {
     loadMatches(userData)
   }, [loadPage, userData])
 
+  const removeMatch = (id: string) => (e: any) => {
+    e.stopPropagation()
+    firebase.deleteMatch(currentUser.uid, id)
+  }
+
   const handleLoadMore = (e: any) => {
     setLoadPage(loadPage + 1)
   }
@@ -72,6 +77,7 @@ const MatchContainer = ({ history }: { history: any }, ...props: any) => {
                 history={history}
                 matchData={doc}
                 key={doc.id}
+                onRemove={removeMatch(doc.id)}
                 onClick={onCardClick(
                   doc.data().matchId,
                   doc.data().matchDate,

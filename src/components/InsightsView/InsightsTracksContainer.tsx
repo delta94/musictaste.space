@@ -2,13 +2,16 @@ import Color from 'color'
 import Vibrant from 'node-vibrant'
 import React, { useEffect, useState } from 'react'
 import { Track } from 'react-spotify-api'
+import CreatePlaylistFromTracksButton from '../PlaylistView/CreatePlaylistButton'
 
 const InsightsTracksContainer = ({
   tracksData,
   textData,
+  onCreatePlaylist,
 }: {
   tracksData: ITrack[]
   textData: { code: string; title: string; lowercase: string }
+  onCreatePlaylist: () => Promise<{ success: boolean }>
 }) => {
   const [artistBackgroundURL, setArtistBackgroundURL] = useState('')
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
@@ -100,10 +103,15 @@ const InsightsTracksContainer = ({
             <div className="track-container">
               <div
                 className="tracks-text"
-                style={{ color: altBackgroundColor }}
+                style={{ color: altBackgroundColor, marginBottom: '1em' }}
               >
                 Here are your {textData.lowercase} top 30 tracks according to
                 Spotify.
+              </div>
+              <div className="d-flex justify-content-center mb-2">
+                <CreatePlaylistFromTracksButton
+                  createPlaylist={onCreatePlaylist}
+                />
               </div>
             </div>
             <div className="rank-text" style={{ color: altBackgroundColor }}>

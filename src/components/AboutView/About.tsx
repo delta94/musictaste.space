@@ -186,6 +186,10 @@ const About = (props: any) => {
           </Button>
         </div>
       </div>
+      <div className="container mb-3">
+        <hr />
+        Made with ❤️ in Melbourne, Australia.
+      </div>
     </>
   )
 }

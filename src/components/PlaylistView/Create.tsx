@@ -1,11 +1,11 @@
 import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
-import { useHistory, useParams, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
+import firebase from '../../util/Firebase'
 import { Dot } from '../Aux/Dot'
-import firebase from '../Firebase'
 import Navbar from '../Navbars/Navbar'
 import Canvas from './Canvas'
 import CreatePlaylistButton from './CreatePlaylistButton'
@@ -48,7 +48,7 @@ const Create = (props: any) => {
         currentUser.uid,
         userData.serverState
       )
-      .catch(err => (playlistError = err))
+      .catch((err) => (playlistError = err))
     if (res.success && res.tracks) {
       const d = (await s
         .createPlaylist(userData.spotifyID, {
@@ -61,8 +61,8 @@ const Create = (props: any) => {
             matchUser.anon ? matchUserId : matchUser.displayName
           }, made on musictaste.space.`,
         })
-        .then(res => res)
-        .catch(err => {
+        .then((res) => res)
+        .catch((err) => {
           setLoading(false)
           setError({
             state: true,
@@ -76,10 +76,10 @@ const Create = (props: any) => {
       s.addTracksToPlaylist(d.id, res.tracks.slice(0, 50))
       playlistData = await s
         .getPlaylist(d.id)
-        .catch(err => (playlistError = err))
+        .catch((err) => (playlistError = err))
       tracks = await s
         .getPlaylistTracks(d.id)
-        .catch(err => (playlistError = err))
+        .catch((err) => (playlistError = err))
       if (tracks.total !== 0) {
         firebase
           .createPlaylistInUser(
@@ -140,14 +140,14 @@ const Create = (props: any) => {
         data.matchedArtists[
           Math.floor(Math.random() * data.matchedArtists.length)
         ].id
-      ).then(res => {
+      ).then((res) => {
         if (res) {
           setArtistImage({ ...res.images[0] } as any)
         }
       })
     }
     if (currentUser && matchId && Object.keys(userData).length !== 0) {
-      getMatchData(matchId).then(s => {
+      getMatchData(matchId).then((s) => {
         if (s) {
           getPlaylistImage(s)
         }

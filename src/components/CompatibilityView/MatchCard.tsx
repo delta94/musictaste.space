@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Spotify from 'spotify-web-api-js'
 import styled from 'styled-components'
 import { AuthContext } from '../../contexts/Auth'
+import RemoveModal from './RemoveModal'
 
 interface IUserMatchData {
   anon: boolean
@@ -17,25 +18,30 @@ interface IUserMatchData {
   bgCode: { type: 'artist' | 'track' | ''; id: string }
 }
 
-const MatchCard = (
-  {
-    history,
-    matchData,
-    onClick,
-  }: { history: any; matchData: any; onClick: (e: any) => void },
-  ...props: any
-) => {
-  const { spotifyToken } = useContext(AuthContext)
+const MatchCard = ({
+  matchData,
+  onClick,
+  onRemove,
+}: {
+  history: any
+  matchData: any
+  onClick: (e: any) => void
+  onRemove?: (e: any) => void
+}) => {
+  const { spotifyToken, currentUser } = useContext(AuthContext)
   const [bgImageURL, setBgImageURL] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
+  const toggleModal = () => setModalOpen(!modalOpen)
+
   const spotify = new Spotify()
   spotify.setAccessToken(spotifyToken)
   const data = matchData.data() as IUserMatchData
   if (data.bgCode.type === 'artist') {
-    spotify.getArtist(data.bgCode.id).then(res => {
+    spotify.getArtist(data.bgCode.id).then((res) => {
       setBgImageURL(res.images[0].url)
     })
   } else if (data.bgCode.type === 'track') {
-    spotify.getTrack(data.bgCode.id).then(res => {
+    spotify.getTrack(data.bgCode.id).then((res) => {
       setBgImageURL(res.album.images[0].url)
     })
   }
@@ -48,7 +54,7 @@ const MatchCard = (
     const setColors = async (image: any) => {
       await Vibrant.from(image)
         .getPalette()
-        .then(palette => {
+        .then((palette) => {
           if (
             palette.LightVibrant &&
             palette.DarkMuted &&
@@ -97,6 +103,13 @@ const MatchCard = (
   `
   return (
     <>
+      <RemoveModal
+        isOpen={modalOpen}
+        toggleModal={toggleModal}
+        matchUser={data.displayName}
+        // @ts-ignore
+        deleteMatch={onRemove}
+      />
       <div className="a-match animated fadeInUp" onClick={onClick}>
         <div className="text-div">
           {data.anon ? (

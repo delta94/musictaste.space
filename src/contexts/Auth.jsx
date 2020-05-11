@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import firebase from '../components/Firebase'
+import firebase from '../util/Firebase'
 import SpotifyWebApi from 'spotify-web-api-js'
 import GoogleAnalytics from 'react-ga'
-
 
 export const AuthContext = React.createContext()
 
@@ -17,29 +16,33 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     let sub = () => {}
     if (currentUser) {
-      GoogleAnalytics.set({ userId : currentUser.uid })
-    sub = firebase.app
-      .firestore()
-      .collection('users')
-      .doc(currentUser.uid)
-      .onSnapshot(doc => {
-        const source = doc.metadata.hasPendingWrites
-        if (!source) {
-          checkAccessToken(doc.data().accessToken, currentUser.uid).then(val => val ? setSpotifyToken(doc.data().accessToken) : null)
-          setUserData(doc.data())
-        }
-      })
+      GoogleAnalytics.set({ userId: currentUser.uid })
+      sub = firebase.app
+        .firestore()
+        .collection('users')
+        .doc(currentUser.uid)
+        .onSnapshot((doc) => {
+          const source = doc.metadata.hasPendingWrites
+          if (!source) {
+            checkAccessToken(
+              doc.data().accessToken,
+              currentUser.uid
+            ).then((val) =>
+              val ? setSpotifyToken(doc.data().accessToken) : null
+            )
+            setUserData(doc.data())
+          }
+        })
     }
     return sub
   }, [currentUser])
-
 
   return (
     <AuthContext.Provider
       value={{
         currentUser,
         spotifyToken,
-        userData
+        userData,
       }}
     >
       {' '}
@@ -48,9 +51,13 @@ export const AuthProvider = ({ children }) => {
   )
 }
 
-
 async function checkAccessToken(token, uid) {
   const sp = new SpotifyWebApi()
   sp.setAccessToken(token)
-  return sp.getMe().then(_ => true).catch(async _ => await firebase.refreshSpotifyToken(uid) ? false: false)
+  return sp
+    .getMe()
+    .then((_) => true)
+    .catch(async (_) =>
+      (await firebase.refreshSpotifyToken(uid)) ? false : false
+    )
 }

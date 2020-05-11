@@ -1,0 +1,47 @@
+.tally {
+  .tally-heading {
+    font-weight: 800;
+    font-size: 3em;
+    // margin-bottom: -0.2em;
+  }
+  min-height: 100vh;
+  min-width: 100vw;
+  font-family: 'Montserrat', sans-serif;
+  transition: 5s;
+  .headings {
+    margin-top: -0.5em;
+    transition: 5s;
+    font-weight: 800;
+    font-size: clamp(1.2em, 5vw, 2em);
+  }
+  .count {
+    transition: 5s;
+    font-weight: 800;
+    font-size: 7em;
+    font-size: clamp(3em, 10vw, 7em);
+  }
+
+  .heading-recent {
+    transition: 5s;
+    font-weight: 800;
+    font-size: 3em;
+    margin: 0.5em 0em;
+    text-align: right;
+    @media screen and (max-width: 1000px) {
+      font-size: 2em;
+    }
+  }
+  .artist-heading {
+    transition: 5s;
+    font-weight: 800;
+    font-size: 1.5em;
+  }
+  .region-heading {
+    transition: 5s;
+    font-weight: 800;
+    font-size: 1.5em;
+  }
+  .region-name {
+    font-size: 3em;
+  }
+}

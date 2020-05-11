@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import { AuthContext } from '../../contexts/Auth'
-import firebase from '../Firebase'
+import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 import Artists from './Artists'
 import Genres from './Genres'
 import Header from './Header'
-import Tracks from './Tracks'
 import Playlist from './Playlist'
+import Tracks from './Tracks'
 
 // @ts-ignore
 const Result = ({ location, history }, ...props: any) => {

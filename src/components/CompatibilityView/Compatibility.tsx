@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Navbar from '../Navbars/Navbar'
 import EnterCode from './EnterCode'
 import MatchContainer from './MatchContainer'
@@ -9,6 +9,13 @@ import LogInButton from '../Home/LogInButton'
 
 function Compatibility({ history }: { history: any }, ...props: any) {
   const { currentUser, userData } = useContext(AuthContext)
+  useEffect(() => {
+    if (currentUser && Object.entries(userData).length) {
+      if (userData.importData && !userData.importData.exists) {
+        history.push('/dashboard')
+      }
+    }
+  }, [currentUser, userData])
   return (
     <>
       <Navbar />

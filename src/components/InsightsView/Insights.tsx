@@ -3,27 +3,23 @@ import { Helmet } from 'react-helmet'
 import { SpotifyApiContext } from 'react-spotify-api'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
-import firebase from '../Firebase'
+import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 import Genres from './InsightsGenres'
 import Header from './InsightsHeader'
 import Moods from './Moods'
 import Obscurify from './Obscurify'
 import TopArtists from './TopArtists'
+import { useHistory } from 'react-router'
 
 const Insights = (props: any) => {
   const { currentUser, spotifyToken, userData } = useContext(AuthContext)
+  const history = useHistory()
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
   const [artistData, setArtistData] = useState(
     [] as SpotifyApi.ArtistObjectFull[]
-  )
-  const [topTrackData, setTopTrackData] = useState(
-    [] as SpotifyApi.TrackObjectFull[]
-  )
-  const [recentTrackData, setRecentTrackData] = useState(
-    [] as SpotifyApi.TrackObjectFull[]
   )
   const [featureTracks, setFeatureTracks] = useState(
     {} as {
@@ -31,10 +27,13 @@ const Insights = (props: any) => {
     }
   )
   const [averages, setAverages] = useState(
-    {} as { hasRegion: boolean; data: INationalAverage }
+    {} as { hasRegion: boolean; data: INationalAverage; stdDev: number }
   )
   useEffect(() => {
     if (Object.entries(userData).length > 0 && currentUser) {
+      if (userData.importData && !userData.importData.exists) {
+        history.push('/dashboard')
+      }
       firebase.getSpotifyData(currentUser.uid).then((data) => {
         if (data) {
           setSpotifyData(data)
@@ -47,20 +46,6 @@ const Insights = (props: any) => {
     const importData = async () => {
       const s = new Spotify()
       s.setAccessToken(userData.accessToken)
-      setTopTrackData(
-        await s
-          .getTracks(spotifyData.topTracksLongTerm.slice(0, 5).map((t) => t.id))
-          .then((d) => d.tracks)
-          .catch(() => [])
-      )
-      setRecentTrackData(
-        await s
-          .getTracks(
-            spotifyData.topTracksShortTerm.slice(0, 5).map((t) => t.id)
-          )
-          .then((d) => d.tracks)
-          .catch(() => [])
-      )
       setArtistData(
         await s
           .getArtists(

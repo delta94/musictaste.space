@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useHistory, useLocation } from 'react-router-dom'
+import firebase from '../util/Firebase'
 import { Dot } from './Aux/Dot'
-import firebase from './Firebase'
 const qs = require('query-string')
 
 const Login = (props: any) => {

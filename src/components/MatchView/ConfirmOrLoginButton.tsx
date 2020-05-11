@@ -3,8 +3,8 @@ import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
+import firebase from '../../util/Firebase'
 import { Dot } from '../Aux/Dot'
-import firebase from '../Firebase'
 
 function ConfirmOrLogInButton(props: any) {
   const history = useHistory()
@@ -33,7 +33,8 @@ function ConfirmOrLogInButton(props: any) {
       !anon ? userData.matchCode : userData.anonMatchCode,
       props.compareUser,
       userData.serverState,
-      currentUser.uid
+      currentUser.uid,
+      userData.region
     )
     setContinueText(
       <>

@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../../contexts/Auth'
-import firebase from '../Firebase'
-import MatchCard from '../CompatibilityView/MatchCard'
-import { Button } from 'reactstrap'
 import { useHistory } from 'react-router'
+import { Button } from 'reactstrap'
+import { AuthContext } from '../../contexts/Auth'
+import firebase from '../../util/Firebase'
+import MatchCard from '../CompatibilityView/MatchCard'
 
 const MatchContainer = () => {
   const history = useHistory()
@@ -36,7 +36,9 @@ const MatchContainer = () => {
             .startAfter(lastDoc)
         }
         const docs = await matchRef.get()
-        setMatches(matches.concat(docs.docs.filter(d => d.data().score > 0.5)))
+        setMatches(
+          matches.concat(docs.docs.filter((d) => d.data().score > 0.5))
+        )
         if (docs.docs.length) {
           setLastDoc(docs.docs[docs.docs.length - 1])
         }

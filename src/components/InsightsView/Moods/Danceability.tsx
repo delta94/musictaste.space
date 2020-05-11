@@ -103,7 +103,7 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
                       className="mood-score-average"
                       style={{ color: backgroundColor }}
                     >
-                      {Math.round(Math.abs(score - averageScore) * 100) < 2 ? (
+                      {Math.round(Math.abs(score - averageScore) * 100) < 3 ? (
                         `Right on the ${
                           averages.hasRegion
                             ? `${averages.region} average!`
@@ -113,7 +113,7 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
                         <span>
                           That&apos;s{' '}
                           {Math.round(Math.abs(score - averageScore) * 100)}%{' '}
-                          {score > averageScore ? 'lower' : 'higher'} than{' '}
+                          {score > averageScore ? 'higher' : 'lower'} than{' '}
                           {averages.hasRegion
                             ? `the ${averages.region} average`
                             : 'the global average'}
