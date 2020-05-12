@@ -1,15 +1,12 @@
 import React from 'react'
-import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
+
 const Genres = ({ genreData }: { genreData: IGenreDict }) => {
   const genres = Object.entries(genreData)
     .map((val) => [val[1].count, val[0]])
     .filter((v) => v[0] > 5)
     .sort((a, b) => (b[0] as number) - (a[0] as number))
-  const history = useHistory()
-  const handleReturn = (e: any) => {
-    history.push('/dashboard')
-  }
+
   const maxCount: number = Number.parseInt(genres[0][0] as string, 10)
   return (
     <div className="genres" id="genres">

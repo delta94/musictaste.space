@@ -1,13 +1,15 @@
 import React, { useContext, useEffect } from 'react'
+import { Helmet } from 'react-helmet'
+import { useHistory } from 'react-router-dom'
+import { AuthContext } from '../../contexts/Auth'
+import LogInButton from '../Home/LogInButton'
 import Navbar from '../Navbars/Navbar'
 import EnterCode from './EnterCode'
 import MatchContainer from './MatchContainer'
 import UserCodes from './UserCodes'
-import { Helmet } from 'react-helmet'
-import { AuthContext } from '../../contexts/Auth'
-import LogInButton from '../Home/LogInButton'
 
-function Compatibility({ history }: { history: any }, ...props: any) {
+function Compatibility() {
+  const history = useHistory()
   const { currentUser, userData } = useContext(AuthContext)
   useEffect(() => {
     if (currentUser && Object.entries(userData).length) {
@@ -15,7 +17,7 @@ function Compatibility({ history }: { history: any }, ...props: any) {
         history.push('/dashboard')
       }
     }
-  }, [currentUser, userData])
+  })
   return (
     <>
       <Navbar />
@@ -50,13 +52,13 @@ function Compatibility({ history }: { history: any }, ...props: any) {
                 Enter A Code
               </a>
             </div>
-            <EnterCode history={history} userData={userData} />
+            <EnterCode userData={userData} />
             <div className="compatibility title-div  sub-title">
               <a id="matches" className="compatibility title" href="#matches">
                 Matches
               </a>
             </div>
-            <MatchContainer history={history} />
+            <MatchContainer />
           </div>
         ) : (
           <div className="waiting">

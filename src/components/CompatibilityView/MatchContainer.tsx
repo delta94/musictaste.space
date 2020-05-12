@@ -1,11 +1,13 @@
 import { Timestamp } from '@firebase/firestore-types'
 import React, { useContext, useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
 import MatchCard from './MatchCard'
 
-const MatchContainer = ({ history }: { history: any }, ...props: any) => {
+const MatchContainer = () => {
+  const history = useHistory()
   const [matches, setMatches] = useState([] as any)
   const [morePages, setMorePages] = useState(false)
   const { currentUser, userData } = useContext(AuthContext)
@@ -14,7 +16,7 @@ const MatchContainer = ({ history }: { history: any }, ...props: any) => {
   useEffect(() => {
     const loadMatches = async (user: any) => {
       const LIMIT = 10
-      if (typeof user.importData !== 'undefined') {
+      if (user.importData && user.importData.exists) {
         let matchRef
         if (!lastDoc) {
           matchRef = firebase.app

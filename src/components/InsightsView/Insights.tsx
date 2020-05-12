@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import { useHistory } from 'react-router'
 import { SpotifyApiContext } from 'react-spotify-api'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
@@ -10,9 +11,8 @@ import Header from './InsightsHeader'
 import Moods from './Moods'
 import Obscurify from './Obscurify'
 import TopArtists from './TopArtists'
-import { useHistory } from 'react-router'
 
-const Insights = (props: any) => {
+const Insights = () => {
   const { currentUser, spotifyToken, userData } = useContext(AuthContext)
   const history = useHistory()
   const [loading, setLoading] = useState(false)
@@ -34,11 +34,13 @@ const Insights = (props: any) => {
       if (userData.importData && !userData.importData.exists) {
         history.push('/dashboard')
       }
-      firebase.getSpotifyData(currentUser.uid).then((data) => {
-        if (data) {
-          setSpotifyData(data)
-        }
-      })
+      if (!Object.entries(spotifyData).length) {
+        firebase.getSpotifyData(currentUser.uid).then((data) => {
+          if (data) {
+            setSpotifyData(data)
+          }
+        })
+      }
     }
   }, [currentUser, userData])
 
@@ -79,8 +81,11 @@ const Insights = (props: any) => {
           window.location.reload(false)
           return 'world'
         })
-      const avgData = await firebase.getAverages(region)
-      setAverages(avgData)
+      if (!Object.entries(averages).length) {
+        const avgData = await firebase.getAverages(region)
+        setAverages(avgData)
+      }
+
       setLoading(false)
       setLoaded(true)
     }

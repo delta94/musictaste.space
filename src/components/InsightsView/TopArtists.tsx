@@ -103,6 +103,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                   <img
                     className="artist-image-small"
                     src={artists[1].images[0].url}
+                    alt="top-artist"
                   />
                 </div>
                 <div className="col-md-3 col-8 mt-2">
@@ -116,6 +117,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                   <img
                     className="artist-image-small"
                     src={artists[2].images[0].url}
+                    alt="top-artist"
                   />
                 </div>
                 <div className="col-md-3 col-8 mt-2">
@@ -131,6 +133,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                   <img
                     className="artist-image-small"
                     src={artists[3].images[0].url}
+                    alt="top-artist"
                   />
                 </div>
                 <div className="col-md-3 col-8 mt-2">
@@ -144,6 +147,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                   <img
                     className="artist-image-small"
                     src={artists[4].images[0].url}
+                    alt="top-artist"
                   />
                 </div>
                 <div className="col-md-3 col-8 mt-2">

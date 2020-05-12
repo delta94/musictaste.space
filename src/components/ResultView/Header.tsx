@@ -83,7 +83,7 @@ const Header = ({
         )
       }
     }
-  }, [toastSent, query.rp, matchData])
+  }, [toastSent, query.rp, matchData, addToast])
 
   const shootConfetti = (e: any) => {
     if (matchData.score > 0.7) {
