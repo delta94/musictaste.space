@@ -126,8 +126,9 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
                       style={{ color: backgroundColor }}
                     >
                       The danceability of tracks is judged by musical elements
-                      such as tempo, rhythm stability, and beat strength. Your
-                      top tracks are {Math.round(score * 100)}% danceable on
+                      such as tempo, rhythm stability, and beat strength to give
+                      a score on how well you could groove to it. Your top
+                      tracks are {Math.round(score * 100)}% danceable on
                       average.
                     </div>
                   </div>

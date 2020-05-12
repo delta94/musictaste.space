@@ -190,6 +190,9 @@
   .track-label {
     text-align: center;
     margin-top: 1.5em;
+    &.no-margin {
+      margin-top: 0em;
+    }
   }
 
   .mood-score-average {

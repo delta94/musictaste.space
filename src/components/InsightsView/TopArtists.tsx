@@ -84,8 +84,8 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                   <span style={{ color: altTextColor }}>{artists[0].name}</span>
                 </div>
                 <div className="subtitle" style={{ color: altBackgroundColor }}>
-                  When it comes to your favourite artist, no one does it quite
-                  like {artists[0].name}!
+                  When it comes to your favourite artist at the moment, no one
+                  does it quite like {artists[0].name}!
                 </div>
               </div>
               <div className="col-md-5 d-flex flex-row justify-content-start">
