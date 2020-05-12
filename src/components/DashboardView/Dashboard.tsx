@@ -5,7 +5,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
-import { useToasts } from 'react-toast-notifications'
 import { Col, Row } from 'reactstrap'
 import styled from 'styled-components'
 import { AuthContext } from '../../contexts/Auth'
@@ -59,7 +58,6 @@ export function Me() {
     loading: false,
   } as IImportStatus)
   const [loading, setLoading] = useState(false)
-  const { addToast } = useToasts()
 
   useEffect(() => {
     if (typeof userData.importData === 'undefined') {
@@ -184,7 +182,7 @@ export function Me() {
 
   const onClickHandle = (route: string) => (e: any) => history.push(route)
 
-  if (currentUser && spotifyToken) {
+  if (currentUser) {
     return (
       <>
         <SpotifyApiContext.Provider value={spotifyToken}>
@@ -205,7 +203,7 @@ export function Me() {
             style={{ backgroundColor: `${backgroundColor}` }}
           >
             <div className="page-header">
-              {Object.entries(spotifyData).length !== 0 ? (
+              {Object.entries(spotifyData).length ? (
                 <ArtistFloaters
                   spotifyData={spotifyData}
                   setMenuColors={setMenuColors}
@@ -275,7 +273,7 @@ export function Me() {
                         <ImportStatus importStatus={importStatus} />
                       ) : importStatus.loading && importClick ? (
                         <ImportStatus importStatus={importStatus} />
-                      ) : (
+                      ) : Object.entries(userData).length ? (
                         <>
                           <p className="menu menu-text">
                             {importStatus.loading
@@ -289,6 +287,8 @@ export function Me() {
                             Get My Spotify Data
                           </Menu1>
                         </>
+                      ) : (
+                        <p className="menu menu-text">Loading...</p>
                       )}
                     </Col>
                     <Col lg="3" md="3" />
