@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
@@ -11,7 +11,8 @@ import Playlist from './Playlist'
 import Tracks from './Tracks'
 
 // @ts-ignore
-const Result = ({ location, history }, ...props: any) => {
+const Result = () => {
+  const history = useHistory()
   window.scrollTo(0, 0)
   const { currentUser, spotifyToken, userData } = useContext(AuthContext)
   const [matchUser, setMatchUser] = useState({} as IUsersLookupData)

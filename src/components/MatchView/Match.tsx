@@ -67,7 +67,7 @@ const Match = () => {
     } else if (query.request) {
       setDataOnly(query.request as string)
     }
-  }, [currentUser, userData])
+  })
 
   const onGoToMatch = () => {
     history.push(`/match/${matchCode}`)

@@ -15,7 +15,11 @@ const Insights = (props: any) => {
 
   const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
   useEffect(() => {
-    if (Object.entries(userData).length > 0 && currentUser) {
+    if (
+      Object.entries(userData).length > 0 &&
+      currentUser &&
+      !Object.entries(spotifyData).length
+    ) {
       firebase.getSpotifyData(currentUser.uid).then((data) => {
         if (data) {
           setSpotifyData(data)

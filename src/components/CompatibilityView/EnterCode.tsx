@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
 import firebase from '../../util/Firebase'
 
-const EnterCode = (
-  { history, userData }: { history: any; userData: IUserProfile },
-  ...props: any
-) => {
+const EnterCode = ({ userData }: { userData: IUserProfile }) => {
+  const history = useHistory()
   const [code, setCode] = useState('')
   const [exists, setExists] = useState(true)
   const [backgroundColor, setBackgroundColor] = useState('#dff9fb')
