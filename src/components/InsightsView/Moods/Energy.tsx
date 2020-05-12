@@ -153,9 +153,9 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
                       style={{ color: backgroundColor }}
                     >
                       Energetic tracks feel fast, loud and noisy. For example,
-                      death metal has high energy while Bach would lie on the
-                      other side of the scale. Your top tracks have an energy of{' '}
-                      {Math.round(score * 100)}% on average.
+                      heavy metal has high energy while lo-fi hip pop might lie
+                      on the other side of the scale. Your top tracks have an
+                      energy of {Math.round(score * 100)}% on average.
                     </div>
                   </div>
                 </div>
