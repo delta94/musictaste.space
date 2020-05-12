@@ -1,16 +1,20 @@
 import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import { useHistory, useLocation } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 import ConfirmOrLoginButton from './ConfirmOrLoginButton'
 
-// @ts-ignore
-const Match = ({ location, history }, ...props: any) => {
+const Match = () => {
+  const history = useHistory()
+  const location = useLocation()
   window.scrollTo(0, 0)
   const { currentUser, userData } = useContext(AuthContext)
-  const [matchUser, setMatchUser] = useState({} as IUsersLookupData)
+  const [matchUser, setMatchUser] = useState<IUsersLookupData | undefined>(
+    undefined
+  )
   const [rematch, setRematch] = useState(false)
   const [matchCode, setMatchCode] = useState('')
   const query = qs.parse(location.search)
@@ -23,34 +27,39 @@ const Match = ({ location, history }, ...props: any) => {
   }
   useEffect(() => {
     const getInfo = async (id: string) => {
-      const d = await firebase.getUserFromID(id)
-      if (d) {
-        setMatchUser(d)
-        const m = await firebase.userHasMatchForId(currentUser.uid, id)
-        if (m) {
-          const match = m as IPreviewMatchData
-          if (
-            match.matchDate.toDate() < userData.importData.lastImport.toDate()
-          ) {
-            setRematch(true)
-            setMatchCode(match.matchId)
-          } else {
-            history.push('/match/' + match.matchId)
-          }
+      if (!matchUser) {
+        const d = await firebase.getUserFromID(id)
+        if (d) {
+          setMatchUser(d)
+        } else {
+          history.push('/compatibility')
         }
-      } else {
-        history.push('/compatibility')
+      }
+      const m = await firebase.userHasMatchForId(currentUser.uid, id)
+      if (m) {
+        const match = m as IPreviewMatchData
+        if (
+          match.matchDate.toDate() < userData.importData.lastImport.toDate()
+        ) {
+          setRematch(true)
+          setMatchCode(match.matchId)
+        } else {
+          history.push('/match/' + match.matchId)
+        }
       }
     }
     const setDataOnly = async (id: string) => {
-      const d = await firebase.getUserFromID(id)
-      if (d) {
-        setMatchUser(d)
+      if (!matchUser) {
+        const d = await firebase.getUserFromID(id)
+        if (d) {
+          setMatchUser(d)
+        }
       }
     }
-    if (currentUser && query.request && Object.entries(userData).length !== 0) {
-      if (typeof userData.importData === 'undefined') {
+    if (currentUser && query.request && Object.entries(userData).length) {
+      if (!userData.importData || !userData.importData.exists) {
         localStorage.setItem('redirectMatch', query.request as string)
+        localStorage.setItem('redirectMatchDate', new Date().toString())
         history.push(`/dashboard?callback=true&page=match&id=${query.request}`)
       } else {
         getInfo(query.request as string)
@@ -60,7 +69,7 @@ const Match = ({ location, history }, ...props: any) => {
     }
   }, [currentUser, userData])
 
-  const onGoToMatch = (e: any) => {
+  const onGoToMatch = () => {
     history.push(`/match/${matchCode}`)
   }
   return (
@@ -85,8 +94,9 @@ const Match = ({ location, history }, ...props: any) => {
                   style={{ backgroundImage: `url(${userData.photoURL})` }}
                 />
               </div>
+
               <div className="user2 animated fadeInRightBig">
-                {matchUser.anon ? (
+                {matchUser && matchUser.anon ? (
                   <div className="profile-img-div">
                     <i
                       className="fas fa-user-secret profile-img anon-profile"
@@ -97,46 +107,56 @@ const Match = ({ location, history }, ...props: any) => {
                 ) : (
                   <div
                     className="profile-img-div"
-                    style={{ backgroundImage: `url(${matchUser.imageURL})` }}
+                    style={{
+                      backgroundImage: `url(${
+                        matchUser && matchUser.imageURL
+                      })`,
+                    }}
                   />
                 )}
               </div>
             </>
           ) : (
             <>
-              <div className="user2 animated fadeInRightBig">
-                {matchUser.anon ? (
-                  <div className="profile-img-div">
-                    <i
-                      className="fas fa-user-secret profile-img anon-profile"
-                      aria-hidden="true"
-                      style={{ color: '#130f40' }}
+              {matchUser ? (
+                <div className="user2 animated fadeInRightBig">
+                  {matchUser.anon ? (
+                    <div className="profile-img-div">
+                      <i
+                        className="fas fa-user-secret profile-img anon-profile"
+                        aria-hidden="true"
+                        style={{ color: '#130f40' }}
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="profile-img-div"
+                      style={{ backgroundImage: `url(${matchUser.imageURL})` }}
                     />
-                  </div>
-                ) : (
-                  <div
-                    className="profile-img-div"
-                    style={{ backgroundImage: `url(${matchUser.imageURL})` }}
-                  />
-                )}
-              </div>
+                  )}
+                </div>
+              ) : null}
             </>
           )}
         </div>
         <div className="confirm-text animated fadeInUp above-button">
           {currentUser ? (
-            <>
-              <p>
-                You are{' '}
-                {rematch ? <strong>rematching</strong> : 'comparing tastes'}{' '}
-                with
-                {matchUser.anon ? ' anonymous user:' : ':'}
-              </p>
-              <p className="user-name">
-                {matchUser.anon ? query.request : matchUser.displayName}
-              </p>
-            </>
-          ) : (
+            matchUser ? (
+              <>
+                <p>
+                  You are{' '}
+                  {rematch ? <strong>rematching</strong> : 'comparing tastes'}{' '}
+                  with
+                  {matchUser.anon ? ' anonymous user:' : ':'}
+                </p>
+                <p className="user-name">
+                  {matchUser.anon ? query.request : matchUser.displayName}
+                </p>
+              </>
+            ) : (
+              <p>Loading...</p>
+            )
+          ) : matchUser ? (
             <>
               <p className="smaller-text">
                 {matchUser.anon
@@ -146,12 +166,14 @@ const Match = ({ location, history }, ...props: any) => {
                 Spotify to get your own code and find out!
               </p>
             </>
+          ) : (
+            <p>Loading...</p>
           )}
         </div>
         <div className="start-button animated fadeInUp">
           <ConfirmOrLoginButton
             compareUser={query.request}
-            anon={matchUser.anon}
+            anon={matchUser && matchUser.anon}
             rematch={{ rematch, matchCode }}
           />
         </div>
@@ -175,17 +197,19 @@ const Match = ({ location, history }, ...props: any) => {
 
         <div className="confirm-text below-button animated fadeInUp">
           {currentUser ? (
-            <>
-              <p className="smaller-text">
-                {rematch
-                  ? 'Since you are rematching with new data, your previous match will be overwritten.'
-                  : matchUser.anon
-                  ? 'Because this is an anonymous match, your profile will appear as ' +
-                    userData.anonMatchCode +
-                    '. Your name and profile photo are not shared.'
-                  : "Your name and profile photo will be shared with the person you're matching with."}
-              </p>
-            </>
+            matchUser ? (
+              <>
+                <p className="smaller-text">
+                  {rematch
+                    ? 'Since you are rematching with new data, your previous match will be overwritten.'
+                    : matchUser.anon
+                    ? 'Because this is an anonymous match, your profile will appear as ' +
+                      userData.anonMatchCode +
+                      '. Your name and profile photo are not shared.'
+                    : "Your name and profile photo will be shared with the person you're matching with."}
+                </p>
+              </>
+            ) : null
           ) : (
             <>
               <p className="smaller-text">
