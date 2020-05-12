@@ -90,7 +90,7 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
               <div className="row">
                 <div className="col-md-6 d-flex flex-column justify-content-center align-items-center">
                   <div
-                    className="track-label"
+                    className="track-label no-margin"
                     style={{ color: backgroundColor }}
                   >
                     Your Most Pumpin&apos; Song
@@ -153,9 +153,9 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
                       style={{ color: backgroundColor }}
                     >
                       Energetic tracks feel fast, loud and noisy. For example,
-                      heavy metal has high energy while lo-fi hip pop might lie
-                      on the other side of the scale. Your top tracks have an
-                      energy of {Math.round(score * 100)}% on average.
+                      heavy metal has high energy while lo-fi hip pop might not.
+                      Your top tracks have an energy of{' '}
+                      {Math.round(score * 100)}% on average.
                     </div>
                   </div>
                 </div>

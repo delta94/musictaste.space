@@ -90,7 +90,7 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
               <div className="row">
                 <div className="col-md-6 d-flex flex-column justify-content-center align-items-center">
                   <div
-                    className="track-label"
+                    className="track-label no-margin"
                     style={{ color: backgroundColor }}
                   >
                     Your Acoustic Gem
