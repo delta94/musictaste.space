@@ -1,5 +1,6 @@
 import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
+import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Link } from 'react-router-dom'
@@ -45,7 +46,12 @@ const Match = () => {
           setRematch(true)
           setMatchCode(match.matchId)
         } else {
-          history.push('/match/' + match.matchId)
+          GoogleAnalytics.event({
+            category: 'Interaction',
+            action: 'Follow request link to existing match',
+            label: 'Match Redirect',
+          })
+          history.push(`/match/${match.matchId}?r=1`)
         }
       }
     }
