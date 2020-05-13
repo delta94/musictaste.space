@@ -63,6 +63,11 @@ const MatchContainer = () => {
     e.stopPropagation()
     setMatches(matches.filter((m: any) => m.id !== id))
     firebase.deleteMatch(currentUser.uid, id)
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      label: 'Remove Match',
+      action: 'Deleted a match from the Compatibility page',
+    })
   }
 
   const handleLoadMore = (e: any) => {

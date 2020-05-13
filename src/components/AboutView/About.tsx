@@ -140,8 +140,8 @@ const About = () => {
               data may also be used for general statistical analysis or
               demographic comparisons (ie. How many people have Taylor Swift in
               their Top 10 artists? Do more females like her than males?). If
-              you&apos;d like your data deleted, please message me on{' '}
-              <a href="https://www.twitter.com/_kalpal">Twitter</a>.
+              you&apos;d like to delete your account, you can now do so{' '}
+              <Link to="/account/delete">here</Link>.
             </span>
           </p>
           <h2>

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
@@ -61,6 +62,11 @@ const MatchContainer = () => {
   }, [])
 
   const onCardClick = (matchId: string) => (e: any) => {
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      label: 'Visit Playlist',
+      action: 'Visited create playlist page from playlist page',
+    })
     history.push('/playlist/' + matchId)
   }
 

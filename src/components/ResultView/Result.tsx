@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import GoogleAnalytics from 'react-ga'
 import { useHistory, useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import { AuthContext } from '../../contexts/Auth'
@@ -10,7 +11,6 @@ import Header from './Header'
 import Playlist from './Playlist'
 import Tracks from './Tracks'
 
-// @ts-ignore
 const Result = () => {
   const history = useHistory()
   window.scrollTo(0, 0)
@@ -69,6 +69,11 @@ const Result = () => {
   }, [currentUser, matchId])
 
   const handleClick = (e: any) => {
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      label: 'Visit Playlist',
+      action: 'Visited create playlist page from match',
+    })
     history.push('/playlist/' + matchId + '?from=match')
   }
   return (
