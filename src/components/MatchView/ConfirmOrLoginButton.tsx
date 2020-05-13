@@ -21,6 +21,7 @@ function ConfirmOrLogInButton(props: any) {
     GoogleAnalytics.event({
       category: 'Log In',
       action: 'Logged In From Match Page',
+      label: 'Match Log In',
     })
     // if mobile, redirect to login instead of pop up login
     isMobile
@@ -47,16 +48,30 @@ function ConfirmOrLogInButton(props: any) {
       </>
     )
     t.then((code) => {
+      GoogleAnalytics.event({
+        category: 'Interaction',
+        action: 'Follow request link to existing match',
+        label: 'Match Redirect',
+      })
       history.push('/match/' + code)
     })
   }
   function handleClickContinue() {
     if (!started) {
       startCompareUsers()
-      GoogleAnalytics.event({
-        category: 'Interaction',
-        action: 'Match With a User',
-      })
+      if (props.rematch.rematch) {
+        GoogleAnalytics.event({
+          category: 'Interaction',
+          action: 'Rematch with a user',
+          label: 'Rematch',
+        })
+      } else {
+        GoogleAnalytics.event({
+          category: 'Interaction',
+          action: 'Matched with a user',
+          label: 'Match',
+        })
+      }
     }
     setStarted(true)
   }
