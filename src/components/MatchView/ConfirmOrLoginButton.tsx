@@ -48,12 +48,7 @@ function ConfirmOrLogInButton(props: any) {
       </>
     )
     t.then((code) => {
-      GoogleAnalytics.event({
-        category: 'Interaction',
-        action: 'Follow request link to existing match',
-        label: 'Match Redirect',
-      })
-      history.push('/match/' + code)
+      history.push(`/match/${code}`)
     })
   }
   function handleClickContinue() {

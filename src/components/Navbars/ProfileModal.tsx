@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom'
 import { Button, Modal } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
+import { Dot } from '../Aux/Dot'
 
 const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
   const history = useHistory()
@@ -117,7 +118,7 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
         <div className="row mt-3">
           <div className="col-4 text-left d-flex flex-column">
             <span className="data-title">
-              <strong>API</strong>
+              <strong>API {userData.accessToken ? <Dot>•</Dot> : ''}</strong>
             </span>
             <span className="data">
               {userData.accessToken ? 'Connected' : 'Error'}
