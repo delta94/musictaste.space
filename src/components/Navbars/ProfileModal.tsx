@@ -88,7 +88,9 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
               <strong>Match Code</strong>
             </span>
             <span className="data">
-              {userData.matchCode ? userData.matchCode : 'Error'}
+              {userData.importData?.exists && userData.matchCode
+                ? userData.matchCode
+                : '-'}
             </span>
           </div>
           <div className="col-4 text-left d-flex flex-column">
@@ -96,7 +98,9 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
               <strong>Anon Code</strong>
             </span>
             <span className="data">
-              {userData.anonMatchCode ? userData.anonMatchCode : 'Error'}
+              {userData.importData?.exists && userData.anonMatchCode
+                ? userData.anonMatchCode
+                : '-'}
             </span>
           </div>
           <div className="col-4 text-left d-flex flex-column">

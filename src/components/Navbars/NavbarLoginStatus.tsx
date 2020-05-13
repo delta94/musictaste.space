@@ -17,7 +17,7 @@ class NavbarLoginStatus extends React.Component<{}, { modalOpen: boolean }> {
       GoogleAnalytics.event({
         category: 'Interaction',
         label: 'Modal',
-        action: 'User profile modal opened.',
+        action: 'User profile modal opened',
       })
     }
     this.setState({ modalOpen: !this.state.modalOpen })
