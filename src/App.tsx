@@ -6,6 +6,7 @@ import { ToastProvider } from 'react-toast-notifications'
 import About from './components/AboutView/About'
 import Compatibility from './components/CompatibilityView/Compatibility'
 import Dashboard from './components/DashboardView/Dashboard'
+import DeleteAccountView from './components/DeleteAccountView/DeleteAccountView'
 import Discord from './components/DiscordView/Discord'
 import HomeView from './components/Home/HomeView'
 import Insights from './components/InsightsView/Insights'
@@ -116,6 +117,11 @@ export default function SpotifyCompatibility() {
                 exact={true}
                 path="/tally"
                 component={withTracker(Tally)}
+              />
+              <Route
+                exact={true}
+                path="/account/delete"
+                component={withTracker(DeleteAccountView)}
               />
             </div>
           </Router>
