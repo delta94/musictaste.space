@@ -13,7 +13,7 @@ import {
 } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 
-function UserCodes(props: any) {
+function UserCodes() {
   const { currentUser, userData } = useContext(AuthContext)
 
   const copyIdToClipboard = (e: any) => {
@@ -88,7 +88,7 @@ function UserCodes(props: any) {
               <InputGroupAddon addonType="append">
                 <InputGroupText className="input-border input-group-append">
                   <i
-                    className="tim-icons icon-single-copy-04 url-copy-icon"
+                    className="far fa-copy url-copy-icon"
                     onClick={copyUrlToClipboard}
                   />
                 </InputGroupText>
@@ -138,7 +138,7 @@ function UserCodes(props: any) {
                   <InputGroupText className="input-border input-group-append">
                     <i
                       className={
-                        'tim-icons icon-single-copy-04 id-copy-icon' +
+                        'far fa-copy url-copy-icon id-copy-icon' +
                         (anonIDDisplay ? ' incognito' : '')
                       }
                       onClick={copyIdToClipboard}
