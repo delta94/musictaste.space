@@ -1,3 +1,4 @@
+import firebase from 'firebase/app'
 import React, { useContext, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
@@ -10,6 +11,7 @@ const LinkDiscordButton = () => {
   const { currentUser, userData } = useContext(AuthContext)
   const [continueText, setContinueText] = useState(<>Connect Discord</>)
   const [started, setStarted] = useState(false)
+  const [unlinked, setUnlinked] = useState(false)
 
   function handleClickLogin() {
     const isMobile = window.matchMedia('only screen and (max-width: 760px)')
@@ -18,13 +20,35 @@ const LinkDiscordButton = () => {
     localStorage.setItem('redirectTimestamp', new Date().toJSON())
     GoogleAnalytics.event({
       category: 'Log In',
-      action: 'Logged In From Discord Page',
+      action: 'Logged in from Discord page',
+      label: 'Discord Log In',
     })
     setStarted(true)
     // if mobile, redirect to login instead of pop up login
     isMobile
       ? history.push('/login')
       : window.open('login', '_blank', 'height=585,width=500')
+  }
+
+  function handleUnlink() {
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(currentUser.uid)
+      .update({
+        discordId: firebase.firestore.FieldValue.delete(),
+        discord: firebase.firestore.FieldValue.delete(),
+      })
+      .then(() => {
+        setContinueText(<>Connect Discord</>)
+        setUnlinked(true)
+      })
+      .catch(() => {})
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      action: 'Unlinked Discord from the Discord page',
+      label: 'Unlinked Discord',
+    })
   }
 
   function handleClickDiscord() {
@@ -34,7 +58,8 @@ const LinkDiscordButton = () => {
     localStorage.setItem('redirectTimestamp', new Date().toJSON())
     GoogleAnalytics.event({
       category: 'Link',
-      action: 'Linked Discord',
+      action: 'Linked Discord from the discord page',
+      label: 'Link Discord',
     })
     setContinueText(
       <div className="waiting-text">
@@ -54,7 +79,7 @@ const LinkDiscordButton = () => {
 
   return currentUser ? (
     Object.entries(userData).length ? (
-      !userData.discord ? (
+      !userData.discord || unlinked ? (
         <>
           <Button
             className="btn-round discord-link-button"
@@ -69,9 +94,9 @@ const LinkDiscordButton = () => {
           <Button
             className="btn-round discord-linked-button"
             size="md"
-            onClick={handleClickDiscord}
+            onClick={handleUnlink}
           >
-            <>Reload Discord Profile</>
+            <>Unlink Profile</>
           </Button>
         </>
       )
