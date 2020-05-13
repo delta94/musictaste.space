@@ -1,5 +1,6 @@
 import copy from 'copy-to-clipboard'
 import React, { useContext, useState } from 'react'
+import GoogleAnalytics from 'react-ga'
 import Switch from 'react-switch'
 import {
   Col,
@@ -16,6 +17,11 @@ function UserCodes(props: any) {
   const { currentUser, userData } = useContext(AuthContext)
 
   const copyIdToClipboard = (e: any) => {
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      label: 'Copy Code',
+      action: 'Copied match ID to clipboard',
+    })
     document
       .getElementsByClassName('id-copy-icon')[0]
       .classList.remove('animated', 'tada')
@@ -26,6 +32,11 @@ function UserCodes(props: any) {
   }
 
   const copyUrlToClipboard = (e: any) => {
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      label: 'Copy Code',
+      action: 'Copied match URL to clipboard',
+    })
     document
       .getElementsByClassName('url-copy-icon')[0]
       .classList.remove('animated', 'tada')
