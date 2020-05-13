@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
@@ -19,16 +20,6 @@ const EnterCode = ({ userData }: { userData: IUserProfile }) => {
       .toLowerCase()
     setCode(val)
   }
-  const checkEnterKey = (e: any) => {
-    if (e.key === 'Enter') {
-      validateCode(code)
-    }
-  }
-  const onSubmitCode = (e: any) => {
-    if (exists) {
-      validateCode(code)
-    }
-  }
 
   useEffect(() => {
     if (!exists) {
@@ -42,7 +33,7 @@ const EnterCode = ({ userData }: { userData: IUserProfile }) => {
         setBackgroundColor('#dff9fb')
       }
     }
-  }, [code])
+  }, [code, exists, fails])
 
   const validateCode = async (code: string) => {
     if (code !== userData.matchCode && code !== userData.anonMatchCode) {
@@ -52,6 +43,11 @@ const EnterCode = ({ userData }: { userData: IUserProfile }) => {
         .doc(code)
         .get()
       if (d.exists) {
+        GoogleAnalytics.event({
+          category: 'Interaction',
+          label: 'Match',
+          action: 'Code entered from Compatibility page.',
+        })
         history.push('/match?request=' + code)
       } else {
         setExists(false)
@@ -68,6 +64,16 @@ const EnterCode = ({ userData }: { userData: IUserProfile }) => {
       })
       setExists(false)
       setFails(fails + 1)
+    }
+  }
+  const checkEnterKey = (e: any) => {
+    if (e.key === 'Enter') {
+      validateCode(code)
+    }
+  }
+  const onSubmitCode = (e: any) => {
+    if (exists) {
+      validateCode(code)
     }
   }
   return (

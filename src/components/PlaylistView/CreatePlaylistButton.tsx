@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import GoogleAnalytics from 'react-ga'
 import { Button } from 'reactstrap'
 import { Dot } from '../Aux/Dot'
 
@@ -31,11 +30,7 @@ function CreatePlaylistButton({
         </div>
       </>
     )
-    createPlaylist().then(res => {
-      GoogleAnalytics.event({
-        category: 'Interaction',
-        action: 'Create A Playlist',
-      })
+    createPlaylist().then((res) => {
       if (res.success) {
         setSpotifyURL(res.uri as string)
         setContinueText(<>Done!</>)

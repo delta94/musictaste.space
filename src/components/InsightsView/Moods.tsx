@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Acousticness from './Moods/Acousticness'
 import Danceability from './Moods/Danceability'
 import Energy from './Moods/Energy'
@@ -64,7 +64,7 @@ const Moods = ({ features, loaded, tracks, averages }: MoodsProps) => {
           />
         </>
       ) : (
-        <div className="col">Loading...</div>
+        <div className="col" />
       )}
     </div>
   )

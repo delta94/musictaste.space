@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'

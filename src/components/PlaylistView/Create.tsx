@@ -1,6 +1,7 @@
 import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import GoogleAnalytics from 'react-ga'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
@@ -10,7 +11,7 @@ import Navbar from '../Navbars/Navbar'
 import Canvas from './Canvas'
 import CreatePlaylistButton from './CreatePlaylistButton'
 
-const Create = (props: any) => {
+const Create = () => {
   window.scrollTo(0, 0)
   const { currentUser, spotifyToken, userData } = useContext(AuthContext)
   const [matchUser, setMatchUser] = useState({} as IUsersLookupData)
@@ -25,14 +26,8 @@ const Create = (props: any) => {
   const [playlistImage, setPlaylistImage] = useState('')
   const [error, setError] = useState({ state: false, message: '' })
   const [loading, setLoading] = useState(true)
-  const history = useHistory()
   const location = useLocation()
   const query = qs.parse(location.search)
-  const backToPlaylist = (e: any) => {
-    query.from === 'match'
-      ? history.push('/match/' + matchId)
-      : history.push('/playlist')
-  }
 
   async function createPlaylist(): Promise<{
     success: boolean
@@ -62,7 +57,7 @@ const Create = (props: any) => {
           }, made on musictaste.space.`,
         })
         .then((res) => res)
-        .catch((err) => {
+        .catch(() => {
           setLoading(false)
           setError({
             state: true,
@@ -72,9 +67,8 @@ const Create = (props: any) => {
         })) as { id: string }
       await s.uploadCustomPlaylistCoverImage(d.id, playlistImage)
       let tracks = { total: 0 }
-      let playlistData
       s.addTracksToPlaylist(d.id, res.tracks.slice(0, 50))
-      playlistData = await s
+      const playlistData = await s
         .getPlaylist(d.id)
         .catch((err) => (playlistError = err))
       tracks = await s
@@ -95,6 +89,11 @@ const Create = (props: any) => {
             .spotify,
         }
       }
+      GoogleAnalytics.event({
+        category: 'Interaction',
+        label: 'Create Playlist',
+        action: 'Created a collaborative playlist with match user.',
+      })
       return { success: false, error: playlistError }
     }
     setError({
@@ -189,14 +188,19 @@ const Create = (props: any) => {
                 </div>
                 <CreatePlaylistButton createPlaylist={createPlaylist} />
                 <p style={{ marginTop: '10px', marginBottom: '10px' }}>
-                  <a onClick={backToPlaylist} className="underline">
+                  <Link
+                    to={
+                      query.from === 'match' ? `/match/${matchId}` : '/playlist'
+                    }
+                    className="underline"
+                  >
                     {query.from ? 'Back To Match' : 'Back To Playlists'}
-                  </a>
+                  </Link>
                 </p>
                 <div className="description">
                   These playlists are based on your top tracks, shared artists,
-                  and shared genres. It's a collection of songs that you can
-                  both jam to in the car, or use to get to know each other
+                  and shared genres. It&apos;s a collection of songs that you
+                  can both jam to in the car, or use to get to know each other
                   better. Depending on how high your score was, playlists can be
                   generated multiple times.
                 </div>

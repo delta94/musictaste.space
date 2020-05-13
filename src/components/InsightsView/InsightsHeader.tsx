@@ -1,7 +1,6 @@
 import Color from 'color'
 import Vibrant from 'node-vibrant'
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
 
 import { HashLink as Link } from 'react-router-hash-link'
 
@@ -18,7 +17,6 @@ const Header = ({
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
   const [textColor, setTextColor] = useState('#c7ecee')
   const [altTextColor, setAltTextColor] = useState('#c7ecee')
-  const history = useHistory()
 
   useEffect(() => {
     const setColors = async (image: any) => {
@@ -62,9 +60,6 @@ const Header = ({
     }
   }, [userData])
 
-  const handleReturn = (e: any) => {
-    history.push('/dashboard')
-  }
   return (
     <>
       <div className="insights-header" style={{ backgroundColor }}>
@@ -113,16 +108,6 @@ const Header = ({
             </div>
           </div>
         )}
-
-        {/* <div className="button-div animated fadeInUp">
-          <Button
-            className="btn-round sign-in-button return-button "
-            size="lg"
-            onClick={handleReturn}
-          >
-            Return to Dashboard
-          </Button>
-        </div> */}
       </div>
 
       <div className="score-and-artist" />

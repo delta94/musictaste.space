@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
@@ -10,7 +11,7 @@ import Artists from './InsightsArtists'
 import Header from './InsightsHeader'
 import Tracks from './InsightsTracks'
 
-const Insights = (props: any) => {
+const Insights = () => {
   const { currentUser, spotifyToken, userData } = useContext(AuthContext)
 
   const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
@@ -26,9 +27,14 @@ const Insights = (props: any) => {
         }
       })
     }
-  }, [currentUser, userData])
+  }, [currentUser, userData, spotifyData])
 
   const onCreatePlaylist = (tracks: string[], name: string) => () => {
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      label: 'Create Playlist',
+      action: 'Created playlist from top tracks.',
+    })
     return createPlaylist(userData.accessToken, userData.spotifyID, {
       name,
       description: 'Insights discovered on musictaste.space.',
@@ -41,6 +47,11 @@ const Insights = (props: any) => {
       <Navbar />
       <Helmet>
         <title>Insights - musictaste.space</title>
+        <meta
+          name="description"
+          content="See your top artists, tracks, how obscure your music taste is and more! Sign in with Spotify to musictaste.space."
+        />
+        <meta name="keywords" content="spotify,music,match,insights" />
       </Helmet>
       <SpotifyApiContext.Provider value={spotifyToken}>
         {Object.entries(spotifyData).length > 0 ? (

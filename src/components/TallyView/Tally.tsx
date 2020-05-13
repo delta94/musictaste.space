@@ -55,8 +55,8 @@ const Tally = () => {
         }
       })
   }
-  let sub = () => {}
   useEffect(() => {
+    let sub = () => {}
     if (Object.entries(userData).length) {
       sub = firebase.app
         .firestore()

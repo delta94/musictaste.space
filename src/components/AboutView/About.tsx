@@ -1,17 +1,23 @@
 import React from 'react'
+import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import Navbar from '../Navbars/Navbar'
 
-const About = (props: any) => {
+const About = () => {
   const history = useHistory()
 
-  const handleBackToDashboard = (e: any) => {
+  const handleBackToDashboard = () => {
     history.push('/dashboard')
   }
-  const handleMatchClick = (e: any) => {
+  const handleMatchClick = () => {
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      label: 'Match',
+      action: 'Match with Kalana from About page.',
+    })
     history.push('/match?request=kalana')
   }
   return (
@@ -28,7 +34,7 @@ const About = (props: any) => {
             </h2>
             <span>
               <strong>musictaste.space</strong> is a web app created by{' '}
-              <a href="https://kalana.io">Kalana Vithana</a> (that's me, hi
+              <a href="https://kalana.io">Kalana Vithana</a> (that&apos;s me, hi
               there!) which helps users gain insights into their Spotify
               listening habits and compare their music taste with friends.
               I&rsquo;ve always found a person&rsquo;s music taste to be a great
@@ -42,8 +48,8 @@ const About = (props: any) => {
           </p>
           <p>
             <span>
-              After importing your Spotify data, you're able to see your top
-              artists, tracks and genres as part of your insights. With your
+              After importing your Spotify data, you&apos;re able to see your
+              top artists, tracks and genres as part of your insights. With your
               code and URL, you&rsquo;re can match with friends (or even
               anonymously by sharing your anon code with strangers) to get a
               score on how compatible you are, as well as a breakdown on which
@@ -134,7 +140,7 @@ const About = (props: any) => {
               data may also be used for general statistical analysis or
               demographic comparisons (ie. How many people have Taylor Swift in
               their Top 10 artists? Do more females like her than males?). If
-              you'd like your data deleted, please message me on{' '}
+              you&apos;d like your data deleted, please message me on{' '}
               <a href="https://www.twitter.com/_kalpal">Twitter</a>.
             </span>
           </p>

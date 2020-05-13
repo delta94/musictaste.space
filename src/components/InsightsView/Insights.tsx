@@ -42,7 +42,7 @@ const Insights = () => {
         })
       }
     }
-  }, [currentUser, userData])
+  })
 
   useEffect(() => {
     const importData = async () => {
@@ -94,7 +94,7 @@ const Insights = () => {
       setLoading(true)
       importData()
     }
-  })
+  }, [spotifyData, loading, loaded, userData.accessToken, averages])
 
   return (
     <>
@@ -103,8 +103,9 @@ const Insights = () => {
         <title>Insights - musictaste.space</title>
         <meta
           name="description"
-          content=" Sign in with Spotify and import your data to discover your insights. See your top artists, tracks, how obscure your music taste is and more!"
+          content="See your top artists, tracks, how obscure your music taste is and more! Sign in with Spotify to musictaste.space."
         />
+        <meta name="keywords" content="spotify,music,match,insights" />
       </Helmet>
       <SpotifyApiContext.Provider value={spotifyToken}>
         {Object.entries(spotifyData).length ? (
