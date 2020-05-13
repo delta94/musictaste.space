@@ -4,13 +4,13 @@ import React from 'react'
 class Canvas extends React.Component<
   {
     text: string
-    image: { url: string; height: number; width: number }
+    image: { url: string; height?: number; width?: number }
     setPlaylistImage: (url: string) => void
   },
   {}
 > {
   public text: string
-  public image: { url: string; height: number; width: number }
+  public image: { url: string; height?: number; width?: number }
   public textColor: any | undefined
   public altTextColor: any | undefined
   public altBGColor: any | undefined
@@ -59,7 +59,7 @@ class Canvas extends React.Component<
         0,
         0,
         300,
-        (this.image.height * 300) / this.image.width
+        ((this.image.height || 300) * 300) / (this.image.width || 300)
       ) // Draw image
       // Create gradient, from middle to borders
       const gradient = ctx.createLinearGradient(0, 0, 300, 300)

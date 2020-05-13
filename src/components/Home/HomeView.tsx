@@ -6,16 +6,9 @@ import { Col, Row } from 'reactstrap'
 import LogInButton from './LogInButton'
 
 // core components
-import Footer from '../Footer/Footer.jsx'
 import Navbar from '../Navbars/Navbar'
 
-// import bigChartData from 'variables/charts.jsx'
-
 const LandingPage = () => {
-  // const [demoData, setDemoData] = useState(false)
-  // useEffect(() => {
-  //   Firebase.getDemoData().then(setDemoData as any)
-  // }, [])
   return (
     <>
       <Navbar />
@@ -26,7 +19,7 @@ const LandingPage = () => {
           content="Sign in with Spotify and get a unique code to share with your friends and find out how compatible your music tastes are! See insights into your listening habits, which tracks are most matched right now, and more!"
         />
       </Helmet>
-      <div className="wrapper landing-page">
+      <div className="wrapper landing-page container">
         <div className="page-header">
           <div className="content-center">
             <Row className="row-grid justify-content-between align-items-center text-left">
@@ -62,7 +55,7 @@ const LandingPage = () => {
             </Row>
           </div>
         </div>
-        <div className="container" style={{ marginTop: '-5em' }}>
+        <div className="container" style={{ marginBottom: '2em' }}>
           <hr />
           Made with ❤️ in Melbourne, Australia.
         </div>

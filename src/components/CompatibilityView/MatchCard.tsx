@@ -28,7 +28,7 @@ const MatchCard = ({
   onClick: (e: any) => void
   onRemove?: (e: any) => void
 }) => {
-  const { spotifyToken, currentUser } = useContext(AuthContext)
+  const { spotifyToken } = useContext(AuthContext)
   const [bgImageURL, setBgImageURL] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
@@ -40,7 +40,7 @@ const MatchCard = ({
     spotify.getArtist(data.bgCode.id).then((res) => {
       setBgImageURL(res.images[0].url)
     })
-  } else if (data.bgCode.type === 'track') {
+  } else if (data.bgCode.type === 'track' && data.bgCode.id) {
     spotify.getTrack(data.bgCode.id).then((res) => {
       setBgImageURL(res.album.images[0].url)
     })
@@ -110,7 +110,7 @@ const MatchCard = ({
         // @ts-ignore
         deleteMatch={onRemove}
       />
-      <div className="a-match animated fadeInUp" onClick={onClick}>
+      <div className="a-match animated fadeInUp">
         <div className="text-div">
           {data.anon ? (
             <i
@@ -122,10 +122,11 @@ const MatchCard = ({
             <div
               className="profile-img-div"
               style={{ backgroundImage: `url(${data.photoURL})` }}
+              onClick={toggleModal}
             />
           )}
 
-          <div className="text-stack">
+          <div className="text-stack" onClick={onClick}>
             <p className="displayName" style={{ color: textColor }}>
               {data.displayName}
             </p>
@@ -143,6 +144,7 @@ const MatchCard = ({
               color: altTextColor,
               textShadow: '0 0 15px ' + gradientColor.toString(),
             }}
+            onClick={onClick}
           >
             {(data.score * 100).toFixed(0)}
           </div>
@@ -151,9 +153,16 @@ const MatchCard = ({
             className="fas fa-chevron-right arrow"
             aria-hidden="true"
             style={{ color: textColor }}
+            onClick={onClick}
           />
         </div>
-        <BgColorDiv className="bg-color" />
+        <div
+          className="trash-container d-flex align-items-center justify-content-center"
+          onClick={toggleModal}
+        >
+          <i style={{ color: textColor }} className="far fa-trash-alt trash" />
+        </div>
+        <BgColorDiv className="bg-color" onClick={onClick} />
         <div className="bg-img-div">
           <img className="bg-img" src={bgImageURL} alt="" />
         </div>

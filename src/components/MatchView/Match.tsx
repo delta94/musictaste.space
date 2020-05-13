@@ -2,6 +2,7 @@ import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useHistory, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
@@ -69,9 +70,6 @@ const Match = () => {
     }
   })
 
-  const onGoToMatch = () => {
-    history.push(`/match/${matchCode}`)
-  }
   return (
     <>
       <Navbar />
@@ -182,16 +180,16 @@ const Match = () => {
             style={{ marginTop: '10px' }}
             className="start-button animated fadeInUp"
           >
-            <a
+            <Link
               style={{
                 cursor: 'pointer',
                 paddingTop: '10px',
                 borderBottom: '1px solid',
               }}
-              onClick={onGoToMatch}
+              to={`/match/${matchCode}`}
             >
               See previous match
-            </a>
+            </Link>
           </div>
         ) : null}
 

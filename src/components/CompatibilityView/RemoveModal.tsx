@@ -19,9 +19,9 @@ const RemoveModal = (props: RemoveModalProps) => {
           <i className="tim-icons icon-simple-remove text-white" />
         </button>
       </div>
-      <div className="modal-body">
+      <div className="modal-body mt-2">
         <p>
-          <b>Are you sure you want to delete your match with</b>
+          <b>Are you sure you want to delete this match?</b>
         </p>
         <p>{props.matchUser}</p>
       </div>

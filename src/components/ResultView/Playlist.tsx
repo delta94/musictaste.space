@@ -5,16 +5,24 @@ import { Button } from 'reactstrap'
 import Spotify from 'spotify-web-api-js'
 import Canvas from '../PlaylistView/Canvas'
 
-export default function Playlist(props: any) {
+export default function Playlist(props: {
+  token: string
+  artistID: string
+  matchName: string
+  handleClick: (e: any) => void
+  profileImage: string
+}) {
   const doNothing = () => false
 
-  const [artistImage, setArtistImage] = useState({})
+  const [artist, setArtist] = useState<SpotifyApi.ArtistObjectFull | undefined>(
+    undefined
+  )
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
   const s = new Spotify()
   s.setAccessToken(props.token)
 
   useEffect(() => {
-    const setColors = async (image: any) => {
+    const setColors = async (image: string) => {
       await Vibrant.from(image)
         .getPalette()
         .then((palette) => {
@@ -45,26 +53,22 @@ export default function Playlist(props: any) {
           }
         })
     }
-    if (Object.entries(artistImage).length !== 0) {
-      // @ts-ignore
-      setColors(artistImage.url)
+    if (artist) {
+      setColors(artist.images[0].url)
     } else {
       const getArtistImage = async () => {
-        await s
-          .getArtist(props.artistID)
-          .then((res) => setArtistImage(res.images[0]))
+        await s.getArtist(props.artistID).then((res) => setArtist(res))
       }
       getArtistImage()
     }
-  }, [artistImage])
+  }, [artist, props.artistID, s])
 
   return (
     <div className="playlist-area" style={{ backgroundColor }}>
-      {Object.entries(artistImage).length !== 0 ? (
+      {artist ? (
         <Canvas
           text="Hello world!"
-          // @ts-ignore
-          image={artistImage}
+          image={artist.images[0]}
           setPlaylistImage={doNothing}
         />
       ) : null}

@@ -60,7 +60,7 @@ export function Me() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (typeof userData.importData === 'undefined') {
+    if (!userData.importData) {
       setImportStatus(emptyImport)
     } else {
       setImportStatus(userData.importData)
@@ -92,7 +92,7 @@ export function Me() {
         }
       })
     }
-  }, [currentUser, importStatus])
+  }, [currentUser, importStatus, history, loading])
 
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
   const [titleColor, setTitleColor] = useState('#130f40')
@@ -127,14 +127,14 @@ export function Me() {
       color: ${backgroundColor} !important;
     }
   `
-  const Menu4 = styled.a`
-    border-bottom: ${'1px solid white'};
-    color: white !important;
-    :hover {
-      background: white;
-      color: ${backgroundColor} !important;
-    }
-  `
+  // const Menu4 = styled.a`
+  //   border-bottom: ${'1px solid white'};
+  //   color: white !important;
+  //   :hover {
+  //     background: white;
+  //     color: ${backgroundColor} !important;
+  //   }
+  // `
 
   const setMenuColors = (
     bg: string,

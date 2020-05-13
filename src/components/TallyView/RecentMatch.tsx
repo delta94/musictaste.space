@@ -21,7 +21,7 @@ const RecentMatch = ({
     if (artistBackgroundURL !== '') {
       setColors(artistBackgroundURL)
     }
-  }, [artistBackgroundURL])
+  }, [artistBackgroundURL, setColors])
 
   useEffect(() => {
     const getArtistImage = async () => {
@@ -50,7 +50,7 @@ const RecentMatch = ({
     >
       <div className="col-md-3 col-6 d-flex flex-column align-items-center justify-content-center">
         {artists.length > 0 ? (
-          <img alt="artist-image" src={artists[0].images[0].url} />
+          <img alt="artist" src={artists[0].images[0].url} />
         ) : (
           <div className="d-flex align-items-center justify-content-center">
             Please refresh the page.
@@ -59,7 +59,7 @@ const RecentMatch = ({
       </div>
       <div className="col-md-3 col-6 d-flex flex-column align-items-center justify-content-center">
         {artists.length > 1 ? (
-          <img alt="artist-image" src={artists[1].images[0].url} />
+          <img alt="artist" src={artists[1].images[0].url} />
         ) : null}
       </div>
       <div className="col-md-3 col-6 d-flex flex-column text-right mt-3">

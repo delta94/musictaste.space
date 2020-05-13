@@ -1,5 +1,6 @@
 import React from 'react'
-import { NavItem, Button } from 'reactstrap'
+import GoogleAnalytics from 'react-ga'
+import { Button, NavItem } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import ProfileModal from './ProfileModal'
 
@@ -12,9 +13,17 @@ class NavbarLoginStatus extends React.Component<{}, { modalOpen: boolean }> {
   }
 
   public toggleModal = () => {
+    if (!this.state.modalOpen) {
+      GoogleAnalytics.event({
+        category: 'Interaction',
+        label: 'Modal',
+        action: 'User profile modal opened.',
+      })
+    }
     this.setState({ modalOpen: !this.state.modalOpen })
   }
-  public handleClickLogin() {
+  public handleClickLogin(e: any) {
+    e.stopPropagation()
     window.open('/login', '_blank', 'height=585,width=500')
   }
   public render() {
