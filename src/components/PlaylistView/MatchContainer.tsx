@@ -12,10 +12,14 @@ const MatchContainer = () => {
   const { currentUser, userData } = useContext(AuthContext)
   const [lastDoc, setLastDoc] = useState(false as any)
   const [loadPage, setLoadPage] = useState(0)
+  const [lastPage, setLastPage] = useState(0)
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
-    const loadMatches = async (user: any) => {
+    const loadMatches = async (user: IUserProfile) => {
       const LIMIT = 10
-      if (typeof user.importData !== 'undefined') {
+      if (user.importData) {
+        setLoading(true)
         let matchRef
         if (!lastDoc) {
           matchRef = firebase.app
@@ -39,14 +43,22 @@ const MatchContainer = () => {
         setMatches(
           matches.concat(docs.docs.filter((d) => d.data().score > 0.5))
         )
+        setLastPage(loadPage)
         if (docs.docs.length) {
           setLastDoc(docs.docs[docs.docs.length - 1])
         }
         docs.docs.length < LIMIT ? setMorePages(false) : setMorePages(true)
+        setLoading(false)
       }
     }
-    loadMatches(userData)
-  }, [loadPage, userData])
+    if (loadPage !== lastPage && !loading) {
+      loadMatches(userData)
+    }
+  }, [loadPage, userData, currentUser, lastDoc, matches, lastPage, loading])
+
+  useEffect(() => {
+    setLoadPage(1)
+  }, [])
 
   const onCardClick = (matchId: string) => (e: any) => {
     history.push('/playlist/' + matchId)

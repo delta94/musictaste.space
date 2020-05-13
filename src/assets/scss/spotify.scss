@@ -278,16 +278,31 @@ div.spotify-login {
   }
 }
 
+.modal-body {
+  .data {
+    font-size: 0.8em;
+  }
+  .data-title {
+    margin-bottom: -0.5em;
+  }
+}
+
+.modal-footer {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
 .underline {
   border-bottom: 1px solid #16a085;
   color: #16a085 !important;
 }
 
 .modal-img-div {
-  height: 325px;
-  width: 325px;
-  border-radius: 162.5px;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
   overflow: hidden;
+  background-size: cover;
 }
 
 .about {
