@@ -19,7 +19,7 @@ const LinkDiscordButton = () => {
     localStorage.setItem('redirectDiscord', 'true')
     localStorage.setItem('redirectTimestamp', new Date().toJSON())
     GoogleAnalytics.event({
-      category: 'Log In',
+      category: 'Account',
       action: 'Logged in from Discord page',
       label: 'Discord Log In',
     })

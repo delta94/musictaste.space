@@ -33,7 +33,7 @@ const Insights = () => {
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Create Playlist',
-      action: 'Created playlist from top tracks.',
+      action: 'Created playlist from top tracks',
     })
     return createPlaylist(userData.accessToken, userData.spotifyID, {
       name,
