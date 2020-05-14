@@ -2,6 +2,7 @@ import { Timestamp } from '@firebase/firestore-types'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
+import { useToasts } from 'react-toast-notifications'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
@@ -12,6 +13,7 @@ const MatchContainer = () => {
   const [matches, setMatches] = useState([] as any)
   const [morePages, setMorePages] = useState(false)
   const { currentUser, userData } = useContext(AuthContext)
+  const { addToast } = useToasts()
   const [lastDoc, setLastDoc] = useState(false as any)
   const [lastPage, setLastPage] = useState(0)
   const [loadPage, setLoadPage] = useState(0)
@@ -59,7 +61,7 @@ const MatchContainer = () => {
     setLoadPage(1)
   }, [])
 
-  const removeMatch = (id: string) => (e: any) => {
+  const removeMatch = (id: string, name: string) => (e: any) => {
     e.stopPropagation()
     setMatches(matches.filter((m: any) => m.id !== id))
     firebase.deleteMatch(currentUser.uid, id)
@@ -67,6 +69,10 @@ const MatchContainer = () => {
       category: 'Interaction',
       label: 'Remove Match',
       action: 'Deleted a match from the Compatibility page',
+    })
+    addToast(`Removed match with ${name}.`, {
+      appearance: 'success',
+      autoDismiss: true,
     })
   }
 
@@ -102,7 +108,7 @@ const MatchContainer = () => {
                 history={history}
                 matchData={doc}
                 key={doc.id}
-                onRemove={removeMatch(doc.id)}
+                onRemove={removeMatch(doc.id, doc.data().displayName)}
                 onClick={onCardClick(
                   doc.data().matchId,
                   doc.data().matchDate,

@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
+import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
-import { AuthContext } from '../../contexts/Auth'
 import { Button } from 'reactstrap'
+import { AuthContext } from '../../contexts/Auth'
 
 function LogInButton() {
   const history = useHistory()
@@ -9,6 +10,11 @@ function LogInButton() {
 
   function handleClickLogin() {
     window.open('/login', '_blank', 'height=585,width=500')
+    GoogleAnalytics.event({
+      category: 'Account',
+      action: 'Logged In From Login Button',
+      label: 'Button Log In',
+    })
   }
 
   function handleClickDashboard() {

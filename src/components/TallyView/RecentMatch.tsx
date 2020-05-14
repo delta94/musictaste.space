@@ -46,7 +46,7 @@ const RecentMatch = ({
   return (
     <div
       id={Math.round(Math.random() * 100).toString()}
-      className="row animated fadeInUp"
+      className="row animated fadeInUp recent-match"
     >
       <div className="col-md-3 col-6 d-flex flex-column align-items-center justify-content-center">
         {artists.length > 0 ? (

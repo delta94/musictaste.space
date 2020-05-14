@@ -2,6 +2,7 @@ import Color from 'color'
 import differenceInDays from 'date-fns/differenceInDays'
 import { differenceInMinutes } from 'date-fns/esm'
 import React, { useContext, useEffect, useState } from 'react'
+import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
@@ -161,6 +162,11 @@ export function Me() {
 
   const onGetSpotifyData = (e: any) => {
     e.stopPropagation()
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      action: 'Import Spotify data',
+      label: 'Import Data',
+    })
     const brokenImport =
       importStatus.loading &&
       importStatus.lastImport &&
@@ -173,6 +179,11 @@ export function Me() {
   }
   const onReimportSpotifyData = (e: any) => {
     e.stopPropagation()
+    GoogleAnalytics.event({
+      category: 'Interaction',
+      action: 'Re-import Spotify data',
+      label: 'Re-import Data',
+    })
     if (!importStatus.loading) {
       setImportClick(true)
       firebase.importSpotifyData(currentUser.uid, true)

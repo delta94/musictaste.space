@@ -46,7 +46,7 @@ const EnterCode = ({ userData }: { userData: IUserProfile }) => {
         GoogleAnalytics.event({
           category: 'Interaction',
           label: 'Match',
-          action: 'Code entered from Compatibility page.',
+          action: 'Code entered from Compatibility page',
         })
         history.push('/match?request=' + code)
       } else {

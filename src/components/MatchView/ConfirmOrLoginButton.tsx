@@ -19,7 +19,7 @@ function ConfirmOrLogInButton(props: any) {
     localStorage.setItem('redirectMatch', props.compareUser as string)
     localStorage.setItem('redirectTimestamp', new Date().toJSON())
     GoogleAnalytics.event({
-      category: 'Log In',
+      category: 'Account',
       action: 'Logged In From Match Page',
       label: 'Match Log In',
     })

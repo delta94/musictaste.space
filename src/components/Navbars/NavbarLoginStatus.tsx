@@ -23,6 +23,11 @@ class NavbarLoginStatus extends React.Component<{}, { modalOpen: boolean }> {
     this.setState({ modalOpen: !this.state.modalOpen })
   }
   public handleClickLogin(e: any) {
+    GoogleAnalytics.event({
+      category: 'Account',
+      action: 'Logged In From Navbar',
+      label: 'Navbar Log In',
+    })
     e.stopPropagation()
     window.open('/login', '_blank', 'height=585,width=500')
   }
