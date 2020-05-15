@@ -17,7 +17,7 @@ const LockdownView = () => {
       label: 'Login From Lockdown',
     })
     localStorage.setItem('redirectPage', '/insights#playlist')
-    history.push(`/dashboard?callback=true&to=insights`)
+    history.push(`/login`)
   }
   useEffect(() => {
     if (currentUser) {
