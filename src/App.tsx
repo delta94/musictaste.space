@@ -12,6 +12,7 @@ import HomeView from './components/Home/HomeView'
 import Insights from './components/InsightsView/Insights'
 import InsightsAll from './components/InsightsView/InsightsAll'
 import LinkDiscord from './components/LinkDiscord'
+import Lockdown from './components/LockdownView'
 import Login from './components/Login'
 import Match from './components/MatchView/Match'
 import Create from './components/PlaylistView/Create'
@@ -122,6 +123,11 @@ export default function SpotifyCompatibility() {
                 exact={true}
                 path="/account/delete"
                 component={withTracker(DeleteAccountView)}
+              />
+              <Route
+                exact={true}
+                path="/lockdown"
+                component={withTracker(Lockdown)}
               />
             </div>
           </Router>

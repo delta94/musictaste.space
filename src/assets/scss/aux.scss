@@ -1,0 +1,36 @@
+.lockdown-redirect {
+  nav {
+    @media (min-width: 1000px) {
+      a {
+        color: white !important;
+      }
+    }
+  }
+  .container {
+    .title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 4em;
+      font-weight: 800;
+      margin-top: 0;
+      @media (max-width: 600px) {
+        font-size: 3em;
+      }
+    }
+    .subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.5em;
+    }
+  }
+
+  .playlist-image {
+    height: 300px;
+    width: 300px;
+    background-image: url('../img/covid-tunes.png');
+    background-size: contain;
+  }
+
+  .text-box {
+    max-width: 400px;
+    text-align: center;
+  }
+}
