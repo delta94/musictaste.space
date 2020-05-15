@@ -143,7 +143,7 @@ const CovidAnthem = ({ tracks, artist }: CovidAnthemProps) => {
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Create Playlist',
-      action: 'Created a collaborative playlist with match user.',
+      action: 'Created Covid Anthem Playlist',
     })
     return { success: false, error: playlistError }
   }
