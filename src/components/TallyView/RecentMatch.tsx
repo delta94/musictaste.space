@@ -62,7 +62,7 @@ const RecentMatch = ({
           <img alt="artist" src={artists[1].images[0].url} />
         ) : null}
       </div>
-      <div className="col-md-3 col-6 d-flex flex-column text-right mt-3">
+      <div className="col-md-3 col-6 d-flex flex-column mt-3">
         <div className="region-heading" style={{ color: textColor }}>
           Region
         </div>
