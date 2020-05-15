@@ -104,6 +104,9 @@ const Header = ({
           <div className="row">
             <div className="col d-flex flex-row justify-content-center nav-link flex-wrap">
               <Link to="/dashboard">Back To Dashboard</Link>
+              <Link to="/insights#playlist" smooth={true}>
+                Lockdown Playlist
+              </Link>
               <Link to="/insights/all">Top Tracks & Artists</Link>
             </div>
           </div>

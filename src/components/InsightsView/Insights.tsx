@@ -6,6 +6,7 @@ import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
+import CovidAnthem from './CovidAnthem'
 import Genres from './InsightsGenres'
 import Header from './InsightsHeader'
 import Moods from './Moods'
@@ -18,9 +19,10 @@ const Insights = () => {
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
-  const [artistData, setArtistData] = useState(
-    [] as SpotifyApi.ArtistObjectFull[]
+  const [artistData, setArtistData] = useState<SpotifyApi.ArtistObjectFull[]>(
+    []
   )
+  const [trackData, setTrackData] = useState<SpotifyApi.TrackObjectFull[]>([])
   const [featureTracks, setFeatureTracks] = useState(
     {} as {
       [key: string]: { track: SpotifyApi.TrackObjectFull; score: number }
@@ -51,11 +53,52 @@ const Insights = () => {
       setArtistData(
         await s
           .getArtists(
-            spotifyData.topArtistsShortTerm.slice(0, 5).map((a) => a.id)
+            spotifyData.topArtistsShortTerm.slice(0, 6).map((a) => a.id)
           )
           .then((d) => d.artists)
           .catch(() => [])
       )
+      if (spotifyData.topTracksShortTerm && spotifyData.topTracksMediumTerm) {
+        const tSet = new Set()
+        const tracks = Array.from({ length: 30 })
+          .map((_, i) => {
+            if (
+              spotifyData.topTracksShortTerm.length > i &&
+              spotifyData.topTracksMediumTerm.length > i
+            ) {
+              return [
+                spotifyData.topTracksShortTerm[i].id,
+                spotifyData.topTracksMediumTerm[i].id,
+              ]
+            } else if (spotifyData.topTracksShortTerm.length > i) {
+              return [spotifyData.topTracksShortTerm[i].id]
+            } else if (spotifyData.topTracksMediumTerm.length > i) {
+              return [spotifyData.topTracksMediumTerm[i].id]
+            }
+            return []
+          })
+          .flat()
+          .filter((t) => {
+            if (tSet.has(t)) {
+              return false
+            } else {
+              tSet.add(t)
+              return true
+            }
+          })
+          .slice(0, 40)
+        setTrackData(
+          await s
+            .getTracks(
+              tracks
+                .filter(Boolean)
+                .slice(0, 30)
+                .map((a) => a)
+            )
+            .then((d) => d.tracks)
+            .catch(() => [])
+        )
+      }
 
       const extractedIds = Object.entries(
         spotifyData.shortTermAudioFeatures.maxVals
@@ -118,6 +161,7 @@ const Insights = () => {
             {spotifyData.obscurifyScoreLongTerm ? (
               <>
                 <TopArtists artists={artistData} loaded={loaded} />
+                <CovidAnthem tracks={trackData} artist={artistData[5]} />
                 <Moods
                   features={spotifyData.shortTermAudioFeatures}
                   loaded={loaded}

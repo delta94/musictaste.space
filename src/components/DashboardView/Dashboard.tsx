@@ -83,9 +83,15 @@ export function Me() {
       }
     }
     const redirectMatch = localStorage.getItem('redirectMatch')
-    if (importStatus.exists && currentUser && redirectMatch) {
-      localStorage.removeItem('redirectMatch')
-      history.push('/match?request=' + redirectMatch)
+    const redirectPage = localStorage.getItem('redirectPage')
+    if (importStatus.exists && currentUser) {
+      if (redirectMatch) {
+        localStorage.removeItem('redirectMatch')
+        history.push('/match?request=' + redirectMatch)
+      } else if (redirectPage) {
+        localStorage.removeItem('redirectPage')
+        history.push(redirectPage)
+      }
     } else if (!importStatus.exists && currentUser) {
       firebase.getSpotifyData(currentUser.uid).then((data) => {
         if (data) {
