@@ -134,17 +134,17 @@ const CovidAnthem = ({ tracks, artist }: CovidAnthemProps) => {
       if (playlistError) {
         return { success: false }
       }
+      GoogleAnalytics.event({
+        category: 'Interaction',
+        label: 'Create Playlist',
+        action: 'Created Covid Anthem Playlist',
+      })
       return {
         success: true,
         uri: (playlistData as SpotifyApi.PlaylistObjectFull).external_urls
           .spotify,
       }
     }
-    GoogleAnalytics.event({
-      category: 'Interaction',
-      label: 'Create Playlist',
-      action: 'Created Covid Anthem Playlist',
-    })
     return { success: false, error: playlistError }
   }
   return (

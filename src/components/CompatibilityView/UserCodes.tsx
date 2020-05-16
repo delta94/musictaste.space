@@ -57,7 +57,7 @@ function UserCodes() {
     <>
       <div className="user-code-area">
         <Row className="row-grid text-left">
-          <Col lg="1" md="1" />
+          <Col lg="1" md="1" className="d-none d-lg-block" />
           <Col lg="4" md="4" className="profile-col">
             {currentUser ? (
               <div
@@ -68,6 +68,7 @@ function UserCodes() {
               <></>
             )}
           </Col>
+          <Col lg="1" md="1" className="d-block d-lg-none" />
           <Col lg="7" md="7" className="profile">
             <p>Send a friend your URL:</p>
             <InputGroup className="url-container">
