@@ -152,7 +152,7 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
                       className="mood-description"
                       style={{ color: backgroundColor }}
                     >
-                      Tracks with higher acousticness score have more acoustic
+                      Tracks with a higher acousticness score have more acoustic
                       elements compared to electronic. Your top tracks have an
                       acoustic factor of {Math.round(score * 100)}% on average.
                     </div>

@@ -92,7 +92,7 @@ const Insights = () => {
             .getTracks(
               tracks
                 .filter(Boolean)
-                .slice(0, 30)
+                .slice(0, 40)
                 .map((a) => a)
             )
             .then((d) => d.tracks)

@@ -83,17 +83,17 @@ const Create = () => {
             playlistData
           )
           .catch()
+        GoogleAnalytics.event({
+          category: 'Interaction',
+          label: 'Create Playlist',
+          action: 'Created a collaborative playlist with match user.',
+        })
         return {
           success: true,
           uri: (playlistData as SpotifyApi.PlaylistObjectFull).external_urls
             .spotify,
         }
       }
-      GoogleAnalytics.event({
-        category: 'Interaction',
-        label: 'Create Playlist',
-        action: 'Created a collaborative playlist with match user.',
-      })
       return { success: false, error: playlistError }
     }
     setError({
