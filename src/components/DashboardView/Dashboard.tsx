@@ -256,10 +256,14 @@ export function Me() {
                       </h1>
                       {error ? (
                         <p className="menu menu-text text-center">
-                          Oops 😢. There was an error with importing your
-                          Spotify data. You might not have enough listening data
-                          for me to calculate your profile. If this doesn&apos;t
-                          sound right, try importing your data again.
+                          Oops{' '}
+                          <span role="img" aria-label="sad-emoji">
+                            😢
+                          </span>
+                          . There was an error with importing your Spotify data.
+                          You might not have enough listening data for me to
+                          calculate your profile. If this doesn&apos;t sound
+                          right, try importing your data again.
                         </p>
                       ) : importStatus.exists ? (
                         <>
