@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
+import Helmet from 'react-helmet'
 import { useHistory, useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import { AuthContext } from '../../contexts/Auth'
@@ -15,9 +16,9 @@ const Result = () => {
   const history = useHistory()
   window.scrollTo(0, 0)
   const { currentUser, spotifyToken, userData } = useContext(AuthContext)
-  const [matchUser, setMatchUser] = useState({} as IUsersLookupData)
+  const [matchUser, setMatchUser] = useState<IUsersLookupData | null>(null)
   const [matchUserId, setMatchUserId] = useState('')
-  const [matchData, setMatchData] = useState({} as IMatchData)
+  const [matchData, setMatchData] = useState<IMatchData | null>(null)
   const { matchId } = useParams()
   const [error, setError] = useState({ state: false, message: <></> })
 
@@ -46,7 +47,7 @@ const Result = () => {
             message: (
               <>
                 Oops, something went wrong with the match making bot. Try again,
-                or if it's still not working, find me on{' '}
+                or if it&apos;s still not working, find me on{' '}
                 <a href="https://www.twitter.com/_kalpal">Twitter</a>.
               </>
             ),
@@ -56,7 +57,8 @@ const Result = () => {
             state: true,
             message: (
               <>
-                You don't have access to this match or the match does not exist.
+                You don&apos;t have access to this match or the match does not
+                exist.
               </>
             ),
           })
@@ -68,7 +70,7 @@ const Result = () => {
     }
   }, [currentUser, matchId])
 
-  const handleClick = (e: any) => {
+  const handleClick = () => {
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Visit Playlist',
@@ -78,10 +80,20 @@ const Result = () => {
   }
   return (
     <>
+      <Helmet>
+        <title>
+          {matchUser && userData
+            ? `${matchUser.anon ? matchUserId : matchUser.displayName}
+            ${' × '}
+            ${userData.displayName}`
+            : 'Result'}{' '}
+          - musictaste.space
+        </title>
+      </Helmet>
       <SpotifyApiContext.Provider value={spotifyToken}>
         <Navbar />
         <div className="result">
-          {currentUser && Object.entries(matchData).length !== 0 ? (
+          {currentUser && matchUser && matchData ? (
             <>
               <Header
                 matchData={matchData}
