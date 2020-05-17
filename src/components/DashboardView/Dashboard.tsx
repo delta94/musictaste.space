@@ -59,6 +59,7 @@ export function Me() {
     loading: false,
   } as IImportStatus)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     if (!userData.importData) {
@@ -168,32 +169,52 @@ export function Me() {
 
   const onGetSpotifyData = (e: any) => {
     e.stopPropagation()
-    GoogleAnalytics.event({
-      category: 'Interaction',
-      action: 'Import Spotify data',
-      label: 'Import Data',
-    })
     const brokenImport =
       importStatus.loading &&
       importStatus.lastImport &&
       differenceInMinutes(new Date(), importStatus.lastImport.toDate()) >= 1
     if (!importStatus.loading || brokenImport) {
       setImportClick(true)
-      firebase.importSpotifyData(currentUser.uid)
       setImportStatus({ ...emptyImport, loading: true })
+      firebase.importSpotifyData(currentUser.uid).then((success) => {
+        if (!success) {
+          GoogleAnalytics.event({
+            category: 'Error',
+            action: 'Import Data Error',
+            label: 'Not enough Spotify data displayed',
+          })
+          setError(true)
+        } else {
+          GoogleAnalytics.event({
+            category: 'Interaction',
+            action: 'Imported Spotify data',
+            label: 'Import Data',
+          })
+        }
+      })
     }
   }
   const onReimportSpotifyData = (e: any) => {
     e.stopPropagation()
-    GoogleAnalytics.event({
-      category: 'Interaction',
-      action: 'Re-import Spotify data',
-      label: 'Re-import Data',
-    })
     if (!importStatus.loading) {
       setImportClick(true)
-      firebase.importSpotifyData(currentUser.uid, true)
       setImportStatus({ ...emptyImport, loading: true })
+      firebase.importSpotifyData(currentUser.uid, true).then((success) => {
+        if (!success) {
+          GoogleAnalytics.event({
+            category: 'Error',
+            action: 'Import Data Error',
+            label: 'Not enough Spotify data displayed',
+          })
+          setError(true)
+        } else {
+          GoogleAnalytics.event({
+            category: 'Interaction',
+            action: 'Re-imported Spotify data',
+            label: 'Re-import Data',
+          })
+        }
+      })
     }
   }
 
@@ -225,9 +246,7 @@ export function Me() {
                   spotifyData={spotifyData}
                   setMenuColors={setMenuColors}
                 />
-              ) : (
-                <></>
-              )}
+              ) : null}
               <NameBox className="me">
                 <NameDiv>
                   <Row className="row-grid text-left me-max">
@@ -235,7 +254,14 @@ export function Me() {
                       <h1 className="mb-8" style={{ color: `${titleColor}` }}>
                         <strong>{currentUser.displayName}</strong>
                       </h1>
-                      {importStatus.exists ? (
+                      {error ? (
+                        <p className="menu menu-text text-center">
+                          Oops 😢. There was an error with importing your
+                          Spotify data. You might not have enough listening data
+                          for me to calculate your profile. If this doesn&apos;t
+                          sound right, try importing your data again.
+                        </p>
+                      ) : importStatus.exists ? (
                         <>
                           <Menu1 className="menu button1">
                             <span
