@@ -5,16 +5,9 @@ import { Helmet } from 'react-helmet'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
 import { Dot } from '../Aux/Dot'
+import Footer from '../Footer'
 import Navbar from '../Navbars/Navbar'
 import RecentMatch from './RecentMatch'
-
-interface GlobalTally {
-  users: number
-  matches: number
-  lastUpdated: Date
-  lastMatchRegion: string
-  lastMatch: IMatchData
-}
 
 const Tally = () => {
   const [tallyData, setTally] = useState<GlobalTally | undefined>(undefined)
@@ -134,13 +127,9 @@ const Tally = () => {
             </div>
           )}
         </div>
-        <div
-          className="container"
-          style={{ marginTop: '4em', paddingBottom: '2em' }}
-        >
-          <hr />
-          Made with ❤️ in Melbourne, Australia.
-        </div>
+        <div className="w-100 mt-4" />
+        <Footer />
+        <div className="w-100 pb-1" />
       </div>
     </>
   )

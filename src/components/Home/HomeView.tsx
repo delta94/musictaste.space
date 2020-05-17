@@ -7,16 +7,8 @@ import LogInButton from './LogInButton'
 
 // core components
 import firebase from '../../util/Firebase'
+import Footer from '../Footer'
 import Navbar from '../Navbars/Navbar'
-
-interface GlobalTally {
-  users: number
-  matches: number
-  lastUpdated: Date
-  lastMatchRegion: string
-  lastMatch: IMatchData
-  countries: number
-}
 
 const LandingPage = () => {
   const [tallyData, setTallyData] = useState<GlobalTally | null>(null)
@@ -63,9 +55,26 @@ const LandingPage = () => {
                   others to see how your taste stacks up against the rest of the
                   world!
                 </p>
+                <p className="text-white">
+                  {tallyData
+                    ? `So far, I've been to ${
+                        tallyData.countries
+                      } countries, calculated ${tallyData.matches
+                        .toString()
+                        .replace(
+                          /(\d)(?=(\d\d\d)+(?!\d))/g,
+                          '$1,'
+                        )} compatibilities for ${tallyData.users
+                        .toString()
+                        .replace(
+                          /(\d)(?=(\d\d\d)+(?!\d))/g,
+                          '$1,'
+                        )} users and counting!`
+                    : 'One sec...'}
+                </p>
                 <p className="text-white mb-4">
-                  Although this app uses the Spotify API, it is not affiliated
-                  with Spotify.
+                  Although I use the Spotify API, I'm not affiliated with
+                  Spotify.
                 </p>
                 <div className="btn-wrapper">
                   <LogInButton />
@@ -74,28 +83,7 @@ const LandingPage = () => {
             </Row>
           </div>
         </div>
-        <Row className="row justify-content-center align-items-center text-center home-tally">
-          <Col xs="3">
-            <p className="count">{tallyData ? tallyData.countries : '-'}</p>
-            <p className="count-heading">Countries</p>
-          </Col>
-          <Col xs="3">
-            <p className="count">
-              {tallyData ? Math.floor(tallyData.users / 1000) : '-'}K
-            </p>
-            <p className="count-heading">Users</p>
-          </Col>
-          <Col xs="3">
-            <p className="count">
-              {tallyData ? Math.floor(tallyData.matches / 1000) : '-'}K
-            </p>
-            <p className="count-heading">Matches</p>
-          </Col>
-        </Row>
-        <div className="container" style={{ marginBottom: '2em' }}>
-          <hr />
-          Made with ❤️ in Melbourne, Australia.
-        </div>
+        <Footer />
       </div>
       {/* <div className="demo" style={{ zIndex: 1000 }}>
         <div className="result-container">
