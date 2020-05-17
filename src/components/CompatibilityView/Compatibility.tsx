@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth'
+import Footer from '../Footer'
 import LogInButton from '../Home/LogInButton'
 import Navbar from '../Navbars/Navbar'
 import EnterCode from './EnterCode'
@@ -59,6 +60,7 @@ function Compatibility() {
               </a>
             </div>
             <MatchContainer />
+            <Footer />
           </div>
         ) : (
           <div className="waiting">

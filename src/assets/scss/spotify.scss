@@ -21,10 +21,11 @@ a.nav-link {
 }
 
 .landing-page {
-  p {
-    color: #30336b;
-  }
   .home-tally {
+    p {
+      text-align: center !important;
+      color: #30336b;
+    }
     @media screen and (max-width: 600px) {
       text-align: left;
     }
@@ -380,5 +381,20 @@ div.spotify-login {
     margin: 50px 50px;
     justify-self: center;
     align-self: center;
+  }
+}
+
+.footer {
+  font-size: 0.9em;
+  a {
+    font-weight: 400;
+    border-bottom: 1px solid #1db954;
+    color: #191414 !important;
+    cursor: pointer;
+    padding: 0.2em 0.2em;
+    &:hover {
+      background: #1db954;
+      color: #ffffff !important;
+    }
   }
 }

@@ -184,3 +184,12 @@ interface INationalAverage {
   lastUpdated: Date
   stdDev?: number
 }
+
+interface GlobalTally {
+  users: number
+  matches: number
+  lastUpdated: Date
+  lastMatchRegion: string
+  lastMatch: IMatchData
+  countries: number
+}

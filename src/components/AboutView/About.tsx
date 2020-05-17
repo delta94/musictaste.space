@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { Button } from 'reactstrap'
+import { Button, Col, Row } from 'reactstrap'
+import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
+import Footer from '../Footer'
 
 const About = () => {
   const history = useHistory()
@@ -20,6 +22,16 @@ const About = () => {
     })
     history.push('/match?request=kalana')
   }
+
+  const [tallyData, setTallyData] = useState<GlobalTally | null>(null)
+  useEffect(() => {
+    firebase.app
+      .firestore()
+      .collection('app')
+      .doc('tally')
+      .get()
+      .then((doc) => setTallyData(doc.data() as GlobalTally))
+  }, [])
   return (
     <>
       <Navbar />
@@ -172,6 +184,29 @@ const About = () => {
             </span>
           </p>
         </div>
+        <div
+          style={{ textAlign: 'center', width: '90%' }}
+          className="landing-page mt-3 mb-2"
+        >
+          <Row className="justify-content-center align-items-center text-center home-tally">
+            <Col xs="3">
+              <p className="count">{tallyData ? tallyData.countries : '-'}</p>
+              <p className="count-heading">Countries</p>
+            </Col>
+            <Col xs="3">
+              <p className="count">
+                {tallyData ? Math.floor(tallyData.users / 1000) : '-'}K
+              </p>
+              <p className="count-heading">Users</p>
+            </Col>
+            <Col xs="3">
+              <p className="count">
+                {tallyData ? Math.floor(tallyData.matches / 1000) : '-'}K
+              </p>
+              <p className="count-heading">Matches</p>
+            </Col>
+          </Row>
+        </div>
         <div className="about-logo">
           <img
             alt="musictaste.space logo"
@@ -189,10 +224,7 @@ const About = () => {
           </Button>
         </div>
       </div>
-      <div className="container mb-3">
-        <hr />
-        Made with ❤️ in Melbourne, Australia.
-      </div>
+      <Footer />
     </>
   )
 }
