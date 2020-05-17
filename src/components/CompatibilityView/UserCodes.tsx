@@ -2,6 +2,7 @@ import copy from 'copy-to-clipboard'
 import React, { useContext, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import Switch from 'react-switch'
+import { useToasts } from 'react-toast-notifications'
 import {
   Col,
   Input,
@@ -15,6 +16,8 @@ import { AuthContext } from '../../contexts/Auth'
 
 function UserCodes() {
   const { currentUser, userData } = useContext(AuthContext)
+  const [anonIDDisplay, setAnonIDDisplay] = useState(false)
+  const { addToast } = useToasts()
 
   const copyIdToClipboard = (e: any) => {
     GoogleAnalytics.event({
@@ -22,6 +25,19 @@ function UserCodes() {
       label: 'Copy Code',
       action: 'Copied match ID to clipboard',
     })
+    addToast(
+      `Copied your ${
+        anonIDDisplay ? 'anonymous' : ''
+      } match code to clipboard. ${
+        !anonIDDisplay
+          ? 'Share it with your friends!'
+          : 'Share it with strangers!'
+      }`,
+      {
+        appearance: 'info',
+        autoDismiss: true,
+      }
+    )
     document
       .getElementsByClassName('id-copy-icon')[0]
       .classList.remove('animated', 'tada')
@@ -31,12 +47,25 @@ function UserCodes() {
       .classList.add('animated', 'tada')
   }
 
-  const copyUrlToClipboard = (e: any) => {
+  const copyUrlToClipboard = () => {
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Copy Code',
       action: 'Copied match URL to clipboard',
     })
+    addToast(
+      `Copied your ${
+        anonIDDisplay ? 'anonymous' : ''
+      } match URL to clipboard. ${
+        !anonIDDisplay
+          ? 'Share it with your friends!'
+          : 'Share it with strangers!'
+      }`,
+      {
+        appearance: 'info',
+        autoDismiss: true,
+      }
+    )
     document
       .getElementsByClassName('url-copy-icon')[0]
       .classList.remove('animated', 'tada')
@@ -49,9 +78,8 @@ function UserCodes() {
       .getElementsByClassName('url-copy-icon')[0]
       .classList.add('animated', 'tada')
   }
-  const [anonIDDisplay, setAnonIDDisplay] = useState(false)
 
-  const doNothing = (_: any) => {}
+  const doNothing = () => {}
 
   return (
     <>
