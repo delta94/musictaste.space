@@ -20,6 +20,31 @@ a.nav-link {
   }
 }
 
+.landing-page {
+  p {
+    color: #30336b;
+  }
+  .home-tally {
+    @media screen and (max-width: 600px) {
+      text-align: left;
+    }
+    .count {
+      font-size: 3em;
+      font-weight: 800;
+      @media screen and (max-width: 600px) {
+        font-size: 2em;
+      }
+    }
+    .count-heading {
+      font-size: 1.5em;
+      font-weight: 800;
+      @media screen and (max-width: 600px) {
+        font-size: 1em;
+      }
+    }
+  }
+}
+
 nav {
   li.nav-item {
     @media only screen and (max-width: 600px) {

@@ -80,7 +80,15 @@ const Match = () => {
     <>
       <Navbar />
       <Helmet>
-        <title>Match with {query.request} - musictaste.space</title>
+        <title>
+          Match with{' '}
+          {matchUser
+            ? matchUser.anon
+              ? query.request
+              : matchUser.displayName
+            : query.request}{' '}
+          - musictaste.space
+        </title>
         <meta
           name="description"
           content="Accept your invite to match your music taste based on your Spotify data! \
