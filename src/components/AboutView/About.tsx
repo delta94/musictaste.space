@@ -5,8 +5,8 @@ import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { Button, Col, Row } from 'reactstrap'
 import firebase from '../../util/Firebase'
-import Navbar from '../Navbars/Navbar'
 import Footer from '../Footer'
+import Navbar from '../Navbars/Navbar'
 
 const About = () => {
   const history = useHistory()
@@ -139,6 +139,12 @@ const About = () => {
           <h2>
             <span>Privacy & Your Data&nbsp;</span>
           </h2>
+          <p>
+            <strong>
+              See the full Privacy Policy <Link to="/privacy-policy">here</Link>
+              .
+            </strong>
+          </p>
           <p>
             <span>
               Your account data (display name, profile image and Spotify

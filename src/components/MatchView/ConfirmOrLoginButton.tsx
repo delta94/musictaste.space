@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
@@ -96,13 +96,19 @@ function ConfirmOrLogInButton(props: any) {
       </>
     )
   ) : (
-    <Button
-      className="btn-round sign-in-button"
-      size="lg"
-      onClick={handleClickLogin}
-    >
-      Sign In With Spotify
-    </Button>
+    <div className="about d-flex flex-column align-items-center justify-content-center">
+      <Button
+        className="btn-round sign-in-button"
+        size="lg"
+        onClick={handleClickLogin}
+      >
+        Sign In With Spotify
+      </Button>
+      <p style={{ fontSize: '0.8em' }}>
+        By signing in you agree to the{' '}
+        <Link to="/privacy-policy">Privacy Policy</Link>.
+      </p>
+    </div>
   )
 }
 
