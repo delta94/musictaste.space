@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { ToastProvider } from 'react-toast-notifications'
 
 import About from './components/AboutView/About'
+import PrivacyPolicy from './components/AboutView/PrivacyPolicy'
 import Compatibility from './components/CompatibilityView/Compatibility'
 import Dashboard from './components/DashboardView/Dashboard'
 import DeleteAccountView from './components/DeleteAccountView/DeleteAccountView'
@@ -58,6 +59,11 @@ export default function SpotifyCompatibility() {
                 exact={true}
                 path="/about"
                 component={withTracker(About)}
+              />
+              <Route
+                exact={true}
+                path="/privacy-policy"
+                component={withTracker(PrivacyPolicy)}
               />
               <Route
                 exact={true}

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import GoogleAnalytics from 'react-ga'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 
@@ -30,13 +30,19 @@ function LogInButton() {
       Go To Dashboard
     </Button>
   ) : (
-    <Button
-      className="btn-round sign-in-button"
-      size="md"
-      onClick={handleClickLogin}
-    >
-      Sign In With Spotify
-    </Button>
+    <div className="about d-flex flex-column align-items-center justify-content-center">
+      <Button
+        className="btn-round sign-in-button"
+        size="md"
+        onClick={handleClickLogin}
+      >
+        Sign In With Spotify
+      </Button>
+      <p style={{ fontSize: '0.8em' }}>
+        By signing in you agree to the{' '}
+        <Link to="/privacy-policy">Privacy Policy</Link>.
+      </p>
+    </div>
   )
 }
 
