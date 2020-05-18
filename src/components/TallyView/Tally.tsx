@@ -51,18 +51,28 @@ const Tally = () => {
       })
   }
   useEffect(() => {
-    let sub = () => {}
+    let sub = 0
     if (Object.entries(userData).length) {
-      sub = firebase.app
+      firebase.app
         .firestore()
         .collection('app')
         .doc('tally_live')
-        .onSnapshot((doc) => {
-          const source = doc.metadata.hasPendingWrites
-          if (!source) {
-            setTally(doc.data() as GlobalTally)
-          }
+        .get()
+        .then((doc) => {
+          setTally(doc.data() as GlobalTally)
         })
+      sub = setInterval(
+        () =>
+          firebase.app
+            .firestore()
+            .collection('app')
+            .doc('tally_live')
+            .get()
+            .then((doc) => {
+              setTally(doc.data() as GlobalTally)
+            }),
+        10e3
+      )
     } else {
       firebase.app
         .firestore()
@@ -71,12 +81,16 @@ const Tally = () => {
         .get()
         .then((doc) => setTally(doc.data() as GlobalTally))
     }
-    return sub
+    return () => clearInterval(sub)
   }, [userData])
 
   useEffect(() => {
     addToast(
       'musictaste.space is booming! Due to high demand totals are now being updated once a minute!',
+      { appearance: 'warning', autoDismiss: true }
+    )
+    addToast(
+      'To reduce load, the last match will now only update every 10 seconds.',
       { appearance: 'warning', autoDismiss: true }
     )
   }, [addToast])

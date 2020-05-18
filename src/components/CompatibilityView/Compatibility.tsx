@@ -23,7 +23,7 @@ function Compatibility() {
     <>
       <Navbar />
       <Helmet>
-        <title>Compatibililty - musictaste.space{}</title>
+        <title>Compatibilility - musictaste.space</title>
         <meta
           name="description"
           content="Get your unique code to share with your friends (or strangers)! \

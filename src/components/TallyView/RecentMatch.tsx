@@ -1,3 +1,4 @@
+import { differenceInMinutes } from 'date-fns'
 import React, { useContext, useEffect, useState } from 'react'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
@@ -53,7 +54,15 @@ const RecentMatch = ({
           <img alt="artist" src={artists[0].images[0].url} />
         ) : (
           <div className="d-flex align-items-center justify-content-center">
-            Please refresh the page.
+            {userData
+              ? differenceInMinutes(
+                  new Date(),
+                  userData.accessTokenRefresh.toDate()
+                ) > 60
+                ? 'Please refresh the page'
+                : 'No artists!'
+              : 'Loading...'}
+            .
           </div>
         )}
       </div>
