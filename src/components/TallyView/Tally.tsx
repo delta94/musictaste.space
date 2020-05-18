@@ -2,6 +2,7 @@ import Color from 'color'
 import Vibrant from 'node-vibrant'
 import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import { useToasts } from 'react-toast-notifications'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
 import { Dot } from '../Aux/Dot'
@@ -15,6 +16,7 @@ const Tally = () => {
   const [textColor, setTextColor] = useState('#191414')
   const [altTextColor, setAltTextColor] = useState('#1db954')
   const { userData } = useContext(AuthContext)
+  const { addToast } = useToasts()
   const setColors = async (image: string) => {
     await Vibrant.from(image)
       .getPalette()
@@ -54,7 +56,7 @@ const Tally = () => {
       sub = firebase.app
         .firestore()
         .collection('app')
-        .doc('tally')
+        .doc('tally_live')
         .onSnapshot((doc) => {
           const source = doc.metadata.hasPendingWrites
           if (!source) {
@@ -65,12 +67,19 @@ const Tally = () => {
       firebase.app
         .firestore()
         .collection('app')
-        .doc('tally')
+        .doc('tally_live')
         .get()
         .then((doc) => setTally(doc.data() as GlobalTally))
     }
     return sub
   }, [userData])
+
+  useEffect(() => {
+    addToast(
+      'musictaste.space is booming! Due to high demand totals are now being updated once a minute!',
+      { appearance: 'warning', autoDismiss: true }
+    )
+  }, [addToast])
 
   return (
     <>
