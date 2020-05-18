@@ -90,7 +90,7 @@ const Tally = () => {
       { appearance: 'warning', autoDismiss: true }
     )
     addToast(
-      'To reduce load, the last match will now only update every 10 seconds.',
+      'To reduce load, the latest match will now only update every 10 seconds.',
       { appearance: 'warning', autoDismiss: true }
     )
   }, [addToast])
