@@ -34,7 +34,7 @@ const RecentMatch = ({
         .catch(() => [])
       if (artists.length) {
         setArtists(artists)
-        setArtistBackgroundURL(artists[0].images[0].url)
+        setArtistBackgroundURL(artists[0].images[0]?.url)
       } else {
         setArtists([])
       }
@@ -51,7 +51,7 @@ const RecentMatch = ({
     >
       <div className="col-md-3 col-6 d-flex flex-column align-items-center justify-content-center">
         {artists.length > 0 ? (
-          <img alt="artist" src={artists[0].images[0].url} />
+          <img alt="artist" src={artists[0].images[0]?.url} />
         ) : (
           <div className="d-flex align-items-center justify-content-center">
             {userData
@@ -68,7 +68,7 @@ const RecentMatch = ({
       </div>
       <div className="col-md-3 col-6 d-flex flex-column align-items-center justify-content-center">
         {artists.length > 1 ? (
-          <img alt="artist" src={artists[1].images[0].url} />
+          <img alt="artist" src={artists[1].images[0]?.url} />
         ) : null}
       </div>
       <div className="col-md-3 col-6 d-flex flex-column mt-3">

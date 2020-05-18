@@ -55,7 +55,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
     }
   }, [artistBackgroundURL])
   if (loaded && artistBackgroundURL === '') {
-    setArtistBackgroundURL(artists[0].images[0].url)
+    setArtistBackgroundURL(artists[0].images[0]?.url)
   }
   const Menu1 = styled.a`
     border-bottom: ${'1px solid ' + backgroundColor};
@@ -92,7 +92,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                 <div
                   className="artist-image"
                   style={{
-                    backgroundImage: `url(${artists[0].images[0].url})`,
+                    backgroundImage: `url(${artists[0].images[0]?.url})`,
                   }}
                 />
               </div>
@@ -104,7 +104,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                     <div className="col-md-3 col-4 mt-2">
                       <img
                         className="artist-image-small"
-                        src={artists[1].images[0].url}
+                        src={artists[1].images[0]?.url}
                         alt="top-artist"
                       />
                     </div>
@@ -122,7 +122,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                     <div className="col-md-3 col-4 mt-2">
                       <img
                         className="artist-image-small"
-                        src={artists[2].images[0].url}
+                        src={artists[2].images[0]?.url}
                         alt="top-artist"
                       />
                     </div>
@@ -142,7 +142,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                     <div className="col-md-3 col-4 mt-2">
                       <img
                         className="artist-image-small"
-                        src={artists[3].images[0].url}
+                        src={artists[3].images[0]?.url}
                         alt="top-artist"
                       />
                     </div>
@@ -160,7 +160,7 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                     <div className="col-md-3 col-4 mt-2">
                       <img
                         className="artist-image-small"
-                        src={artists[4].images[0].url}
+                        src={artists[4].images[0]?.url}
                         alt="top-artist"
                       />
                     </div>

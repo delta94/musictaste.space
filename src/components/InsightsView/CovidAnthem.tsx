@@ -28,7 +28,7 @@ const Track = ({ backgroundColor, textColor, track }: TrackProps) => (
     style={{ backgroundColor }}
     key={track.id}
   >
-    <img src={track.album.images[0].url} className="top-image" alt="" />
+    <img src={track.album.images[0]?.url} className="top-image" alt="" />
     <p className="artist-name" style={{ color: textColor }}>
       {track.name}
       <br />
@@ -97,7 +97,7 @@ const CovidAnthem = ({ tracks, artist }: CovidAnthemProps) => {
 
   useEffect(() => {
     if (artist) {
-      setArtistBackgroundURL(artist.images[0].url)
+      setArtistBackgroundURL(artist.images[0]?.url)
     }
   }, [artist])
 

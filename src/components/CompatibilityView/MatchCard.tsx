@@ -38,11 +38,11 @@ const MatchCard = ({
   const data = matchData.data() as IUserMatchData
   if (data.bgCode.type === 'artist') {
     spotify.getArtist(data.bgCode.id).then((res) => {
-      setBgImageURL(res.images[0].url)
+      setBgImageURL(res.images[0]?.url)
     })
   } else if (data.bgCode.type === 'track' && data.bgCode.id) {
     spotify.getTrack(data.bgCode.id).then((res) => {
-      setBgImageURL(res.album.images[0].url)
+      setBgImageURL(res.album.images[0]?.url)
     })
   }
 

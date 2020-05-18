@@ -186,7 +186,7 @@ const Header = ({
                             )}
                           >
                             <img
-                              src={artist.images[0].url}
+                              src={artist.images[0]?.url}
                               className="top-image"
                               alt=""
                             />
@@ -228,7 +228,7 @@ const Header = ({
                             onClick={onClickHandle(track.external_urls.spotify)}
                           >
                             <img
-                              src={track.album.images[0].url}
+                              src={track.album.images[0]?.url}
                               className="top-image"
                               alt=""
                             />
@@ -264,11 +264,11 @@ const Header = ({
                   ) => {
                     if (artist) {
                       setArtistBackgroundURL(
-                        artist.images[0].url ? artist.images[0].url : ''
+                        artist.images[0]?.url ? artist.images[0]?.url : ''
                       )
                       return (
                         <img
-                          src={artist.images[0].url}
+                          src={artist.images[0]?.url}
                           className="artist"
                           alt=""
                         />
@@ -291,7 +291,7 @@ const Header = ({
                     if (artist) {
                       return (
                         <img
-                          src={artist.images[0].url}
+                          src={artist.images[0]?.url}
                           className="artist"
                           alt=""
                         />
@@ -314,7 +314,7 @@ const Header = ({
                     if (artist) {
                       return (
                         <img
-                          src={artist.images[0].url}
+                          src={artist.images[0]?.url}
                           className="artist"
                           alt=""
                         />

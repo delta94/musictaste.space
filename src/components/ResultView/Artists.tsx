@@ -100,9 +100,9 @@ const Artists = ({
             ) => {
               if (artists && artists.artists) {
                 if (artists.artists.length > 1) {
-                  setArtistBackgroundURL(artists.artists[1].images[0].url)
+                  setArtistBackgroundURL(artists.artists[1].images[0]?.url)
                 } else {
-                  setArtistBackgroundURL(artists.artists[0].images[0].url)
+                  setArtistBackgroundURL(artists.artists[0].images[0]?.url)
                 }
                 return artists.artists.map((artist, index) => (
                   <div
@@ -112,7 +112,7 @@ const Artists = ({
                     onClick={onClickArtist(artist.uri)}
                   >
                     <img
-                      src={artist.images[0].url}
+                      src={artist.images[0]?.url}
                       className="top-image"
                       alt=""
                     />

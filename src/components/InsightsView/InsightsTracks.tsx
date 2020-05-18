@@ -14,7 +14,7 @@ const InsightsTracks = ({
     <div id="tracks">
       {userData.topTracksLongTerm.length ? (
         <TracksContainer
-          tracksData={userData.topTracksLongTerm.slice(0, 30)}
+          tracksData={userData.topTracksLongTerm.filter(Boolean).slice(0, 30)}
           textData={{ code: 'lt', title: 'All-Time', lowercase: 'all-time' }}
           onCreatePlaylist={createPlaylist(
             userData.topTracksLongTerm.map((t) => t.id).slice(0, 50),
@@ -34,7 +34,7 @@ const InsightsTracks = ({
       ) : null} */}
       {userData.topTracksShortTerm.length ? (
         <TracksContainer
-          tracksData={userData.topTracksShortTerm.slice(0, 30)}
+          tracksData={userData.topTracksShortTerm.filter(Boolean).slice(0, 30)}
           textData={{
             code: 'st',
             title: 'Recent',
