@@ -114,7 +114,10 @@ const Result = () => {
                 matchUserId={matchUserId}
               />
               <Genres history={history} matchData={matchData} />
-              {matchData.score > 0.5 ? (
+              {matchData.score > 0.5 &&
+              (matchData.matchedTracksLongTerm.length ||
+                matchData.matchedTracksMediumTerm.length ||
+                matchData.matchedTracksShortTerm.length) ? (
                 <Playlist
                   token={userData.accessToken}
                   artistID={

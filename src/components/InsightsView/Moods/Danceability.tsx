@@ -73,7 +73,7 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
   if (loaded && track && artistBackgroundURL === '' && averages) {
     setScore(features.danceability)
     setAverageScore(averages.data.features.danceability)
-    setArtistBackgroundURL(track.track.album.images[0].url)
+    setArtistBackgroundURL(track.track.album.images[0]?.url)
   }
   return (
     <div
@@ -147,7 +147,7 @@ const Happy = ({ features, loaded, track, averages, emoji }: HappyProps) => {
                     onClick={handleClick}
                   >
                     <img
-                      src={track.track.album.images[0].url}
+                      src={track.track.album.images[0]?.url}
                       className="top-image"
                       alt=""
                     />

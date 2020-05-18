@@ -54,7 +54,7 @@ export default function Playlist(props: {
         })
     }
     if (artist) {
-      setColors(artist.images[0].url)
+      setColors(artist.images[0]?.url)
     } else {
       const getArtistImage = async () => {
         await s.getArtist(props.artistID).then((res) => setArtist(res))

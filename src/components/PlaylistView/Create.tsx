@@ -1,8 +1,9 @@
 import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
+import { Button } from 'reactstrap'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
@@ -28,6 +29,7 @@ const Create = () => {
   const [loading, setLoading] = useState(true)
   const location = useLocation()
   const query = qs.parse(location.search)
+  const history = useHistory()
 
   async function createPlaylist(): Promise<{
     success: boolean
@@ -205,7 +207,19 @@ const Create = () => {
                   generated multiple times.
                 </div>
               </div>
-            ) : null}
+            ) : (
+              <div className="error">
+                Oops. We need some top tracks in common to create a playlist.
+                <br />
+                <Button
+                  className="mt-3 btn-round sign-in-button"
+                  size="sm"
+                  onClick={() => history.goBack()}
+                >
+                  Go back
+                </Button>
+              </div>
+            )}
             <div className="error">{error.message}</div>
           </div>
         )}

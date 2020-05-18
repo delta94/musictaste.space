@@ -71,7 +71,7 @@ const InsightsTracksContainer = ({
             if (track) {
               return (
                 <img
-                  src={track.album.images[0].url}
+                  src={track.album.images[0]?.url}
                   className="track-hover-image"
                   alt=""
                 />
@@ -128,7 +128,7 @@ const InsightsTracksContainer = ({
                     if (tracks && tracks.tracks) {
                       if (tracks.tracks.length) {
                         setArtistBackgroundURL(
-                          tracks.tracks[0].album.images[0].url
+                          tracks.tracks[0].album.images[0]?.url
                         )
                       }
                       return tracks.tracks.map((track, index) => (
@@ -139,7 +139,7 @@ const InsightsTracksContainer = ({
                           onClick={onClickHandle(track.uri)}
                         >
                           <img
-                            src={track.album.images[0].url}
+                            src={track.album.images[0]?.url}
                             className="top-image"
                             alt=""
                           />

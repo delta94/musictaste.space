@@ -14,7 +14,7 @@ export const ArtistFloaters = (props: {
 }) => {
   const topArtists = props.spotifyData.topArtistsLongTerm
     .slice(0, 31)
-    .map(val => val.id)
+    .map((val) => val.id)
 
   const artistURIs: string[] = []
   const m =
@@ -30,17 +30,17 @@ export const ArtistFloaters = (props: {
     hex3: '#130f40',
   }
   const updateColors = async (artists: any) => {
-    await Vibrant.from(artists[0].images[0].url)
+    await Vibrant.from(artists[0].images[0]?.url)
       .getPalette()
-      .then(palette => {
+      .then((palette) => {
         if (palette.LightVibrant && palette.DarkMuted) {
           colors.bg = palette.LightVibrant.hex
           colors.title = palette.DarkMuted.hex
         }
       })
-    await Vibrant.from(artists[1].images[0].url)
+    await Vibrant.from(artists[1].images[0]?.url)
       .getPalette()
-      .then(palette => {
+      .then((palette) => {
         if (palette.DarkVibrant && palette.Muted && palette.DarkMuted) {
           colors.hex1 = palette.Muted.hex
           colors.hex2 = palette.DarkVibrant.hex
@@ -62,7 +62,7 @@ export const ArtistFloaters = (props: {
       <div
         className={'spotify-cards card' + (index + 1).toString()}
         key={'artist.id' + index.toString()}
-        style={{ backgroundImage: `url(${artist.images[0].url})` }}
+        style={{ backgroundImage: `url(${artist.images[0]?.url})` }}
       />
     ))
   }
