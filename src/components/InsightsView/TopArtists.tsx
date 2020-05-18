@@ -99,64 +99,80 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
             </div>
             <div className="mt-3 mb-3">
               <div className="row sub-artists">
-                <div className="col-md-3 col-4 mt-2">
-                  <img
-                    className="artist-image-small"
-                    src={artists[1].images[0].url}
-                    alt="top-artist"
-                  />
-                </div>
-                <div className="col-md-3 col-8 mt-2">
-                  <div className="title" style={{ color: backgroundColor }}>
-                    <span style={{ color: altTextColor }}>#2</span>
-                    <br />
-                    {artists[1].name}
-                  </div>
-                </div>
-                <div className="col-md-3 col-4 mt-2">
-                  <img
-                    className="artist-image-small"
-                    src={artists[2].images[0].url}
-                    alt="top-artist"
-                  />
-                </div>
-                <div className="col-md-3 col-8 mt-2">
-                  <div className="title" style={{ color: backgroundColor }}>
-                    <span style={{ color: altTextColor }}>#3</span>
-                    <br />
-                    {artists[2].name}
-                  </div>
-                </div>
+                {artists.length > 1 ? (
+                  <>
+                    <div className="col-md-3 col-4 mt-2">
+                      <img
+                        className="artist-image-small"
+                        src={artists[1].images[0].url}
+                        alt="top-artist"
+                      />
+                    </div>
+                    <div className="col-md-3 col-8 mt-2">
+                      <div className="title" style={{ color: backgroundColor }}>
+                        <span style={{ color: altTextColor }}>#2</span>
+                        <br />
+                        {artists[1].name}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+                {artists.length > 2 ? (
+                  <>
+                    <div className="col-md-3 col-4 mt-2">
+                      <img
+                        className="artist-image-small"
+                        src={artists[2].images[0].url}
+                        alt="top-artist"
+                      />
+                    </div>
+                    <div className="col-md-3 col-8 mt-2">
+                      <div className="title" style={{ color: backgroundColor }}>
+                        <span style={{ color: altTextColor }}>#3</span>
+                        <br />
+                        {artists[2].name}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
               </div>
               <div className="row sub-artists">
-                <div className="col-md-3 col-4 mt-2">
-                  <img
-                    className="artist-image-small"
-                    src={artists[3].images[0].url}
-                    alt="top-artist"
-                  />
-                </div>
-                <div className="col-md-3 col-8 mt-2">
-                  <div className="title" style={{ color: backgroundColor }}>
-                    <span style={{ color: altTextColor }}>#4</span>
-                    <br />
-                    {artists[3].name}
-                  </div>
-                </div>
-                <div className="col-md-3 col-4 mt-2">
-                  <img
-                    className="artist-image-small"
-                    src={artists[4].images[0].url}
-                    alt="top-artist"
-                  />
-                </div>
-                <div className="col-md-3 col-8 mt-2">
-                  <div className="title" style={{ color: backgroundColor }}>
-                    <span style={{ color: altTextColor }}>#5</span>
-                    <br />
-                    {artists[4].name}
-                  </div>
-                </div>
+                {artists.length > 3 ? (
+                  <>
+                    <div className="col-md-3 col-4 mt-2">
+                      <img
+                        className="artist-image-small"
+                        src={artists[3].images[0].url}
+                        alt="top-artist"
+                      />
+                    </div>
+                    <div className="col-md-3 col-8 mt-2">
+                      <div className="title" style={{ color: backgroundColor }}>
+                        <span style={{ color: altTextColor }}>#4</span>
+                        <br />
+                        {artists[3].name}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
+                {artists.length > 4 ? (
+                  <>
+                    <div className="col-md-3 col-4 mt-2">
+                      <img
+                        className="artist-image-small"
+                        src={artists[4].images[0].url}
+                        alt="top-artist"
+                      />
+                    </div>
+                    <div className="col-md-3 col-8 mt-2">
+                      <div className="title" style={{ color: backgroundColor }}>
+                        <span style={{ color: altTextColor }}>#5</span>
+                        <br />
+                        {artists[4].name}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
               </div>
               <div className="row">
                 <div className="col d-flex flex-row justify-content-end full-button">
