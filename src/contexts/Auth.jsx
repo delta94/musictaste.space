@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
               </span>,
               {
                 appearance: data.appearance,
-                autoDismiss: false,
+                autoDismiss: data.autoDismiss,
               }
             )
           }
