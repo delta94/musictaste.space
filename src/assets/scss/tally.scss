@@ -17,8 +17,7 @@
   .count {
     transition: 5s;
     font-weight: 800;
-    font-size: 7em;
-    font-size: clamp(3em, 10vw, 7em);
+    font-size: clamp(2em, 9vw, 6em);
   }
 
   .heading-recent {

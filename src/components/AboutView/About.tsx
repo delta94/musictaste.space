@@ -54,18 +54,18 @@ const About = () => {
               into the same question when meeting new people of: &ldquo;So what
               kind of music do you listen to?&rdquo;, I knew there must be an
               easier (and more fun) way to see which aspects of your music taste
-              you had in common. So, as Summer project in early 2020, I created{' '}
-              <strong>musictaste.space</strong>.
+              you had in common. So, as a Summer project in early 2020, I
+              created <strong>musictaste.space</strong>.
             </span>
           </p>
           <p>
             <span>
               After importing your Spotify data, you&apos;re able to see your
               top artists, tracks and genres as part of your insights. With your
-              code and URL, you&rsquo;re can match with friends (or even
-              anonymously by sharing your anon code with strangers) to get a
-              score on how compatible you are, as well as a breakdown on which
-              artists and songs you have a common interest in.
+              code and URL, you can match with friends (or even anonymously by
+              sharing your anon code with strangers) to get a score on how
+              compatible you are, as well as a breakdown on which artists and
+              songs you have in common.
             </span>
           </p>
           <p>
@@ -74,13 +74,6 @@ const About = () => {
               chat about music, feel free to reach out to me on{' '}
               <a href="https://www.twitter.com/_kalpal">my Twitter</a>.
             </span>
-          </p>
-          <p style={{ textAlign: 'center' }}>
-            <strong>
-              The musictaste Discord bot is now in beta! Click{' '}
-              <Link to="/discord">here</Link> to link your account or invite the
-              bot to your channel.
-            </strong>
           </p>
           <p>
             <span>
