@@ -50,14 +50,26 @@ const Insights = () => {
     const importData = async () => {
       const s = new Spotify()
       s.setAccessToken(userData.accessToken)
-      setArtistData(
-        await s
-          .getArtists(
-            spotifyData.topArtistsShortTerm.slice(0, 6).map((a) => a.id)
-          )
-          .then((d) => d.artists)
-          .catch(() => [])
-      )
+      if (spotifyData.topArtistsLongTerm.length) {
+        setArtistData(
+          await s
+            .getArtists(
+              spotifyData.topArtistsShortTerm.slice(0, 6).map((a) => a.id)
+            )
+            .then((d) => d.artists)
+            .catch(() => [])
+        )
+      } else {
+        setArtistData(
+          await s
+            .getArtists(
+              spotifyData.topArtistsLongTerm.slice(0, 6).map((a) => a.id)
+            )
+            .then((d) => d.artists)
+            .catch(() => [])
+        )
+      }
+
       if (spotifyData.topTracksShortTerm && spotifyData.topTracksMediumTerm) {
         const tSet = new Set()
         const tracks = Array.from({ length: 30 })

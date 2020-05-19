@@ -58,7 +58,7 @@ div.main-container {
       }
       width: 400px;
       @media screen and (max-width: 600px) {
-        width: 250px;
+        width: 300px;
       }
       background-color: #dff9fb;
       border-radius: 10px;
@@ -101,11 +101,11 @@ div.main-container {
         color: #ecf0f1 !important;
       }
 
-      font-size: 1.6em;
+      font-size: 1.3em;
       padding-top: 30px;
       padding-bottom: 30px;
       @media screen and (max-width: 600px) {
-        font-size: 1.3em;
+        font-size: 1.2em;
         padding-top: 25px;
         padding-bottom: 25px;
       }
@@ -128,7 +128,7 @@ div.main-container {
   input {
     &.url {
       color: #30336b !important;
-      font-size: 1.4em;
+      font-size: 1.3em;
       padding-top: 30px;
       padding-bottom: 30px;
       @media screen and (max-width: 600px) {

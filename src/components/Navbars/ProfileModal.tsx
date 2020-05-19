@@ -84,7 +84,7 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
           </div>
         </div>
         <div className="row mt-3">
-          <div className="col-4 text-left d-flex flex-column">
+          <div className="col-8 text-left d-flex flex-column">
             <span className="data-title">
               <strong>Match Code</strong>
             </span>
@@ -96,22 +96,12 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
           </div>
           <div className="col-4 text-left d-flex flex-column">
             <span className="data-title">
-              <strong>Anon Code</strong>
+              <strong>Created</strong>
             </span>
             <span className="data">
-              {userData.importData?.exists && userData.anonMatchCode
-                ? userData.anonMatchCode
-                : '-'}
-            </span>
-          </div>
-          <div className="col-4 text-left d-flex flex-column">
-            <span className="data-title">
-              <strong>Data</strong>
-            </span>
-            <span className="data">
-              {userData.importData?.exists
-                ? format(userData.importData.lastImport.toDate(), 'd MMMM yy')
-                : 'None'}
+              {userData.importData?.created
+                ? format(userData.importData.created.toDate(), 'd MMMM yy')
+                : 'Legacy'}
             </span>
           </div>
         </div>
@@ -135,15 +125,17 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
                 userData.accessTokenRefresh.toDate() as Date
               ) < 60
                 ? 'Token OK'
-                : 'Token Expired'}
+                : 'Expired'}
             </span>
           </div>
           <div className="col-4 text-left d-flex flex-column">
             <span className="data-title">
-              <strong>Discord</strong>
+              <strong>Import</strong>
             </span>
             <span className="data">
-              {userData.discordId ? 'Linked' : 'Not Linked'}
+              {userData.importData?.exists
+                ? format(userData.importData.lastImport.toDate(), 'd MMMM yy')
+                : 'None'}
             </span>
           </div>
         </div>
