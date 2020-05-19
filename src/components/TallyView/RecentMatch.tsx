@@ -17,7 +17,7 @@ const RecentMatch = ({
 }) => {
   const [artistBackgroundURL, setArtistBackgroundURL] = useState('')
   const [artists, setArtists] = useState<SpotifyApi.ArtistObjectFull[]>([])
-  const { userData } = useContext(AuthContext)
+  const { currentUser, spotifyToken } = useContext(AuthContext)
   useEffect(() => {
     if (artistBackgroundURL !== '') {
       setColors(artistBackgroundURL)
@@ -27,7 +27,7 @@ const RecentMatch = ({
   useEffect(() => {
     const getArtistImage = async () => {
       const s = new Spotify()
-      s.setAccessToken(userData.accessToken)
+      s.setAccessToken(spotifyToken)
       const artists = await s
         .getArtists(data.matchedArtists.slice(0, 8).map((i) => i.id))
         .then((d) => d.artists)
@@ -39,10 +39,10 @@ const RecentMatch = ({
         setArtists([])
       }
     }
-    if (data?.matchedArtists?.length && Object.entries(userData).length) {
+    if (data?.matchedArtists?.length && spotifyToken) {
       getArtistImage()
     }
-  }, [data, userData])
+  }, [data, spotifyToken])
 
   return (
     <div
@@ -54,14 +54,7 @@ const RecentMatch = ({
           <img alt="artist" src={artists[0].images[0]?.url} />
         ) : (
           <div className="d-flex align-items-center justify-content-center">
-            {userData
-              ? differenceInMinutes(
-                  new Date(),
-                  userData.accessTokenRefresh.toDate()
-                ) > 60
-                ? 'Please refresh the page'
-                : 'No artists!'
-              : 'Loading...'}
+            {currentUser ? 'No artists!' : 'Loading...'}
           </div>
         )}
       </div>
