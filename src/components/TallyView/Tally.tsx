@@ -15,6 +15,7 @@ const Tally = () => {
   const [backgroundColor, setBackgroundColor] = useState('#ffffff')
   const [textColor, setTextColor] = useState('#191414')
   const [altTextColor, setAltTextColor] = useState('#1db954')
+  const [subStarted, setSubStarted] = useState(false)
   const { userData } = useContext(AuthContext)
   const { addToast } = useToasts()
   const setColors = async (image: string) => {
@@ -61,18 +62,21 @@ const Tally = () => {
         .then((doc) => {
           setTally(doc.data() as GlobalTally)
         })
-      sub = setInterval(
-        () =>
-          firebase.app
-            .firestore()
-            .collection('app')
-            .doc('tally_live')
-            .get()
-            .then((doc) => {
-              setTally(doc.data() as GlobalTally)
-            }),
-        10e3
-      )
+      if (!subStarted) {
+        sub = setInterval(
+          () =>
+            firebase.app
+              .firestore()
+              .collection('app')
+              .doc('tally_live')
+              .get()
+              .then((doc) => {
+                setTally(doc.data() as GlobalTally)
+              }),
+          10e3
+        )
+        setSubStarted(true)
+      }
     } else {
       firebase.app
         .firestore()

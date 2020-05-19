@@ -62,7 +62,6 @@ const RecentMatch = ({
                 ? 'Please refresh the page'
                 : 'No artists!'
               : 'Loading...'}
-            .
           </div>
         )}
       </div>
