@@ -1,6 +1,6 @@
 import Color from 'color'
 import differenceInDays from 'date-fns/differenceInDays'
-import { differenceInMinutes } from 'date-fns/esm'
+import differenceInSeconds from 'date-fns/differenceInSeconds'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
@@ -171,7 +171,7 @@ export function Me() {
     const brokenImport =
       importStatus.loading &&
       importStatus.lastImport &&
-      differenceInMinutes(new Date(), importStatus.lastImport.toDate()) >= 1
+      differenceInSeconds(new Date(), importStatus.lastImport.toDate()) >= 4
     if (!importStatus.loading || brokenImport) {
       setImportClick(true)
       setImportStatus({ ...emptyImport, loading: true })
@@ -262,7 +262,8 @@ export function Me() {
                           . There was an error with importing your Spotify data.
                           You might not have enough listening data for me to
                           calculate your profile. If this doesn&apos;t sound
-                          right, try importing your data again.
+                          right, Spotify might be playing up. Try importing your
+                          data again.
                         </p>
                       ) : importStatus.exists ? (
                         <>
@@ -312,10 +313,10 @@ export function Me() {
                         </>
                       ) : importStatus.loading &&
                         importStatus.lastImport &&
-                        differenceInMinutes(
+                        differenceInSeconds(
                           new Date(),
                           importStatus.lastImport.toDate()
-                        ) < 1 ? (
+                        ) < 4 ? (
                         <ImportStatus importStatus={importStatus} />
                       ) : importStatus.loading && importClick ? (
                         <ImportStatus importStatus={importStatus} />
