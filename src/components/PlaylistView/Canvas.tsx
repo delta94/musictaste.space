@@ -67,7 +67,11 @@ class Canvas extends React.Component<
       ctx.font = '600 20px "Poppins", sans-serif'
       ctx.fillStyle = '#ecf0f1'
       ctx.globalCompositeOperation = 'source-over'
-      ctx.fillText('musictaste.space ✦', 15, 40)
+      if (this.covidPlaylist) {
+        ctx.fillText('musictaste.space ✦', 15, 40)
+      } else {
+        ctx.fillText('musictaste.space ✦', 15, 280)
+      }
       this.props.setPlaylistImage(canvas.toDataURL('image/jpeg', 0.9))
     })
   }
