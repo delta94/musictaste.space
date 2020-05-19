@@ -6,6 +6,7 @@ import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
+import { useToasts } from 'react-toast-notifications'
 import { Col, Row } from 'reactstrap'
 import styled from 'styled-components'
 import { AuthContext } from '../../contexts/Auth'
@@ -60,7 +61,7 @@ export function Me() {
   } as IImportStatus)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
-
+  const { addToast } = useToasts()
   useEffect(() => {
     if (!userData.importData) {
       setImportStatus(emptyImport)
@@ -68,6 +69,28 @@ export function Me() {
       setImportStatus(userData.importData)
     }
   }, [userData])
+
+  useEffect(() => {
+    firebase.app
+      .firestore()
+      .collection('app')
+      .doc('alert')
+      .get()
+      .then((d) => {
+        if (d.exists) {
+          const data = d.data()
+          if (data?.limited) {
+            addToast(
+              'musictaste.space is handling too many requests right now! Spotify is rate limiting our API calls. Please try back later if you run into issues ❤️.',
+              {
+                appearance: 'error',
+                autoDismiss: false,
+              }
+            )
+          }
+        }
+      })
+  }, [])
 
   const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
   useEffect(() => {

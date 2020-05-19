@@ -184,8 +184,8 @@ const About = () => {
           </p>
         </div>
         <div
-          style={{ textAlign: 'center', width: '90%' }}
-          className="landing-page mt-3 mb-2"
+          style={{ textAlign: 'center' }}
+          className="landing-page container mt-3 mb-2"
         >
           <Row className="justify-content-center align-items-center text-center home-tally">
             <Col xs="3">
