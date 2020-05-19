@@ -15,8 +15,7 @@ const Tally = () => {
   const [backgroundColor, setBackgroundColor] = useState('#ffffff')
   const [textColor, setTextColor] = useState('#191414')
   const [altTextColor, setAltTextColor] = useState('#1db954')
-  const [subStarted, setSubStarted] = useState(false)
-  const { userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
   const { addToast } = useToasts()
   const setColors = async (image: string) => {
     await Vibrant.from(image)
@@ -53,7 +52,7 @@ const Tally = () => {
   }
   useEffect(() => {
     let sub = 0
-    if (Object.entries(userData).length) {
+    if (!tallyData) {
       firebase.app
         .firestore()
         .collection('app')
@@ -62,20 +61,18 @@ const Tally = () => {
         .then((doc) => {
           setTally(doc.data() as GlobalTally)
         })
-      if (!subStarted) {
-        sub = setInterval(
-          () =>
-            firebase.app
-              .firestore()
-              .collection('app')
-              .doc('tally_live')
-              .get()
-              .then((doc) => {
-                setTally(doc.data() as GlobalTally)
-              }),
-          10e3
-        )
-        setSubStarted(true)
+      if (currentUser) {
+        sub = setInterval(() => {
+          console.log('loaded')
+          firebase.app
+            .firestore()
+            .collection('app')
+            .doc('tally_live')
+            .get()
+            .then((doc) => {
+              setTally(doc.data() as GlobalTally)
+            })
+        }, 10e3)
       }
     } else {
       firebase.app
@@ -86,7 +83,7 @@ const Tally = () => {
         .then((doc) => setTally(doc.data() as GlobalTally))
     }
     return () => clearInterval(sub)
-  }, [userData])
+  }, [currentUser])
 
   useEffect(() => {
     addToast(
@@ -110,8 +107,7 @@ const Tally = () => {
           {tallyData ? (
             <>
               <div className="tally-heading">
-                Global Tally{' '}
-                {Object.entries(userData).length ? <Dot>·</Dot> : null}
+                Global Tally {currentUser ? <Dot>·</Dot> : null}
               </div>
               <div className="row">
                 <div className="col-6 d-flex flex-column align-items-center justify-content-center">
@@ -131,7 +127,7 @@ const Tally = () => {
                   <div className="headings">Matches</div>
                 </div>
               </div>
-              {Object.entries(userData).length ? (
+              {currentUser ? (
                 <>
                   <div className="heading-recent">Latest Match</div>
                   <RecentMatch
