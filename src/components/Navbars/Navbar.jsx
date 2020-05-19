@@ -171,11 +171,11 @@ class PagesNavbar extends React.Component {
                   Tally
                 </NavLink>
               </NavItem> */}
-              <NavItem>
+              {/* <NavItem>
                 <NavLink tag={Link} to="/discord">
                   Discord
                 </NavLink>
-              </NavItem>
+              </NavItem> */}
               <NavItem>
                 <NavLink tag={Link} to="/compatibility">
                   Compatibility
