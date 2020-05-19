@@ -1,9 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import firebase from '../util/Firebase'
 import SpotifyWebApi from 'spotify-web-api-js'
 import GoogleAnalytics from 'react-ga'
+import { differenceInMinutes } from 'date-fns'
 
 export const AuthContext = React.createContext()
+
+async function checkAccessToken(token, uid) {
+  const sp = new SpotifyWebApi()
+  sp.setAccessToken(token)
+  return sp
+    .getMe()
+    .then(() => true)
+    .catch(async () => (await firebase.refreshSpotifyToken(uid)) && false)
+}
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null)
@@ -12,7 +22,16 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   const [spotifyToken, setSpotifyToken] = useState('')
+  const [lastRefresh, setLastRefresh] = useState(new Date())
+  const [uid, setUid] = useState(null)
   const [userData, setUserData] = useState({})
+  const tokenRef = useRef(spotifyToken)
+  const lastRefreshRef = useRef(lastRefresh)
+  const uidRef = useRef(uid)
+  tokenRef.current = spotifyToken
+  lastRefreshRef.current = lastRefresh
+  uidRef.current = uid
+
   useEffect(() => {
     let sub = () => {}
     if (currentUser) {
@@ -24,11 +43,14 @@ export const AuthProvider = ({ children }) => {
         .onSnapshot((doc) => {
           const source = doc.metadata.hasPendingWrites
           if (!source) {
-            checkAccessToken(
-              doc.data().accessToken,
-              currentUser.uid
-            ).then((val) =>
-              val ? setSpotifyToken(doc.data().accessToken) : null
+            checkAccessToken(doc.data().accessToken, currentUser.uid).then(
+              (val) => {
+                if (val) {
+                  setSpotifyToken(doc.data().accessToken)
+                  setLastRefresh(doc.data().accessTokenRefresh.toDate())
+                  setUid(doc.id)
+                }
+              }
             )
             setUserData(doc.data())
           }
@@ -36,6 +58,19 @@ export const AuthProvider = ({ children }) => {
     }
     return sub
   }, [currentUser])
+
+  useEffect(() => {
+    const ref = setInterval(() => {
+      console.log(
+        'checking token age:',
+        differenceInMinutes(new Date(), lastRefreshRef.current)
+      )
+      if (differenceInMinutes(new Date(), lastRefreshRef.current) > 45) {
+        firebase.refreshSpotifyToken(uidRef.current)
+      }
+    }, 60e3)
+    return () => clearInterval(ref)
+  }, [])
 
   return (
     <AuthContext.Provider
@@ -45,19 +80,7 @@ export const AuthProvider = ({ children }) => {
         userData,
       }}
     >
-      {' '}
-      {children}{' '}
+      {children}
     </AuthContext.Provider>
   )
-}
-
-async function checkAccessToken(token, uid) {
-  const sp = new SpotifyWebApi()
-  sp.setAccessToken(token)
-  return sp
-    .getMe()
-    .then((_) => true)
-    .catch(async (_) =>
-      (await firebase.refreshSpotifyToken(uid)) ? false : false
-    )
 }
