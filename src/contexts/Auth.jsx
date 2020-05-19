@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import firebase from '../util/Firebase'
-import SpotifyWebApi from 'spotify-web-api-js'
+// import SpotifyWebApi from 'spotify-web-api-js'
 import GoogleAnalytics from 'react-ga'
-import { differenceInMinutes, differenceInSeconds } from 'date-fns'
+import { differenceInMinutes } from 'date-fns'
 import { useToasts } from 'react-toast-notifications'
 
 export const AuthContext = React.createContext()
@@ -29,7 +29,11 @@ export const AuthProvider = ({ children }) => {
               <span>
                 musictaste.space is handling too many requests right now!
                 Spotify is rate limiting our API calls. Please try back later if
-                you run into issues ❤️. Follow updates on my{' '}
+                you run into issues{' '}
+                <span role="img" aria-label="heart">
+                  ❤️
+                </span>
+                . Follow updates on my{' '}
                 <a className="cool-link" href="https://www.twitter.com/_kalpal">
                   Twitter
                 </a>
@@ -43,7 +47,7 @@ export const AuthProvider = ({ children }) => {
           }
         }
       })
-  }, [])
+  }, [addToast])
 
   const [spotifyToken, setSpotifyToken] = useState('')
   const [lastRefresh, setLastRefresh] = useState(new Date())
@@ -52,24 +56,9 @@ export const AuthProvider = ({ children }) => {
   const tokenRef = useRef(spotifyToken)
   const lastRefreshRef = useRef(lastRefresh)
   const uidRef = useRef(uid)
-  const [lastRetry, setLastRetry] = useState(null)
   tokenRef.current = spotifyToken
   lastRefreshRef.current = lastRefresh
   uidRef.current = uid
-
-  async function checkAccessToken(token, uid) {
-    const sp = new SpotifyWebApi()
-    sp.setAccessToken(token)
-    return sp
-      .getMe()
-      .then(() => {
-        return true
-      })
-      .catch(async () => {
-        await firebase.refreshSpotifyToken(uid)
-        return false
-      })
-  }
 
   useEffect(() => {
     let sub = () => {}
@@ -82,22 +71,10 @@ export const AuthProvider = ({ children }) => {
         .onSnapshot((doc) => {
           const source = doc.metadata.hasPendingWrites
           if (!source) {
-            if (!lastRetry || differenceInSeconds(new Date(), lastRetry) > 15) {
-              setLastRetry(new Date())
-              checkAccessToken(doc.data().accessToken, currentUser.uid).then(
-                (val) => {
-                  if (val) {
-                    setSpotifyToken(doc.data().accessToken)
-                    setLastRefresh(doc.data().accessTokenRefresh.toDate())
-                  } else {
-                    setSpotifyToken(doc.data().accessToken)
-                    setLastRefresh(doc.data().accessTokenRefresh.toDate())
-                  }
-                  setUid(doc.id)
-                  setUserData(doc.data())
-                }
-              )
-            }
+            setSpotifyToken(doc.data().accessToken)
+            setLastRefresh(doc.data().accessTokenRefresh.toDate())
+            setUid(doc.id)
+            setUserData(doc.data())
           }
         })
     }
@@ -105,15 +82,27 @@ export const AuthProvider = ({ children }) => {
   }, [currentUser])
 
   useEffect(() => {
+    // async function checkAccessToken(token, uid) {
+    //   const sp = new SpotifyWebApi()
+    //   sp.setAccessToken(token)
+    //   return sp
+    //     .getMe()
+    //     .then(() => {
+    //       return true
+    //     })
+    //     .catch(async () => {
+    //       await firebase.refreshSpotifyToken(uid)
+    //       return false
+    //     })
+    // }
+    if (differenceInMinutes(new Date(), lastRefreshRef.current) > 30) {
+      firebase.refreshSpotifyToken(uidRef.current)
+    }
     const ref = setInterval(() => {
-      console.log(
-        'checking token age:',
-        differenceInMinutes(new Date(), lastRefreshRef.current)
-      )
       if (differenceInMinutes(new Date(), lastRefreshRef.current) > 45) {
         firebase.refreshSpotifyToken(uidRef.current)
       }
-    }, 60e3)
+    }, 30e3)
     return () => clearInterval(ref)
   }, [])
 
