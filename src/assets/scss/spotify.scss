@@ -410,3 +410,15 @@ div.spotify-login {
     }
   }
 }
+
+.cool-link {
+  font-weight: 400;
+  border-bottom: 1px solid #1db954;
+  color: #191414 !important;
+  cursor: pointer;
+  padding: 0em 0.1em;
+  &:hover {
+    background: #1db954;
+    color: #ffffff !important;
+  }
+}

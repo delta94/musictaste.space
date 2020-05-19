@@ -70,28 +70,6 @@ export function Me() {
     }
   }, [userData])
 
-  useEffect(() => {
-    firebase.app
-      .firestore()
-      .collection('app')
-      .doc('alert')
-      .get()
-      .then((d) => {
-        if (d.exists) {
-          const data = d.data()
-          if (data?.limited) {
-            addToast(
-              'musictaste.space is handling too many requests right now! Spotify is rate limiting our API calls. Please try back later if you run into issues ❤️.',
-              {
-                appearance: 'error',
-                autoDismiss: false,
-              }
-            )
-          }
-        }
-      })
-  }, [])
-
   const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
   useEffect(() => {
     if (
