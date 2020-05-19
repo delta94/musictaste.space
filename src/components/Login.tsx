@@ -17,7 +17,6 @@ const Login = (props: any) => {
   const [errorData, setErrorData] = useState({
     state: false,
     error: '',
-    object: {},
   })
 
   /**
@@ -45,7 +44,6 @@ const Login = (props: any) => {
           setErrorData({
             state: true,
             error: 'Could not create an account.',
-            object: err,
           })
         )
     } else {
@@ -53,7 +51,6 @@ const Login = (props: any) => {
         setErrorData({
           state: true,
           error: data.error,
-          object: data.error,
         })
       }
       console.error(data)
@@ -63,13 +60,12 @@ const Login = (props: any) => {
     setErrorData({
       state: true,
       error: 'Error back from the Spotify auth page.',
-      object: error,
     })
     return (
       <div>
         <p className="spotify-login">{errorData.error}</p>
         <p className="spotify-login" style={{ fontSize: '0.5em' }}>
-          {errorData.object.toString()}
+          {errorData.error}
         </p>
       </div>
     )
@@ -127,8 +123,7 @@ const Login = (props: any) => {
         .catch((err) => {
           setErrorData({
             state: true,
-            error: 'Machine Broke 😢',
-            object: err,
+            error: `Machine Broke 😢\n ${err?.message}`,
           })
           console.log(err)
         })
@@ -147,9 +142,12 @@ const Login = (props: any) => {
           </p>
         ) : (
           <div>
-            <p className="spotify-login">{errorData.error}</p>
-            <p className="spotify-login" style={{ fontSize: '0.5em' }}>
-              {JSON.stringify(errorData.object)}
+            <p className="spotify-login">Machine Broke 😢</p>
+            <p
+              className="spotify-login"
+              style={{ fontSize: '0.8em', maxWidth: '300px' }}
+            >
+              {errorData?.error ? errorData.error : 'Internal Error'}
             </p>
           </div>
         )}
