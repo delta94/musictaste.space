@@ -82,22 +82,10 @@ export const AuthProvider = ({ children }) => {
         .onSnapshot((doc) => {
           const source = doc.metadata.hasPendingWrites
           if (!source) {
-            if (!lastRetry || differenceInSeconds(new Date(), lastRetry) > 15) {
-              setLastRetry(new Date())
-              checkAccessToken(doc.data().accessToken, currentUser.uid).then(
-                (val) => {
-                  if (val) {
-                    setSpotifyToken(doc.data().accessToken)
-                    setLastRefresh(doc.data().accessTokenRefresh.toDate())
-                  } else {
-                    setSpotifyToken(doc.data().accessToken)
-                    setLastRefresh(doc.data().accessTokenRefresh.toDate())
-                  }
-                  setUid(doc.id)
-                  setUserData(doc.data())
-                }
-              )
-            }
+            setSpotifyToken(doc.data().accessToken)
+            setLastRefresh(doc.data().accessTokenRefresh.toDate())
+            setUid(doc.id)
+            setUserData(doc.data())
           }
         })
     }
@@ -105,15 +93,14 @@ export const AuthProvider = ({ children }) => {
   }, [currentUser])
 
   useEffect(() => {
+    if (differenceInMinutes(new Date(), lastRefreshRef.current) > 30) {
+      firebase.refreshSpotifyToken(uidRef.current)
+    }
     const ref = setInterval(() => {
-      console.log(
-        'checking token age:',
-        differenceInMinutes(new Date(), lastRefreshRef.current)
-      )
       if (differenceInMinutes(new Date(), lastRefreshRef.current) > 45) {
         firebase.refreshSpotifyToken(uidRef.current)
       }
-    }, 60e3)
+    }, 30e3)
     return () => clearInterval(ref)
   }, [])
 
