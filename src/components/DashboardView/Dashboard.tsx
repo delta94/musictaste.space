@@ -6,7 +6,6 @@ import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
-import { useToasts } from 'react-toast-notifications'
 import { Col, Row } from 'reactstrap'
 import styled from 'styled-components'
 import { AuthContext } from '../../contexts/Auth'
@@ -61,7 +60,6 @@ export function Me() {
   } as IImportStatus)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
-  const { addToast } = useToasts()
   useEffect(() => {
     if (!userData.importData) {
       setImportStatus(emptyImport)
