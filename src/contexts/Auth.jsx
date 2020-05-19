@@ -24,23 +24,26 @@ export const AuthProvider = ({ children }) => {
       .then((d) => {
         if (d.exists) {
           const data = d.data()
-          if (data?.limited) {
+          if (data?.display) {
             addToast(
               <span>
-                musictaste.space is handling too many requests right now!
-                Spotify is rate limiting our API calls. Please try back later if
-                you run into issues{' '}
-                <span role="img" aria-label="heart">
-                  ❤️
-                </span>
-                . Follow updates on my{' '}
-                <a className="cool-link" href="https://www.twitter.com/_kalpal">
-                  Twitter
-                </a>
-                .
+                {data.message}
+                {data.twitter ? (
+                  <span>
+                    {' '}
+                    Follow updates on my{' '}
+                    <a
+                      className="cool-link"
+                      href="https://www.twitter.com/_kalpal"
+                    >
+                      Twitter
+                    </a>
+                    .
+                  </span>
+                ) : null}
               </span>,
               {
-                appearance: 'error',
+                appearance: data.appearance,
                 autoDismiss: false,
               }
             )
