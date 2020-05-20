@@ -117,10 +117,15 @@ class Firebase {
     }
   }
 
-  public async importSpotifyData(uid: string, force = false): Promise<boolean> {
+  public async importSpotifyData(
+    uid: string,
+    force = false
+  ): Promise<{ success: boolean; error?: string }> {
     const cf = this.functions.httpsCallable('getSpotifyData')
     const call = await cf({ uid, force }).then((res) => res.data)
-    return call ? call.success : false
+    return call
+      ? call
+      : { success: false, error: 'function did not send a response' }
   }
 
   public async compareUsers(
