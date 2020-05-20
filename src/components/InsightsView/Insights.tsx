@@ -133,7 +133,6 @@ const Insights = () => {
         .getMe()
         .then((d) => (d.country ? d.country : 'world'))
         .catch(() => {
-          window.location.reload(false)
           return 'world'
         })
       if (!Object.entries(averages).length) {
