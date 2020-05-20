@@ -1,4 +1,5 @@
 import { Timestamp } from '@firebase/firestore-types'
+import firebase from 'firebase'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
@@ -6,7 +7,7 @@ import Switch from 'react-switch'
 import { useToasts } from 'react-toast-notifications'
 import { Button, UncontrolledTooltip } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
-import firebase from '../../util/Firebase'
+import Firebase from '../../util/Firebase'
 import MatchCard from './MatchCard'
 
 const MatchContainer = () => {
@@ -28,7 +29,7 @@ const MatchContainer = () => {
         setLoading(true)
         let matchRef
         if (!lastDoc) {
-          matchRef = firebase.app
+          matchRef = Firebase.app
             .firestore()
             .collection('users')
             .doc(currentUser.uid)
@@ -36,7 +37,7 @@ const MatchContainer = () => {
             .orderBy('matchDate', 'desc')
             .limit(LIMIT)
         } else {
-          matchRef = firebase.app
+          matchRef = Firebase.app
             .firestore()
             .collection('users')
             .doc(currentUser.uid)
@@ -64,10 +65,14 @@ const MatchContainer = () => {
     setLoadPage(1)
   }, [])
 
-  const removeMatch = (id: string, name: string) => (e: any) => {
+  const removeMatch = (id: string, name: string) => (
+    e: React.MouseEvent<HTMLInputElement>
+  ) => {
     e.stopPropagation()
-    setMatches(matches.filter((m: any) => m.id !== id))
-    firebase.deleteMatch(currentUser.uid, id)
+    setMatches(
+      matches.filter((m: firebase.firestore.DocumentSnapshot) => m.id !== id)
+    )
+    Firebase.deleteMatch(currentUser.uid, id)
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Remove Match',
@@ -79,12 +84,14 @@ const MatchContainer = () => {
     })
   }
 
-  const handleLoadMore = (e: any) => {
+  const handleLoadMore = () => {
     setLoadPage(loadPage + 1)
   }
-  const onCardClick = (matchId: string, matchDate: Timestamp, id: string) => (
-    e: any
-  ) => {
+  const onCardClick = (
+    matchId: string,
+    matchDate: Timestamp,
+    id: string
+  ) => () => {
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Visit Match',
@@ -168,21 +175,20 @@ const MatchContainer = () => {
       </div>
       <div className="matches">
         <div className="matches-container">
-          {matches.map((doc: any) => {
-            return (
-              <MatchCard
-                history={history}
-                matchData={doc}
-                key={doc.id}
-                quickDelete={quickDelete}
-                onRemove={removeMatch(doc.id, doc.data().displayName)}
-                onClick={onCardClick(
-                  doc.data().matchId,
-                  doc.data().matchDate,
-                  doc.id
-                )}
-              />
-            )
+          {matches.map((doc: firebase.firestore.DocumentSnapshot) => {
+            const data = doc.data() as IPreviewMatchData
+            if (data) {
+              return (
+                <MatchCard
+                  matchData={doc}
+                  key={doc.id}
+                  quickDelete={quickDelete}
+                  onRemove={removeMatch(doc.id, data.displayName)}
+                  onClick={onCardClick(data.matchId, data.matchDate, doc.id)}
+                />
+              )
+            }
+            return null
           })}
         </div>
         {morePages ? (

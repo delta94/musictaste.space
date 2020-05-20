@@ -80,7 +80,6 @@ const MatchContainer = () => {
           {matches.map((doc: any) => {
             return (
               <MatchCard
-                history={history}
                 matchData={doc}
                 key={doc.id}
                 onClick={onCardClick(doc.data().matchId)}

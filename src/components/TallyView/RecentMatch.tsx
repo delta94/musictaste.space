@@ -1,4 +1,3 @@
-import { differenceInMinutes } from 'date-fns'
 import React, { useContext, useEffect, useState } from 'react'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
