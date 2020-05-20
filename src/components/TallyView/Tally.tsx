@@ -83,7 +83,7 @@ const Tally = () => {
         .then((doc) => setTally(doc.data() as GlobalTally))
     }
     return () => clearInterval(sub)
-  }, [currentUser])
+  }, [currentUser, tallyData])
 
   useEffect(() => {
     addToast(

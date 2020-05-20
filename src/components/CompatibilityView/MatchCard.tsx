@@ -22,29 +22,34 @@ const MatchCard = ({
   matchData,
   onClick,
   onRemove,
+  quickDelete,
 }: {
-  history: any
-  matchData: any
-  onClick: (e: any) => void
-  onRemove?: (e: any) => void
+  matchData: firebase.firestore.DocumentSnapshot
+  quickDelete?: boolean
+  onClick: (e: React.MouseEvent<HTMLInputElement>) => void
+  onRemove?: (e: React.MouseEvent<HTMLInputElement>) => void
 }) => {
   const { spotifyToken } = useContext(AuthContext)
   const [bgImageURL, setBgImageURL] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
+  const data = matchData.data() as IPreviewMatchData
 
-  const spotify = new Spotify()
-  spotify.setAccessToken(spotifyToken)
-  const data = matchData.data() as IUserMatchData
-  if (data.bgCode.type === 'artist') {
-    spotify.getArtist(data.bgCode.id).then((res) => {
-      setBgImageURL(res.images[0]?.url)
-    })
-  } else if (data.bgCode.type === 'track' && data.bgCode.id) {
-    spotify.getTrack(data.bgCode.id).then((res) => {
-      setBgImageURL(res.album.images[0]?.url)
-    })
-  }
+  useEffect(() => {
+    const spotify = new Spotify()
+    spotify.setAccessToken(spotifyToken)
+    if (data && spotifyToken) {
+      if (data.bgCode.type === 'artist') {
+        spotify.getArtist(data.bgCode.id).then((res) => {
+          setBgImageURL(res.images[0]?.url)
+        })
+      } else if (data.bgCode.type === 'track' && data.bgCode.id) {
+        spotify.getTrack(data.bgCode.id).then((res) => {
+          setBgImageURL(res.album.images[0]?.url)
+        })
+      }
+    }
+  }, [data, spotifyToken])
 
   const [textColor, setTextColor] = useState('#130f40')
   const [altTextColor, setAltTextColor] = useState('#130f40')
@@ -122,7 +127,7 @@ const MatchCard = ({
             <div
               className="profile-img-div"
               style={{ backgroundImage: `url(${data.photoURL})` }}
-              onClick={toggleModal}
+              onClick={onClick}
             />
           )}
 
@@ -137,7 +142,9 @@ const MatchCard = ({
               {formatDistance(data.matchDate.toDate(), new Date())} ago
             </p>
           </div>
-          <div className="profile-code">{data.anon ? <></> : matchData.id}</div>
+          <div className="profile-code" onClick={onClick}>
+            {data.anon ? <></> : matchData.id}
+          </div>
           <div
             className="score"
             style={{
@@ -156,12 +163,17 @@ const MatchCard = ({
             onClick={onClick}
           />
         </div>
-        <div
-          className="trash-container d-flex align-items-center justify-content-center"
-          onClick={toggleModal}
-        >
-          <i style={{ color: textColor }} className="far fa-trash-alt trash" />
-        </div>
+        {onRemove ? (
+          <div
+            className="trash-container d-flex align-items-center justify-content-center"
+            onClick={quickDelete ? onRemove : toggleModal}
+          >
+            <i
+              style={{ color: textColor }}
+              className="far fa-trash-alt trash"
+            />
+          </div>
+        ) : null}
         <BgColorDiv className="bg-color" onClick={onClick} />
         <div className="bg-img-div">
           <img className="bg-img" src={bgImageURL} alt="" />

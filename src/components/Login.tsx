@@ -142,7 +142,12 @@ const Login = (props: any) => {
           </p>
         ) : (
           <div>
-            <p className="spotify-login">Machine Broke 😢</p>
+            <p className="spotify-login">
+              Machine Broke{' '}
+              <span role="img" aria-label="sad-cry">
+                😢
+              </span>
+            </p>
             <p
               className="spotify-login"
               style={{ fontSize: '0.8em', maxWidth: '300px' }}

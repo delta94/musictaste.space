@@ -54,11 +54,6 @@ function Compatibility() {
               </a>
             </div>
             <EnterCode userData={userData} />
-            <div className="compatibility title-div  sub-title">
-              <a id="matches" className="compatibility title" href="#matches">
-                Matches
-              </a>
-            </div>
             <MatchContainer />
             <Footer />
           </div>
