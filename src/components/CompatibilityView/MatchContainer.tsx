@@ -123,6 +123,8 @@ const MatchContainer = () => {
           autoDismiss: true,
         }
       )
+    } else {
+      setQuickDelete(false)
     }
   }
 
@@ -167,7 +169,7 @@ const MatchContainer = () => {
                 height={20}
                 width={40}
                 className="react-switch"
-                id="material-switch"
+                id="auto-delete-switch"
               />
             </div>
           </div>
