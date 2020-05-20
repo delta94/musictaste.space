@@ -121,11 +121,14 @@ const MatchContainer = () => {
 
   return (
     <>
-      <div className="compatibility title-div sub-title d-flex justify-content-between align-items-center">
+      <div
+        style={{ marginBottom: '1em' }}
+        className="compatibility title-div sub-title d-flex justify-content-between align-items-center"
+      >
         <a id="matches" className="compatibility title" href="#matches">
           Matches
         </a>
-        <div className="match-options d-flex flex-row mr-5">
+        <div className="match-options d-flex flex-row mr-2">
           <div className="d-flex flex-row">
             <div className="trash-container d-flex align-items-center justify-content-center">
               <i
