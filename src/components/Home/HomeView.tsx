@@ -57,19 +57,16 @@ const LandingPage = () => {
                 </p>
                 <p className="text-white">
                   {tallyData
-                    ? `So far, I've been to ${
+                    ? `I've calculated ${tallyData.matches
+                        .toString()
+                        .replace(
+                          /(\d)(?=(\d\d\d)+(?!\d))/g,
+                          '$1,'
+                        )} matches for ${tallyData.users
+                        .toString()
+                        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')} pals in ${
                         tallyData.countries
-                      } countries, calculated ${tallyData.matches
-                        .toString()
-                        .replace(
-                          /(\d)(?=(\d\d\d)+(?!\d))/g,
-                          '$1,'
-                        )} compatibilities for ${tallyData.users
-                        .toString()
-                        .replace(
-                          /(\d)(?=(\d\d\d)+(?!\d))/g,
-                          '$1,'
-                        )} users and counting!`
+                      } different countries and counting!`
                     : 'One sec...'}
                 </p>
                 <p className="text-white mb-4">
