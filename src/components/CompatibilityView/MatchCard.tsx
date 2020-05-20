@@ -22,9 +22,11 @@ const MatchCard = ({
   matchData,
   onClick,
   onRemove,
+  quickDelete,
 }: {
   history: any
   matchData: any
+  quickDelete?: boolean
   onClick: (e: any) => void
   onRemove?: (e: any) => void
 }) => {
@@ -36,15 +38,17 @@ const MatchCard = ({
   const spotify = new Spotify()
   spotify.setAccessToken(spotifyToken)
   const data = matchData.data() as IUserMatchData
-  if (data.bgCode.type === 'artist') {
-    spotify.getArtist(data.bgCode.id).then((res) => {
-      setBgImageURL(res.images[0]?.url)
-    })
-  } else if (data.bgCode.type === 'track' && data.bgCode.id) {
-    spotify.getTrack(data.bgCode.id).then((res) => {
-      setBgImageURL(res.album.images[0]?.url)
-    })
-  }
+  useEffect(() => {
+    if (data.bgCode.type === 'artist') {
+      spotify.getArtist(data.bgCode.id).then((res) => {
+        setBgImageURL(res.images[0]?.url)
+      })
+    } else if (data.bgCode.type === 'track' && data.bgCode.id) {
+      spotify.getTrack(data.bgCode.id).then((res) => {
+        setBgImageURL(res.album.images[0]?.url)
+      })
+    }
+  }, [])
 
   const [textColor, setTextColor] = useState('#130f40')
   const [altTextColor, setAltTextColor] = useState('#130f40')
@@ -122,7 +126,7 @@ const MatchCard = ({
             <div
               className="profile-img-div"
               style={{ backgroundImage: `url(${data.photoURL})` }}
-              onClick={toggleModal}
+              onClick={onClick}
             />
           )}
 
@@ -137,7 +141,9 @@ const MatchCard = ({
               {formatDistance(data.matchDate.toDate(), new Date())} ago
             </p>
           </div>
-          <div className="profile-code">{data.anon ? <></> : matchData.id}</div>
+          <div className="profile-code" onClick={onClick}>
+            {data.anon ? <></> : matchData.id}
+          </div>
           <div
             className="score"
             style={{
@@ -158,7 +164,7 @@ const MatchCard = ({
         </div>
         <div
           className="trash-container d-flex align-items-center justify-content-center"
-          onClick={toggleModal}
+          onClick={quickDelete ? onRemove : toggleModal}
         >
           <i style={{ color: textColor }} className="far fa-trash-alt trash" />
         </div>
