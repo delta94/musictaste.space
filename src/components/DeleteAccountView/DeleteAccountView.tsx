@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import Helmet from 'react-helmet'
 import { useHistory } from 'react-router'
+import { useToasts } from 'react-toast-notifications'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import firebase from '../../util/Firebase'
@@ -13,6 +14,7 @@ const DeleteAccountView = () => {
   const [error, setError] = useState('')
   const { userData } = useContext(AuthContext)
   const history = useHistory()
+  const { addToast } = useToasts()
   useEffect(() => {
     if (done) {
       history.push('/')
@@ -47,6 +49,10 @@ const DeleteAccountView = () => {
       )
     setLoading(false)
     setDone(true)
+    addToast(
+      'Account deleted successfully. If you log in again, a new account will be provisioned.',
+      { appearance: 'success', autoDismiss: false }
+    )
     GoogleAnalytics.event({
       category: 'Account',
       label: 'Delete Account',

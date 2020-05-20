@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }) => {
       if (differenceInMinutes(new Date(), lastRefreshRef.current) > 45) {
         firebase.refreshSpotifyToken(uidRef.current)
       }
-    }, 30e3)
+    }, 60e3)
     return () => clearInterval(ref)
   }, [])
 
