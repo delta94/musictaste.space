@@ -59,7 +59,7 @@ export function Me() {
     loading: false,
   } as IImportStatus)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState<null | string>(null)
   useEffect(() => {
     if (!userData.importData) {
       setImportStatus(emptyImport)
@@ -175,14 +175,18 @@ export function Me() {
     if (!importStatus.loading || brokenImport) {
       setImportClick(true)
       setImportStatus({ ...emptyImport, loading: true })
-      firebase.importSpotifyData(currentUser.uid).then((success) => {
-        if (!success) {
+      firebase.importSpotifyData(currentUser.uid).then((data) => {
+        if (!data.success) {
           GoogleAnalytics.event({
             category: 'Error',
             action: 'Import Data Error',
             label: 'Not enough Spotify data displayed',
           })
-          setError(true)
+          if (data.error) {
+            setError(data.error)
+          } else {
+            setError('Unknown server error.')
+          }
         } else {
           GoogleAnalytics.event({
             category: 'Interaction',
@@ -193,19 +197,24 @@ export function Me() {
       })
     }
   }
+  console.log(error)
   const onReimportSpotifyData = (e: any) => {
     e.stopPropagation()
     if (!importStatus.loading) {
       setImportClick(true)
       setImportStatus({ ...emptyImport, loading: true })
-      firebase.importSpotifyData(currentUser.uid, true).then((success) => {
-        if (!success) {
+      firebase.importSpotifyData(currentUser.uid, true).then((data) => {
+        if (!data.success) {
           GoogleAnalytics.event({
             category: 'Error',
             action: 'Import Data Error',
             label: 'Not enough Spotify data displayed',
           })
-          setError(true)
+          if (data.error) {
+            setError(data.error)
+          } else {
+            setError('Unknown server error.')
+          }
         } else {
           GoogleAnalytics.event({
             category: 'Interaction',
@@ -254,17 +263,31 @@ export function Me() {
                         <strong>{currentUser.displayName}</strong>
                       </h1>
                       {error ? (
-                        <p className="menu menu-text text-center">
-                          Oops{' '}
-                          <span role="img" aria-label="sad-emoji">
-                            😢
-                          </span>
-                          . There was an error with importing your Spotify data.
-                          You might not have enough listening data for me to
-                          calculate your profile. If this doesn&apos;t sound
-                          right, Spotify might be playing up. Try importing your
-                          data again.
-                        </p>
+                        <>
+                          <p
+                            className="text-left"
+                            style={{ color: titleColor }}
+                          >
+                            oops{' '}
+                            <span role="img" aria-label="sad-emoji">
+                              😢
+                            </span>
+                            there was an error with importing your Spotify data.
+                          </p>
+                          <p
+                            className="text-left"
+                            style={{ color: titleColor, fontSize: '0.7em' }}
+                          >
+                            Error: {error}
+                          </p>
+                          <a
+                            href="#nothing"
+                            onClick={() => window.location.reload()}
+                            className="cool-link animated fadeInUp delay-3s"
+                          >
+                            Click here to retry
+                          </a>
+                        </>
                       ) : importStatus.exists ? (
                         <>
                           <Menu1 className="menu button1">
