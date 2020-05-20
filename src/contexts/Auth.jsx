@@ -3,7 +3,6 @@ import firebase from '../util/Firebase'
 // import SpotifyWebApi from 'spotify-web-api-js'
 import GoogleAnalytics from 'react-ga'
 import { differenceInMinutes } from 'date-fns'
-import { useToasts } from 'react-toast-notifications'
 
 export const AuthContext = React.createContext()
 
@@ -12,45 +11,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     firebase.app.auth().onAuthStateChanged(setCurrentUser)
   }, [])
-
-  const { addToast } = useToasts()
-
-  useEffect(() => {
-    firebase.app
-      .firestore()
-      .collection('app')
-      .doc('alert')
-      .get()
-      .then((d) => {
-        if (d.exists) {
-          const data = d.data()
-          if (data?.display) {
-            addToast(
-              <span>
-                {data.message}
-                {data.twitter ? (
-                  <span>
-                    {' '}
-                    Follow updates on my{' '}
-                    <a
-                      className="cool-link"
-                      href="https://www.twitter.com/_kalpal"
-                    >
-                      Twitter
-                    </a>
-                    .
-                  </span>
-                ) : null}
-              </span>,
-              {
-                appearance: data.appearance,
-                autoDismiss: data.autoDismiss,
-              }
-            )
-          }
-        }
-      })
-  }, [addToast])
 
   const [spotifyToken, setSpotifyToken] = useState('')
   const [lastRefresh, setLastRefresh] = useState(new Date())
