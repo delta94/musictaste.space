@@ -100,6 +100,7 @@ const Match = () => {
         <meta name="keywords" content="spotify,music,match,compatibility" />
       </Helmet>
       <div className="match main-div">
+        {matchUser?.donor ? <Confetti width={width} height={height} /> : null}
         <div className="profile-container">
           {currentUser ? (
             <>
@@ -121,7 +122,6 @@ const Match = () => {
                   </div>
                 ) : (
                   <>
-                    <Confetti width={width} height={height} />
                     <div
                       className="profile-img-div"
                       style={{
@@ -138,10 +138,6 @@ const Match = () => {
             <>
               {matchUser ? (
                 <>
-                  {matchUser.donor ? (
-                    <Confetti width={width} height={height} />
-                  ) : null}
-
                   <div className="user2 animated fadeInRightBig">
                     {matchUser.anon ? (
                       <div className="profile-img-div">
