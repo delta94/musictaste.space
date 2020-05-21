@@ -65,6 +65,7 @@ interface IUsersLookupData {
   displayName: string
   imageURL: string
   userId: string
+  donor?: boolean
 }
 
 interface IMatchedSpotifyPoint {

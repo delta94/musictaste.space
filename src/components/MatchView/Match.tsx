@@ -1,10 +1,12 @@
 import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
+import Confetti from 'react-confetti'
 import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth'
+import useWindowSize from '../../hooks/useWindowSize'
 import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 import ConfirmOrLoginButton from './ConfirmOrLoginButton'
@@ -20,6 +22,7 @@ const Match = () => {
   const [rematch, setRematch] = useState(false)
   const [matchCode, setMatchCode] = useState('')
   const query = qs.parse(location.search)
+  const { width, height } = useWindowSize()
   if (
     !query.request ||
     query.request === userData.matchCode ||
@@ -117,36 +120,47 @@ const Match = () => {
                     />
                   </div>
                 ) : (
-                  <div
-                    className="profile-img-div"
-                    style={{
-                      backgroundImage: `url(${
-                        matchUser && matchUser.imageURL
-                      })`,
-                    }}
-                  />
+                  <>
+                    <Confetti width={width} height={height} />
+                    <div
+                      className="profile-img-div"
+                      style={{
+                        backgroundImage: `url(${
+                          matchUser && matchUser.imageURL
+                        })`,
+                      }}
+                    />
+                  </>
                 )}
               </div>
             </>
           ) : (
             <>
               {matchUser ? (
-                <div className="user2 animated fadeInRightBig">
-                  {matchUser.anon ? (
-                    <div className="profile-img-div">
-                      <i
-                        className="fas fa-user-secret profile-img anon-profile"
-                        aria-hidden="true"
-                        style={{ color: '#130f40' }}
+                <>
+                  {matchUser.donor ? (
+                    <Confetti width={width} height={height} />
+                  ) : null}
+
+                  <div className="user2 animated fadeInRightBig">
+                    {matchUser.anon ? (
+                      <div className="profile-img-div">
+                        <i
+                          className="fas fa-user-secret profile-img anon-profile"
+                          aria-hidden="true"
+                          style={{ color: '#130f40' }}
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="profile-img-div"
+                        style={{
+                          backgroundImage: `url(${matchUser.imageURL})`,
+                        }}
                       />
-                    </div>
-                  ) : (
-                    <div
-                      className="profile-img-div"
-                      style={{ backgroundImage: `url(${matchUser.imageURL})` }}
-                    />
-                  )}
-                </div>
+                    )}
+                  </div>
+                </>
               ) : null}
             </>
           )}
@@ -188,6 +202,17 @@ const Match = () => {
             anon={matchUser && matchUser.anon}
             rematch={{ rematch, matchCode }}
           />
+        </div>
+        <div className="confirm-text animated fadeInUp delay-4s">
+          {matchUser?.donor ? (
+            <p className="smaller-text" style={{ fontSize: '1em' }}>
+              {matchUser.displayName} has supported musictaste.space by{' '}
+              <a className="cool-link" href="https://ko-fi.com/kalpal">
+                donating
+              </a>{' '}
+              to help keep the lights on. Simply amazing 🙌!
+            </p>
+          ) : null}
         </div>
         {rematch ? (
           <div
