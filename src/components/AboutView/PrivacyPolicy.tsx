@@ -15,7 +15,7 @@ const PrivacyPolicy = () => {
       <div className="about">
         <div className="container text-box">
           <h1>Privacy Policy</h1>
-          <p>Last updated: May 18, 2020</p>
+          <p>Last updated: May 21, 2020</p>
           <p>
             <strong>musictaste.space</strong> is a web app created by{' '}
             <a href="https://kalana.io">Kalana Vithana</a> which lets users gain
@@ -199,6 +199,7 @@ const PrivacyPolicy = () => {
           </p>
           <ul>
             <li>Spotify</li>
+            <li>Discord</li>
           </ul>
           <p>
             If You decide to register through or otherwise grant us access to a
