@@ -58,16 +58,20 @@ export const AuthProvider = ({ children }) => {
     //       return false
     //     })
     // }
-    if (differenceInMinutes(new Date(), lastRefreshRef.current) > 30) {
-      firebase.refreshSpotifyToken(uidRef.current)
-    }
-    const ref = setInterval(() => {
-      if (differenceInMinutes(new Date(), lastRefreshRef.current) > 45) {
+    if (currentUser) {
+      if (differenceInMinutes(new Date(), lastRefreshRef.current) > 30) {
         firebase.refreshSpotifyToken(uidRef.current)
       }
-    }, 60e3)
-    return () => clearInterval(ref)
-  }, [])
+      const ref = setInterval(() => {
+        if (differenceInMinutes(new Date(), lastRefreshRef.current) > 45) {
+          firebase.refreshSpotifyToken(uidRef.current)
+        }
+      }, 60e3)
+      return () => {
+        clearInterval(ref)
+      }
+    }
+  }, [currentUser])
 
   return (
     <AuthContext.Provider
