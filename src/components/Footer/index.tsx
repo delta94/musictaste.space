@@ -11,7 +11,15 @@ const Footer = () => (
     >
       @_kalpal
     </a>{' '}
-    in Melbourne, Australia.
+    in Melbourne, Australia. Support me with{' '}
+    <a
+      href="https://ko-fi.com/kalpal"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Ko-fi
+    </a>{' '}
+    ☕️.
   </div>
 )
 
