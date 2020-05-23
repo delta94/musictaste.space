@@ -7,15 +7,14 @@ export default async (req: NowRequest, res: NowResponse) => {
     'Access-Control-Allow-Origin',
     process.env.BASE_ORIGIN || 'http://localhost:3000'
   )
-  // endpoint cache 10 seconds
-  res.setHeader('Cache-Control', 'maxage=2, s-maxage=10')
+  // endpoint cache 5 seconds
+  res.setHeader('Cache-Control', 'max-age=1 s-maxage=5, stale-while-revalidate')
   const data: undefined | GlobalTally = await firebase.admin
     .firestore()
     .collection('app')
     .doc('tally_live')
     .get()
     .then((d) => (d.exists ? (d.data() as GlobalTally) : undefined))
-  console.log('data', data)
   if (data) {
     data.lastMatch.users = []
     return res.json({ success: true, data })
