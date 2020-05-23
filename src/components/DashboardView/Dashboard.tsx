@@ -268,11 +268,11 @@ export function Me() {
                             className="text-left"
                             style={{ color: titleColor }}
                           >
-                            oops{' '}
+                            Oops{' '}
                             <span role="img" aria-label="sad-emoji">
-                              😢
-                            </span>
-                            there was an error with importing your Spotify data.
+                              😢!
+                            </span>{' '}
+                            There was an error with importing your Spotify data.
                           </p>
                           <p
                             className="text-left"
