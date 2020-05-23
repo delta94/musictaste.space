@@ -20,7 +20,6 @@ export const getUserFromId = async (
       .then((res) => {
         if (res.success) {
           const data = res.user as IUsersLookupData
-          console.log(data)
           data.userId = cryp.decrypt(data.userId) as string
           return data
         }
