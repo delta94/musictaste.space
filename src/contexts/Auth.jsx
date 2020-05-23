@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     //       return false
     //     })
     // }
-    if (currentUser) {
+    if (Object.entries(userData).length) {
       if (differenceInMinutes(new Date(), lastRefreshRef.current) > 30) {
         firebase.refreshSpotifyToken(uidRef.current)
       }
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
         clearInterval(ref)
       }
     }
-  }, [currentUser])
+  }, [userData])
 
   return (
     <AuthContext.Provider
