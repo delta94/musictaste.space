@@ -24,7 +24,7 @@ const MatchContainer = () => {
 
   useEffect(() => {
     const loadMatches = async (user: IUserProfile) => {
-      const LIMIT = 10
+      const LIMIT = 5
       if (user.importData && user.importData.exists) {
         setLoading(true)
         let matchRef
