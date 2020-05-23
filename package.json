@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@now/node": "^1.6.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -10,6 +11,7 @@
     "copy-to-clipboard": "^3.2.0",
     "date-fns": "^2.8.1",
     "firebase": "^7.6.1",
+    "firebase-admin": "^8.12.1",
     "node-sass": "^4.13.0",
     "node-vibrant": "^3.1.5",
     "normal-distribution": "^0.0.9",
@@ -34,6 +36,7 @@
     "react-switch": "^5.0.1",
     "react-toast-notifications": "^2.4.0",
     "reactstrap": "^8.2.0",
+    "simple-crypto-js": "^3.0.0",
     "simplebar-react": "^2.2.0",
     "spotify-web-api-js": "^1.2.0",
     "styled-components": "^4.4.1",

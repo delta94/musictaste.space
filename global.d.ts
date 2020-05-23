@@ -1,11 +1,8 @@
-declare module 'react-spotify-api'
-declare module 'react-rewards'
-declare module 'react-double-marquee'
-declare module 'normal-distribution'
+declare module '*'
 
 interface IImportStatus {
   exists: boolean
-  lastImport?: Timestamp
+  lastImport?: firebase.firestore.Timestamp
   status?: {
     topTracks: boolean
     topArtists: boolean
@@ -39,7 +36,7 @@ interface IPreviewMatchData {
     type: string
   }
   displayName: string
-  matchDate: Timestamp
+  matchDate: firebase.firestore.Timestamp
   matchId: string
   photoURL: string
   score: number
@@ -79,7 +76,7 @@ interface IMatchData {
   matchedTracksMediumTerm: IMatchedSpotifyPoint[]
   matchedTracksShortTerm: IMatchedSpotifyPoint[]
   matchedArtists: IMatchedSpotifyPoint[]
-  matchedGenres: {
+  matchedGenres: Array<{
     genre: string
     valuesA: {
       index: number
@@ -90,7 +87,7 @@ interface IMatchData {
       count: number
     }
     rank: number
-  }[]
+  }>
   scoreComponents: {
     artists: number
     tracksST: number
@@ -100,7 +97,7 @@ interface IMatchData {
   }
   score: number
   users: string[]
-  matchDate: Timestamp
+  matchDate: firebase.firestore.Timestamp
 }
 
 interface IUserProfile {
@@ -130,13 +127,13 @@ interface IUserProfile {
 
 interface IDemoMatch {
   score: number
-  topArtists: {
+  topArtists: Array<{
     name: string
     images: string[]
     external_urls: {
       spotify: string
     }
-  }[]
+  }>
   topTrack: {
     name: string
     images: string[]
