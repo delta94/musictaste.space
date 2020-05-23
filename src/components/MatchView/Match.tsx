@@ -34,7 +34,7 @@ const Match = () => {
   useEffect(() => {
     const getInfo = async (id: string) => {
       if (!matchUser) {
-        const d = await firebase.getUserFromID(id)
+        const d = await getUserFromId(id)
         if (d) {
           setMatchUser(d)
         } else {
@@ -61,7 +61,7 @@ const Match = () => {
     }
     const setDataOnly = async (id: string) => {
       if (!matchUser) {
-        const d = await firebase.getUserFromID(id)
+        const d = await getUserFromId(id)
         if (d) {
           setMatchUser(d)
         }
