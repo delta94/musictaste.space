@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useToasts } from 'react-toast-notifications'
 import { AuthContext } from '../../contexts/Auth'
+import { getTally } from '../../util/api'
 import firebase from '../../util/Firebase'
 import { Dot } from '../Aux/Dot'
 import Footer from '../Footer'
@@ -52,38 +53,17 @@ const Tally = () => {
   }
   useEffect(() => {
     let sub = 0
-    if (!tallyData) {
-      firebase.app
-        .firestore()
-        .collection('app')
-        .doc('tally_live')
-        .get()
-        .then((doc) => {
-          setTally(doc.data() as GlobalTally)
-        })
-      if (currentUser) {
-        sub = setInterval(() => {
-          console.log('loaded')
-          firebase.app
-            .firestore()
-            .collection('app')
-            .doc('tally_live')
-            .get()
-            .then((doc) => {
-              setTally(doc.data() as GlobalTally)
-            })
-        }, 10e3)
-      }
-    } else {
-      firebase.app
-        .firestore()
-        .collection('app')
-        .doc('tally_live')
-        .get()
-        .then((doc) => setTally(doc.data() as GlobalTally))
+    if (currentUser) {
+      sub = setInterval(() => {
+        getTally().then((doc) => (doc ? setTally(doc as GlobalTally) : null))
+      }, 10e3)
     }
     return () => clearInterval(sub)
-  }, [currentUser, tallyData])
+  }, [currentUser])
+
+  useEffect(() => {
+    getTally().then((doc) => (doc ? setTally(doc as GlobalTally) : null))
+  }, [])
 
   useEffect(() => {
     addToast(

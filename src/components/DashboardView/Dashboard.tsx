@@ -73,8 +73,10 @@ export function Me() {
     if (
       importStatus.exists &&
       currentUser &&
-      differenceInDays(new Date(), importStatus.lastImport.toDate() as Date) >=
-        7
+      differenceInDays(
+        new Date(),
+        importStatus?.lastImport?.toDate() as Date
+      ) >= 7
     ) {
       if (!loading) {
         setLoading(true)
@@ -318,7 +320,7 @@ export function Me() {
                           <br />
                           {Math.abs(
                             differenceInDays(
-                              importStatus.lastImport.toDate() as Date,
+                              importStatus.lastImport?.toDate() as Date,
                               new Date()
                             )
                           ) >= 0 ? (
