@@ -30,7 +30,7 @@ export const getUserFromId = async (
 }
 
 export const getTally = async (): Promise<null | GlobalTally> => {
-  return await fetch(`${process.env.REACT_APP_API_BASE}/${ENDPOINT_TALLY}?id=1`)
+  return await fetch(`${process.env.REACT_APP_API_BASE}/${ENDPOINT_TALLY}`)
     .then((res) => res.json())
     .then((res) => (res.success ? res.data : null))
 }
