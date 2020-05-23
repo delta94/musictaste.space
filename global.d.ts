@@ -191,3 +191,13 @@ interface GlobalTally {
   lastMatch: IMatchData
   countries: number
 }
+
+interface ToastNotification {
+  appearance: 'error' | 'info' | 'success' | 'warning'
+  autoDismiss: boolean
+  autoDismissTimeout: boolean
+  display: boolean
+  limited: boolean
+  message: string
+  twitter: boolean
+}
