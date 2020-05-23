@@ -66,12 +66,8 @@ const Tally = () => {
 
   useEffect(() => {
     addToast(
-      'musictaste.space is booming! Due to high demand totals are now being updated once a minute!',
-      { appearance: 'warning', autoDismiss: true }
-    )
-    addToast(
-      'To reduce load, the latest match will now only update every 10 seconds.',
-      { appearance: 'warning', autoDismiss: true }
+      'musictaste.space is booming! Due to high demand, the tally will update once a minute!',
+      { appearance: 'info', autoDismiss: true }
     )
   }, [addToast])
 

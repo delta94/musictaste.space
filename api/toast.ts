@@ -7,16 +7,15 @@ export default async (req: NowRequest, res: NowResponse) => {
     'Access-Control-Allow-Origin',
     process.env.BASE_ORIGIN || 'http://localhost:3000'
   )
-  // endpoint cache 59 seconds
-  res.setHeader('Cache-Control', 'max-age=10, s-maxage=59')
-  const data: undefined | GlobalTally = await firebase.admin
+  // endpoint cache 60 seconds
+  res.setHeader('Cache-Control', 'max-age=30, s-maxage=60')
+  const data: undefined | {} = await firebase.admin
     .firestore()
     .collection('app')
-    .doc('tally_live')
+    .doc('alert')
     .get()
-    .then((d) => (d.exists ? (d.data() as GlobalTally) : undefined))
+    .then((d) => (d.exists ? (d.data() as ToastNotification) : undefined))
   if (data) {
-    data.lastMatch.users = []
     return res.json({ success: true, data })
   }
   res.json({ success: false })

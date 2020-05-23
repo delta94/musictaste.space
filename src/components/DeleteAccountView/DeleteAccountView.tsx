@@ -50,7 +50,7 @@ const DeleteAccountView = () => {
     setLoading(false)
     setDone(true)
     addToast(
-      'Account deleted successfully. If you log in again, a new account will be provisioned.',
+      'Account deleted successfully. If you log in again, a new account will be created.',
       { appearance: 'success', autoDismiss: false }
     )
     GoogleAnalytics.event({
@@ -104,7 +104,18 @@ const DeleteAccountView = () => {
                   </li>
                 </ul>
               </div>
-              <p>To proceed, click the button below:</p>
+              <p>
+                Please note that deletion of match codes may take up to 30
+                minutes to propagate.
+              </p>
+              <p>
+                Before you continue,{' '}
+                <strong>
+                  please ensure you log out and back in again to verify your
+                  identity, or the delete action will not complete successfully.{' '}
+                </strong>
+                To proceed, click the button below:
+              </p>
               <div className="mt-2">
                 {Object.entries(userData).length && !error ? (
                   <Button
