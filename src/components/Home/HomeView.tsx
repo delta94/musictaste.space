@@ -6,6 +6,7 @@ import { Col, Row } from 'reactstrap'
 import LogInButton from './LogInButton'
 
 // core components
+import { getTally } from '../../util/api'
 import firebase from '../../util/Firebase'
 import Footer from '../Footer'
 import Navbar from '../Navbars/Navbar'
@@ -13,12 +14,7 @@ import Navbar from '../Navbars/Navbar'
 const LandingPage = () => {
   const [tallyData, setTallyData] = useState<GlobalTally | null>(null)
   useEffect(() => {
-    firebase.app
-      .firestore()
-      .collection('app')
-      .doc('tally')
-      .get()
-      .then((doc) => setTallyData(doc.data() as GlobalTally))
+    getTally().then((data) => (data ? setTallyData(data as GlobalTally) : null))
   }, [])
   return (
     <>
