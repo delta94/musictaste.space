@@ -233,6 +233,9 @@
           z-index: unset;
         }
         @media screen and (max-height: 640px) {
+          top: 150px;
+        }
+        @media screen and (max-height: 550px) {
           top: 220px;
         }
       }
