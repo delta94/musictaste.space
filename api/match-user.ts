@@ -11,7 +11,7 @@ export default async (req: NowRequest, res: NowResponse) => {
     process.env.BASE_ORIGIN || 'http://localhost:3000'
   )
   // endpoint cache for 30 mins
-  res.setHeader('Cache-Control', 'maxage=2, s-maxage=1800')
+  res.setHeader('Cache-Control', 'max-age=2, s-maxage=1800')
   if (req.query?.id) {
     const data: undefined | IUsersLookupData = await firebase.admin
       .firestore()

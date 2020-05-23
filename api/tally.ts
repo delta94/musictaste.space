@@ -8,7 +8,7 @@ export default async (req: NowRequest, res: NowResponse) => {
     process.env.BASE_ORIGIN || 'http://localhost:3000'
   )
   // endpoint cache 5 seconds
-  res.setHeader('Cache-Control', 'max-age=1 s-maxage=5, stale-while-revalidate')
+  res.setHeader('Cache-Control', 'max-age=1, s-maxage=9')
   const data: undefined | GlobalTally = await firebase.admin
     .firestore()
     .collection('app')
