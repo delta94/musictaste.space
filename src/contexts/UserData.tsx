@@ -54,21 +54,13 @@ export const UserDataProvider = ({
   const uidRef = useRef(uid)
   const getMePassedRef = useRef(getMePassed)
 
-  useEffect(() => {
-    tokenRef.current = spotifyToken
-  }, [spotifyToken])
+  tokenRef.current = spotifyToken
 
-  useEffect(() => {
-    uidRef.current = uid
-  }, [uid])
+  uidRef.current = uid
 
-  useEffect(() => {
-    lastRefreshRef.current = lastRefresh
-  }, [lastRefresh])
+  lastRefreshRef.current = lastRefresh
 
-  useEffect(() => {
-    getMePassedRef.current = getMePassed
-  }, [getMePassed])
+  getMePassedRef.current = getMePassed
 
   const forceSub = () => {
     setUserData({
