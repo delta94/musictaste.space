@@ -1,41 +1,25 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
-import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import createPlaylist from '../../util/createPlaylist'
-import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 import Artists from './InsightsArtists'
 import Header from './InsightsHeader'
 import Tracks from './InsightsTracks'
 
 const Insights = () => {
-  const { currentUser, spotifyToken, userData } = useContext(AuthContext)
-
-  const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
-  useEffect(() => {
-    if (
-      Object.entries(userData).length > 0 &&
-      currentUser &&
-      !Object.entries(spotifyData).length
-    ) {
-      firebase.getSpotifyData(currentUser.uid).then((data) => {
-        if (data) {
-          setSpotifyData(data)
-        }
-      })
-    }
-  }, [currentUser, userData, spotifyData])
-
+  const { userData, importData, spotifyToken } = useContext(UserDataContext)
+  window.scrollTo(0, 0)
   const onCreatePlaylist = (tracks: string[], name: string) => () => {
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Create Playlist',
       action: 'Created playlist from top tracks',
     })
-    return createPlaylist(userData.accessToken, userData.spotifyID, {
+    return createPlaylist(spotifyToken, userData ? userData.spotifyID : '', {
       name,
       description: 'Insights discovered on musictaste.space.',
       tracks: tracks.map((t: string) => `spotify:track:${t}`),
@@ -54,19 +38,16 @@ const Insights = () => {
         <meta name="keywords" content="spotify,music,match,insights" />
       </Helmet>
       <SpotifyApiContext.Provider value={spotifyToken}>
-        {Object.entries(spotifyData).length > 0 ? (
+        {importData && userData ? (
           <>
             <div className="insights" style={{ overflow: 'hidden' }}>
               <Header
-                spotifyData={spotifyData}
+                spotifyData={importData}
                 userData={userData}
                 showMenu={true}
               />
-              <Artists userData={spotifyData} />
-              <Tracks
-                userData={spotifyData}
-                createPlaylist={onCreatePlaylist}
-              />
+              <Artists userData={importData} />
+              <Tracks userData={importData} createPlaylist={onCreatePlaylist} />
               <div className="genres">
                 <div className="row mb-5 mt-5">
                   <div className="col d-flex flex-row justify-content-end full-button">

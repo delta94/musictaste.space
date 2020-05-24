@@ -4,11 +4,13 @@ import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import { Dot } from '../Aux/Dot'
 
 const LinkDiscordButton = () => {
   const history = useHistory()
-  const { currentUser, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
   const [continueText, setContinueText] = useState(<>Connect Discord</>)
   const [started, setStarted] = useState(false)
   const [unlinked, setUnlinked] = useState(false)
@@ -34,7 +36,7 @@ const LinkDiscordButton = () => {
     firebase
       .firestore()
       .collection('users')
-      .doc(currentUser.uid)
+      .doc(currentUser?.uid || '')
       .update({
         discordId: firebase.firestore.FieldValue.delete(),
         discord: firebase.firestore.FieldValue.delete(),
@@ -78,7 +80,7 @@ const LinkDiscordButton = () => {
   }
 
   return currentUser ? (
-    Object.entries(userData).length ? (
+    userData ? (
       !userData.discord || unlinked ? (
         <>
           <Button

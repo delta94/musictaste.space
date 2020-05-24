@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import useWindowSize from '../../hooks/useWindowSize'
 import { getUserFromId } from '../../util/api'
 import firebase from '../../util/Firebase'
@@ -16,7 +17,8 @@ const Match = () => {
   const history = useHistory()
   const location = useLocation()
   window.scrollTo(0, 0)
-  const { currentUser, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
   const [matchUser, setMatchUser] = useState<IUsersLookupData | undefined>(
     undefined
   )
@@ -25,9 +27,10 @@ const Match = () => {
   const query = qs.parse(location.search)
   const { width, height } = useWindowSize()
   if (
-    !query.request ||
-    query.request === userData.matchCode ||
-    query.request === userData.anonMatchCode
+    userData &&
+    (!query.request ||
+      query.request === userData.matchCode ||
+      query.request === userData.anonMatchCode)
   ) {
     history.push('/compatibility')
   }
@@ -41,21 +44,24 @@ const Match = () => {
           history.push('/compatibility')
         }
       }
-      const m = await firebase.userHasMatchForId(currentUser.uid, id)
-      if (m) {
-        const match = m as IPreviewMatchData
-        if (
-          match.matchDate.toDate() < userData.importData.lastImport.toDate()
-        ) {
-          setRematch(true)
-          setMatchCode(match.matchId)
-        } else {
-          GoogleAnalytics.event({
-            category: 'Interaction',
-            action: 'Follow request link to existing match',
-            label: 'Match Redirect',
-          })
-          history.push(`/match/${match.matchId}?r=1`)
+      if (userData) {
+        const m = await firebase.userHasMatchForId(currentUser?.uid || '', id)
+        if (m) {
+          const match = m as IPreviewMatchData
+          if (
+            userData.importData.lastImport &&
+            match.matchDate.toDate() < userData.importData.lastImport.toDate()
+          ) {
+            setRematch(true)
+            setMatchCode(match.matchId)
+          } else {
+            GoogleAnalytics.event({
+              category: 'Interaction',
+              action: 'Follow request link to existing match',
+              label: 'Match Redirect',
+            })
+            history.push(`/match/${match.matchId}?r=1`)
+          }
         }
       }
     }
@@ -67,7 +73,7 @@ const Match = () => {
         }
       }
     }
-    if (currentUser && query.request && Object.entries(userData).length) {
+    if (currentUser && query.request && userData) {
       if (!userData.importData || !userData.importData.exists) {
         localStorage.setItem('redirectMatch', query.request as string)
         localStorage.setItem('redirectMatchDate', new Date().toString())
@@ -108,7 +114,11 @@ const Match = () => {
               <div className="user1 animated fadeInLeftBig">
                 <div
                   className="profile-img-div"
-                  style={{ backgroundImage: `url(${userData.photoURL})` }}
+                  style={{
+                    backgroundImage: `url(${
+                      userData ? userData.photoURL : ''
+                    })`,
+                  }}
                 />
               </div>
 
@@ -230,7 +240,7 @@ const Match = () => {
         ) : null}
 
         <div className="confirm-text below-button animated fadeInUp">
-          {currentUser ? (
+          {currentUser && userData ? (
             matchUser ? (
               <>
                 <p className="smaller-text">

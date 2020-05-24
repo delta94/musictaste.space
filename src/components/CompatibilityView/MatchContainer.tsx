@@ -7,6 +7,7 @@ import Switch from 'react-switch'
 import { useToasts } from 'react-toast-notifications'
 import { Button, UncontrolledTooltip } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import Firebase from '../../util/Firebase'
 import MatchCard from './MatchCard'
 
@@ -14,7 +15,8 @@ const MatchContainer = () => {
   const history = useHistory()
   const [matches, setMatches] = useState([] as any)
   const [morePages, setMorePages] = useState(false)
-  const { currentUser, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
   const { addToast } = useToasts()
   const [lastDoc, setLastDoc] = useState(false as any)
   const [lastPage, setLastPage] = useState(0)
@@ -32,7 +34,7 @@ const MatchContainer = () => {
           matchRef = Firebase.app
             .firestore()
             .collection('users')
-            .doc(currentUser.uid)
+            .doc(currentUser?.uid || '')
             .collection('matches')
             .orderBy('matchDate', 'desc')
             .limit(LIMIT)
@@ -40,7 +42,7 @@ const MatchContainer = () => {
           matchRef = Firebase.app
             .firestore()
             .collection('users')
-            .doc(currentUser.uid)
+            .doc(currentUser?.uid || '')
             .collection('matches')
             .orderBy('matchDate', 'desc')
             .limit(LIMIT)
@@ -56,10 +58,10 @@ const MatchContainer = () => {
         setLoading(false)
       }
     }
-    if (loadPage !== lastPage && !loading) {
+    if (loadPage !== lastPage && !loading && userData) {
       loadMatches(userData)
     }
-  }, [loadPage, userData, currentUser.uid, lastDoc, matches, lastPage, loading])
+  }, [loadPage, userData, currentUser, lastDoc, matches, lastPage, loading])
 
   useEffect(() => {
     setLoadPage(1)
@@ -72,7 +74,7 @@ const MatchContainer = () => {
     setMatches(
       matches.filter((m: firebase.firestore.DocumentSnapshot) => m.id !== id)
     )
-    Firebase.deleteMatch(currentUser.uid, id)
+    Firebase.deleteMatch(currentUser?.uid || '', id)
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Remove Match',
@@ -97,8 +99,11 @@ const MatchContainer = () => {
       label: 'Visit Match',
       action: 'Visit a match from the Compatibility page',
     })
-    if (Object.entries(userData).length) {
-      if (matchDate.toDate() < userData.importData.lastImport.toDate()) {
+    if (userData) {
+      if (
+        userData.importData?.lastImport &&
+        matchDate.toDate() < userData.importData.lastImport.toDate()
+      ) {
         history.push('/match/' + matchId + '?r=1&rp=0')
       } else {
         history.push('/match/' + matchId + '?r=1')

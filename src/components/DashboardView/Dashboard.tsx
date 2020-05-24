@@ -9,6 +9,7 @@ import { SpotifyApiContext } from 'react-spotify-api'
 import { Col, Row } from 'reactstrap'
 import styled from 'styled-components'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import firebase from '../../util/Firebase'
 import LogInButton from '../Home/LogInButton'
 import Navbar from '../Navbars/Navbar'
@@ -52,7 +53,10 @@ const emptyImport = {
 }
 
 export function Me() {
-  const { currentUser, spotifyToken, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData, spotifyToken, importData, forceSub } = useContext(
+    UserDataContext
+  )
   const history = useHistory()
   const [importStatus, setImportStatus] = useState({
     exists: false,
@@ -61,14 +65,15 @@ export function Me() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<null | string>(null)
   useEffect(() => {
-    if (!userData.importData) {
-      setImportStatus(emptyImport)
-    } else {
-      setImportStatus(userData.importData)
+    if (userData) {
+      if (!userData.importData) {
+        setImportStatus(emptyImport)
+      } else {
+        setImportStatus(userData.importData)
+      }
     }
   }, [userData])
 
-  const [spotifyData, setSpotifyData] = useState({} as ISpotifyUserData)
   useEffect(() => {
     if (
       importStatus.exists &&
@@ -80,7 +85,7 @@ export function Me() {
     ) {
       if (!loading) {
         setLoading(true)
-        firebase.importSpotifyData(currentUser.uid)
+        firebase.importSpotifyData(currentUser?.uid || '')
         setImportStatus({ ...emptyImport, loading: true })
       }
     }
@@ -94,12 +99,6 @@ export function Me() {
         localStorage.removeItem('redirectPage')
         history.push(redirectPage)
       }
-    } else if (!importStatus.exists && currentUser) {
-      firebase.getSpotifyData(currentUser.uid).then((data) => {
-        if (data) {
-          setSpotifyData(data)
-        }
-      })
     }
   }, [currentUser, importStatus, history, loading])
 
@@ -177,7 +176,7 @@ export function Me() {
     if (!importStatus.loading || brokenImport) {
       setImportClick(true)
       setImportStatus({ ...emptyImport, loading: true })
-      firebase.importSpotifyData(currentUser.uid).then((data) => {
+      firebase.importSpotifyData(currentUser?.uid || '').then((data) => {
         if (!data.success) {
           GoogleAnalytics.event({
             category: 'Error',
@@ -199,13 +198,13 @@ export function Me() {
       })
     }
   }
-  console.log(error)
   const onReimportSpotifyData = (e: any) => {
+    forceSub()
     e.stopPropagation()
     if (!importStatus.loading) {
       setImportClick(true)
       setImportStatus({ ...emptyImport, loading: true })
-      firebase.importSpotifyData(currentUser.uid, true).then((data) => {
+      firebase.importSpotifyData(currentUser?.uid || '', true).then((data) => {
         if (!data.success) {
           GoogleAnalytics.event({
             category: 'Error',
@@ -251,9 +250,9 @@ export function Me() {
             style={{ backgroundColor: `${backgroundColor}` }}
           >
             <div className="page-header">
-              {Object.entries(spotifyData).length ? (
+              {importData ? (
                 <ArtistFloaters
-                  spotifyData={spotifyData}
+                  spotifyData={importData}
                   setMenuColors={setMenuColors}
                 />
               ) : null}
@@ -345,7 +344,7 @@ export function Me() {
                         <ImportStatus importStatus={importStatus} />
                       ) : importStatus.loading && importClick ? (
                         <ImportStatus importStatus={importStatus} />
-                      ) : Object.entries(userData).length ? (
+                      ) : userData ? (
                         <>
                           <p className="menu menu-text">
                             {importStatus.loading

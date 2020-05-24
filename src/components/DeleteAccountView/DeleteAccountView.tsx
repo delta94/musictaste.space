@@ -4,7 +4,8 @@ import Helmet from 'react-helmet'
 import { useHistory } from 'react-router'
 import { useToasts } from 'react-toast-notifications'
 import { Button } from 'reactstrap'
-import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
+import { clearStorage } from '../../util/clearLocalStorage'
 import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 
@@ -12,7 +13,7 @@ const DeleteAccountView = () => {
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
-  const { userData } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
   const history = useHistory()
   const { addToast } = useToasts()
   useEffect(() => {
@@ -21,43 +22,46 @@ const DeleteAccountView = () => {
     }
   })
   const onDelete = async () => {
-    const matchCode = userData.matchCode
-    const anonMatchCode = userData.anonMatchCode
-    setLoading(true)
-    console.log('deleting', matchCode)
-    await firebase.app
-      .firestore()
-      .collection('users-lookup')
-      .doc(matchCode)
-      .delete()
-      .catch((err) => console.error(err))
-    console.log('deleting', anonMatchCode)
-    await firebase.app
-      .firestore()
-      .collection('users-lookup')
-      .doc(anonMatchCode)
-      .delete()
-      .catch((err) => console.error(err))
-    console.log('deleting user')
-    await firebase.app
-      .auth()
-      .currentUser?.delete()
-      .catch(() =>
-        setError(
-          'A recent login is required to delete an account. Please log out and in again.'
+    if (userData) {
+      const matchCode = userData.matchCode
+      const anonMatchCode = userData.anonMatchCode
+      setLoading(true)
+      console.log('deleting', matchCode)
+      await firebase.app
+        .firestore()
+        .collection('users-lookup')
+        .doc(matchCode)
+        .delete()
+        .catch((err) => console.error(err))
+      console.log('deleting', anonMatchCode)
+      await firebase.app
+        .firestore()
+        .collection('users-lookup')
+        .doc(anonMatchCode)
+        .delete()
+        .catch((err) => console.error(err))
+      console.log('deleting user')
+      await firebase.app
+        .auth()
+        .currentUser?.delete()
+        .catch(() =>
+          setError(
+            'A recent login is required to delete an account. Please log out and in again.'
+          )
         )
+      setLoading(false)
+      setDone(true)
+      addToast(
+        'Account deleted successfully. If you log in again, a new account will be created.',
+        { appearance: 'success', autoDismiss: false }
       )
-    setLoading(false)
-    setDone(true)
-    addToast(
-      'Account deleted successfully. If you log in again, a new account will be created.',
-      { appearance: 'success', autoDismiss: false }
-    )
-    GoogleAnalytics.event({
-      category: 'Account',
-      label: 'Delete Account',
-      action: 'Deleted user account',
-    })
+      GoogleAnalytics.event({
+        category: 'Account',
+        label: 'Delete Account',
+        action: 'Deleted user account',
+      })
+      clearStorage()
+    }
   }
   return (
     <>
@@ -117,7 +121,7 @@ const DeleteAccountView = () => {
                 To proceed, click the button below:
               </p>
               <div className="mt-2">
-                {Object.entries(userData).length && !error ? (
+                {userData && !error ? (
                   <Button
                     className="btn-round sign-in-button"
                     size="md"

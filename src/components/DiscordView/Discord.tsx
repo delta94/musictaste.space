@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import Navbar from '../Navbars/Navbar'
 import LinkDiscordButton from './LinkDiscordButton'
 
 const Discord = () => {
-  const { currentUser, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
   return (
     <>
       <Navbar />
@@ -15,7 +17,7 @@ const Discord = () => {
             src="https://discordapp.com/assets/e4923594e694a21542a489471ecffa50.svg"
             alt="Discord logo"
           />
-          {currentUser ? (
+          {currentUser && userData ? (
             <div className="profile-images">
               <div className="user1 animated fadeInLeftBig">
                 <div
@@ -45,7 +47,7 @@ const Discord = () => {
           <div className="description">
             {/* <h2 className="title">Connect Discord</h2> */}
             <p>
-              {currentUser
+              {currentUser && userData
                 ? !userData.discord
                   ? 'Link your Discord account to interact with the musictaste.space bot on servers!'
                   : 'You have already linked your Discord account, nice!'

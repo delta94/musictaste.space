@@ -4,6 +4,7 @@ import Helmet from 'react-helmet'
 import { useHistory, useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 import Artists from './Artists'
@@ -15,7 +16,9 @@ import Tracks from './Tracks'
 const Result = () => {
   const history = useHistory()
   window.scrollTo(0, 0)
-  const { currentUser, spotifyToken, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { spotifyToken, userData } = useContext(UserDataContext)
+
   const [matchUser, setMatchUser] = useState<IUsersLookupData | null>(null)
   const [matchUserId, setMatchUserId] = useState('')
   const [matchData, setMatchData] = useState<IMatchData | null>(null)
@@ -24,7 +27,10 @@ const Result = () => {
 
   useEffect(() => {
     const getMatchData = async (id: string) => {
-      const e = await firebase.userHasMatchForMatchId(currentUser.uid, id)
+      const e = await firebase.userHasMatchForMatchId(
+        currentUser?.uid || '',
+        id
+      )
       if (e.exists) {
         const d = await firebase.getMatch(id)
         const u = await firebase.getUserFromID(e.id as string)
@@ -93,24 +99,24 @@ const Result = () => {
       <SpotifyApiContext.Provider value={spotifyToken}>
         <Navbar />
         <div className="result">
-          {currentUser && matchUser && matchData ? (
+          {currentUser && matchUser && matchData && userData ? (
             <>
               <Header
                 matchData={matchData}
                 matchUser={matchUser}
-                userData={userData ? userData : {}}
+                userData={userData}
                 matchUserId={matchUserId}
               />
               <Artists
                 matchData={matchData}
                 matchUser={matchUser}
-                uid={currentUser.uid}
+                uid={currentUser?.uid || ''}
                 matchUserId={matchUserId}
               />
               <Tracks
                 matchData={matchData}
                 matchUser={matchUser}
-                uid={currentUser.uid}
+                uid={currentUser?.uid || ''}
                 matchUserId={matchUserId}
               />
               <Genres history={history} matchData={matchData} />

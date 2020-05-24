@@ -6,6 +6,7 @@ import { SpotifyApiContext } from 'react-spotify-api'
 import { Button } from 'reactstrap'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import firebase from '../../util/Firebase'
 import { Dot } from '../Aux/Dot'
 import Navbar from '../Navbars/Navbar'
@@ -14,7 +15,8 @@ import CreatePlaylistButton from './CreatePlaylistButton'
 
 const Create = () => {
   window.scrollTo(0, 0)
-  const { currentUser, spotifyToken, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { spotifyToken, userData } = useContext(UserDataContext)
   const [matchUser, setMatchUser] = useState({} as IUsersLookupData)
   const [matchUserId, setMatchUserId] = useState('')
   const [artistImage, setArtistImage] = useState({
@@ -36,13 +38,16 @@ const Create = () => {
     uri?: string | undefined
     error?: {} | undefined
   }> {
+    if (!userData) {
+      return { success: false }
+    }
     const s = new Spotify()
     let playlistError = {}
     s.setAccessToken(userData.accessToken)
     const res = await firebase
       .generatePlaylist(
         matchId as string,
-        currentUser.uid,
+        currentUser?.uid || '',
         userData.serverState
       )
       .catch((err) => (playlistError = err))
@@ -66,7 +71,14 @@ const Create = () => {
             message:
               'There was an error making the playlist. You might need to log in again to grant more permissions.',
           })
+          return false
         })) as { id: string }
+      if (!d.id) {
+        return {
+          success: false,
+          error: 'Spotify could not create the playlist. Please try again.',
+        }
+      }
       await s.uploadCustomPlaylistCoverImage(d.id, playlistImage)
       let tracks = { total: 0 }
       s.addTracksToPlaylist(d.id, res.tracks.slice(0, 50))
@@ -79,7 +91,7 @@ const Create = () => {
       if (tracks.total !== 0) {
         firebase
           .createPlaylistInUser(
-            currentUser.uid,
+            currentUser?.uid || '',
             matchUserId,
             d.id,
             playlistData
@@ -107,7 +119,10 @@ const Create = () => {
 
   useEffect(() => {
     const getMatchData = async (id: string) => {
-      const e = await firebase.userHasMatchForMatchId(currentUser.uid, id)
+      const e = await firebase.userHasMatchForMatchId(
+        currentUser?.uid || '',
+        id
+      )
       if (e.exists) {
         const d = await firebase.getMatch(id)
         const u = await firebase.getUserFromID(e.id as string)
@@ -135,6 +150,9 @@ const Create = () => {
       return false
     }
     const getPlaylistImage = async (data: IMatchData) => {
+      if (!userData) {
+        return false
+      }
       const s = new Spotify()
       s.setAccessToken(userData.accessToken)
       s.getArtist(
@@ -147,7 +165,7 @@ const Create = () => {
         }
       })
     }
-    if (currentUser && matchId && Object.keys(userData).length !== 0) {
+    if (currentUser && matchId && userData) {
       getMatchData(matchId).then((s) => {
         if (s) {
           getPlaylistImage(s)
@@ -186,7 +204,7 @@ const Create = () => {
                 ) : null}
                 <div className="playlist-names">
                   {matchUser.anon ? matchUserId : matchUser.displayName} ×{' '}
-                  {userData.displayName}
+                  {userData ? userData.displayName : '...'}
                 </div>
                 <CreatePlaylistButton createPlaylist={createPlaylist} />
                 <p style={{ marginTop: '10px', marginBottom: '10px' }}>

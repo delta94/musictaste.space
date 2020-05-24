@@ -1,20 +1,33 @@
 import differenceInMinutes from 'date-fns/differenceInMinutes'
+import { formatDistance } from 'date-fns/esm'
 import format from 'date-fns/format'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
+import { useToasts } from 'react-toast-notifications'
 import { Button, Modal } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
+import { clearStorage } from '../../util/clearLocalStorage'
 import firebase from '../../util/Firebase'
 import { Dot } from '../Aux/Dot'
 
 const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
   const history = useHistory()
-  const { currentUser, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData, fromCache } = useContext(UserDataContext)
+  const { addToast } = useToasts()
+  const [cacheCleared, setCacheCleared] = useState(false)
 
+  const clearCache = () => {
+    clearStorage()
+    addToast('Cache cleared 👍. Refresh the page.', { appearance: 'success' })
+    setCacheCleared(true)
+  }
   const signOut = () => {
     firebase.app.auth().signOut()
     props.toggleModal()
+    clearStorage()
     GoogleAnalytics.event({
       category: 'Account',
       label: 'Sign Out',
@@ -53,7 +66,7 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
         <div
           className="modal-img-div shadow-lg"
           style={{
-            backgroundImage: `url(${currentUser.photoURL})`,
+            backgroundImage: `url(${currentUser?.photoURL})`,
           }}
           onClick={toTally}
         />
@@ -61,84 +74,96 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
       <div className="modal-body">
         <div className="text-left d-flex" style={{ fontSize: '1.3em' }}>
           <p>
-            <strong>{currentUser.displayName}</strong>
+            <strong>{currentUser?.displayName}</strong>
           </p>
         </div>
         <hr />
-        <div className="row">
-          <div className="col-8 text-left d-flex flex-column">
-            <span className="data-title">
-              <strong>Profile ID</strong>
-            </span>
-            <span className="data">
-              {currentUser.uid.replace('spotify:', '')}
-            </span>
-          </div>
-          <div className="col-4 text-left d-flex flex-column">
-            <span className="data-title">
-              <strong>Country</strong>
-            </span>
-            <span className="data">
-              {userData.region ? userData.region : 'n/a'}
-            </span>
-          </div>
-        </div>
-        <div className="row mt-3">
-          <div className="col-8 text-left d-flex flex-column">
-            <span className="data-title">
-              <strong>Match Code</strong>
-            </span>
-            <span className="data">
-              {userData.importData?.exists && userData.matchCode
-                ? userData.matchCode
-                : '-'}
-            </span>
-          </div>
-          <div className="col-4 text-left d-flex flex-column">
-            <span className="data-title">
-              <strong>Created</strong>
-            </span>
-            <span className="data">
-              {userData.importData?.created
-                ? format(userData.importData.created.toDate(), 'd MMMM yy')
-                : 'Legacy'}
-            </span>
-          </div>
-        </div>
-        <div className="row mt-3">
-          <div className="col-4 text-left d-flex flex-column">
-            <span className="data-title">
-              <strong>API {userData.accessToken ? <Dot>•</Dot> : ''}</strong>
-            </span>
-            <span className="data">
-              {userData.accessToken ? 'Connected' : 'Error'}
-            </span>
-          </div>
-          <div className="col-4 text-left d-flex flex-column">
-            <span className="data-title">
-              <strong>Spotify</strong>
-            </span>
-            <span className="data">
-              {userData.accessTokenRefresh &&
-              differenceInMinutes(
-                new Date(),
-                userData.accessTokenRefresh.toDate() as Date
-              ) < 60
-                ? 'Token OK'
-                : 'Expired'}
-            </span>
-          </div>
-          <div className="col-4 text-left d-flex flex-column">
-            <span className="data-title">
-              <strong>Import</strong>
-            </span>
-            <span className="data">
-              {userData.importData?.exists
-                ? format(userData.importData.lastImport.toDate(), 'd MMMM yy')
-                : 'None'}
-            </span>
-          </div>
-        </div>
+        {userData ? (
+          <>
+            <div className="row">
+              <div className="col-8 text-left d-flex flex-column">
+                <span className="data-title">
+                  <strong>Profile ID</strong>
+                </span>
+                <span className="data">
+                  {currentUser?.uid || ''.replace('spotify:', '')}
+                </span>
+              </div>
+              <div className="col-4 text-left d-flex flex-column">
+                <span className="data-title">
+                  <strong>Country</strong>
+                </span>
+                <span className="data">
+                  {userData.region ? userData.region : 'n/a'}
+                </span>
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-8 text-left d-flex flex-column">
+                <span className="data-title">
+                  <strong>Match Code</strong>
+                </span>
+                <span className="data">
+                  {userData.importData?.exists && userData.matchCode
+                    ? userData.matchCode
+                    : '-'}
+                </span>
+              </div>
+              <div className="col-4 text-left d-flex flex-column">
+                <span className="data-title">
+                  <strong>Created</strong>
+                </span>
+                <span className="data">
+                  {userData.created
+                    ? format(userData.created.toDate(), 'd MMMM yy')
+                    : 'Legacy'}
+                </span>
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col-4 text-left d-flex flex-column">
+                <span className="data-title cache" onClick={clearCache}>
+                  <strong>Cache {!fromCache ? <Dot>•</Dot> : ''}</strong>
+                </span>
+                <span className="data">
+                  {cacheCleared
+                    ? 'Cleared'
+                    : fromCache
+                    ? formatDistance(fromCache, new Date())
+                    : 'Fresh'}
+                </span>
+              </div>
+              <div className="col-4 text-left d-flex flex-column">
+                <span className="data-title">
+                  <strong>Spotify</strong>
+                </span>
+                <span className="data">
+                  {userData.accessTokenRefresh &&
+                  differenceInMinutes(
+                    new Date(),
+                    userData.accessTokenRefresh.toDate() as Date
+                  ) < 60
+                    ? 'Token OK'
+                    : 'Expired'}
+                </span>
+              </div>
+              <div className="col-4 text-left d-flex flex-column">
+                <span className="data-title">
+                  <strong>Import</strong>
+                </span>
+                <span className="data">
+                  {userData.importData?.exists && userData.importData.lastImport
+                    ? format(
+                        userData.importData.lastImport.toDate(),
+                        'd MMMM yy'
+                      )
+                    : 'None'}
+                </span>
+              </div>
+            </div>
+          </>
+        ) : null}
+
         <hr />
       </div>
       <div

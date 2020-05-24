@@ -34,7 +34,7 @@ class NavbarLoginStatus extends React.Component<{}, { modalOpen: boolean }> {
   public render() {
     return (
       <AuthContext.Consumer>
-        {(props: { currentUser: { photoURL: string | undefined } }) => {
+        {(props: { currentUser: null | firebase.User }) => {
           if (props.currentUser) {
             return (
               <NavItem>

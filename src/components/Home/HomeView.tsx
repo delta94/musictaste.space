@@ -7,7 +7,6 @@ import LogInButton from './LogInButton'
 
 // core components
 import { getTally } from '../../util/api'
-import firebase from '../../util/Firebase'
 import Footer from '../Footer'
 import Navbar from '../Navbars/Navbar'
 
