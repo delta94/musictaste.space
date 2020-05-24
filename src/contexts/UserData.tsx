@@ -208,7 +208,7 @@ export const UserDataProvider = ({
   }, [currentUser, userData, subStarted])
 
   useEffect(() => {
-    if (userData && userData.importData.exists) {
+    if (currentUser && userData && userData.importData.exists) {
       const sd: null | string = localStorage.getItem('spotifyData')
       if (sd) {
         const spotifyData = JSON.parse(sd) as ISpotifyUserData
