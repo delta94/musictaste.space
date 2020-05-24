@@ -5,8 +5,8 @@ import Vibrant from 'node-vibrant'
 import React, { useContext, useEffect, useState } from 'react'
 import Spotify from 'spotify-web-api-js'
 import styled from 'styled-components'
-import { AuthContext } from '../../contexts/Auth'
 import RemoveModal from './RemoveModal'
+import { UserDataContext } from '../../contexts/UserData'
 
 interface IUserMatchData {
   anon: boolean
@@ -29,7 +29,7 @@ const MatchCard = ({
   onClick: (e: React.MouseEvent<HTMLInputElement>) => void
   onRemove?: (e: React.MouseEvent<HTMLInputElement>) => void
 }) => {
-  const { spotifyToken } = useContext(AuthContext)
+  const { spotifyToken } = useContext(UserDataContext)
   const [bgImageURL, setBgImageURL] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)

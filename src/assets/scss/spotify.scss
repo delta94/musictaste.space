@@ -310,6 +310,12 @@ div.spotify-login {
   }
   .data-title {
     margin-bottom: -0.5em;
+    &.cache {
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
   }
 }
 

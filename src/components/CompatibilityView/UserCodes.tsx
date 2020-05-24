@@ -13,13 +13,18 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 
 function UserCodes() {
-  const { currentUser, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
   const [anonIDDisplay, setAnonIDDisplay] = useState(false)
   const { addToast } = useToasts()
 
   const copyIdToClipboard = (e: any) => {
+    if (!userData) {
+      return false
+    }
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Copy Code',
@@ -48,6 +53,9 @@ function UserCodes() {
   }
 
   const copyUrlToClipboard = () => {
+    if (!userData) {
+      return false
+    }
     GoogleAnalytics.event({
       category: 'Interaction',
       label: 'Copy Code',
@@ -100,20 +108,23 @@ function UserCodes() {
           <Col lg="7" md="7" className="profile">
             <p>Send a friend your URL:</p>
             <InputGroup className="url-container">
-              <Input
-                type="text"
-                className="url input-border"
-                value={
-                  userData.spotifyID
-                    ? process.env.REACT_APP_MATCH_URL_BASE +
-                      '/match?request=' +
-                      (anonIDDisplay
-                        ? userData.anonMatchCode
-                        : userData.matchCode)
-                    : ''
-                }
-                onChange={doNothing}
-              />
+              {userData ? (
+                <Input
+                  type="text"
+                  className="url input-border"
+                  value={
+                    userData.spotifyID
+                      ? process.env.REACT_APP_MATCH_URL_BASE +
+                        '/match?request=' +
+                        (anonIDDisplay
+                          ? userData.anonMatchCode
+                          : userData.matchCode)
+                      : ''
+                  }
+                  onChange={doNothing}
+                />
+              ) : null}
+
               <InputGroupAddon addonType="append">
                 <InputGroupText className="input-border input-group-append">
                   <i
@@ -136,7 +147,7 @@ function UserCodes() {
                     'anon-id input-border' + (anonIDDisplay ? ' incognito' : '')
                   }
                   value={
-                    userData.matchCode
+                    userData && userData.matchCode
                       ? !anonIDDisplay
                         ? userData.matchCode
                         : userData.anonMatchCode

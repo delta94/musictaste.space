@@ -114,6 +114,8 @@ class Firebase {
     const data = await cf({}).then((res) => res.data)
     if (data) {
       return data.token
+    } else {
+      return undefined
     }
   }
 

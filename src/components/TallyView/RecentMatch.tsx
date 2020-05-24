@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 const RecentMatch = ({
   data,
   setColors,
@@ -16,7 +17,8 @@ const RecentMatch = ({
 }) => {
   const [artistBackgroundURL, setArtistBackgroundURL] = useState('')
   const [artists, setArtists] = useState<SpotifyApi.ArtistObjectFull[]>([])
-  const { currentUser, spotifyToken } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { spotifyToken } = useContext(UserDataContext)
   useEffect(() => {
     if (artistBackgroundURL !== '') {
       setColors(artistBackgroundURL)

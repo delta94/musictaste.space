@@ -6,7 +6,7 @@ import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import Spotify from 'spotify-web-api-js'
 import styled from 'styled-components'
-import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import { gradients } from '../../util/gradients'
 import Canvas from '../PlaylistView/Canvas'
 import CreatePlaylistButton from '../PlaylistView/CreatePlaylistButton'
@@ -40,7 +40,7 @@ const Track = ({ backgroundColor, textColor, track }: TrackProps) => (
 
 const CovidAnthem = ({ tracks, artist }: CovidAnthemProps) => {
   const [playlistImage, setPlaylistImage] = useState('')
-  const { userData } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
   const [textColor, setTextColor] = useState(['#c7ecee', '#c7ecee'])
   const [artistBackgroundURL, setArtistBackgroundURL] = useState('')
@@ -106,6 +106,9 @@ const CovidAnthem = ({ tracks, artist }: CovidAnthemProps) => {
     uri?: string | undefined
     error?: {} | undefined
   }> {
+    if (!userData) {
+      return { success: false }
+    }
     const s = new Spotify()
     let playlistError = false
     s.setAccessToken(userData.accessToken)

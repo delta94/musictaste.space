@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { Button, Col, Row } from 'reactstrap'
-import firebase from '../../util/Firebase'
+import { getTally } from '../../util/api'
 import Footer from '../Footer'
 import Navbar from '../Navbars/Navbar'
 
@@ -25,12 +25,7 @@ const About = () => {
 
   const [tallyData, setTallyData] = useState<GlobalTally | null>(null)
   useEffect(() => {
-    firebase.app
-      .firestore()
-      .collection('app')
-      .doc('tally')
-      .get()
-      .then((doc) => setTallyData(doc.data() as GlobalTally))
+    getTally().then((data) => setTallyData(data as GlobalTally))
   }, [])
   return (
     <>

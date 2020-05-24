@@ -1,14 +1,16 @@
 import React, { useContext, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
-import { useHistory, Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import firebase from '../../util/Firebase'
 import { Dot } from '../Aux/Dot'
 
 function ConfirmOrLogInButton(props: any) {
   const history = useHistory()
-  const { currentUser, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
   const [continueText, setContinueText] = useState(<>Continue</>)
   const [started, setStarted] = useState(false)
   const anon = props.anon
@@ -30,26 +32,28 @@ function ConfirmOrLogInButton(props: any) {
   }
 
   const startCompareUsers = async () => {
-    const t = firebase.compareUsers(
-      !anon ? userData.matchCode : userData.anonMatchCode,
-      props.compareUser,
-      userData.serverState,
-      currentUser.uid,
-      userData.region
-    )
-    setContinueText(
-      <>
-        <div className="waiting-text">
-          Please wait
-          <Dot>.</Dot>
-          <Dot>.</Dot>
-          <Dot>.</Dot>
-        </div>
-      </>
-    )
-    t.then((code) => {
-      history.push(`/match/${code}`)
-    })
+    if (userData) {
+      const t = firebase.compareUsers(
+        !anon ? userData.matchCode : userData.anonMatchCode,
+        props.compareUser,
+        userData.serverState,
+        currentUser?.uid || '',
+        userData.region ? userData.region : ''
+      )
+      setContinueText(
+        <>
+          <div className="waiting-text">
+            Please wait
+            <Dot>.</Dot>
+            <Dot>.</Dot>
+            <Dot>.</Dot>
+          </div>
+        </>
+      )
+      t.then((code) => {
+        history.push(`/match/${code}`)
+      })
+    }
   }
   function handleClickContinue() {
     if (!started) {
@@ -72,7 +76,7 @@ function ConfirmOrLogInButton(props: any) {
   }
 
   return currentUser ? (
-    Object.entries(userData).length && props.compareUser ? (
+    userData && props.compareUser ? (
       <>
         <Button
           className="btn-round sign-in-button"

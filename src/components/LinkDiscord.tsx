@@ -111,7 +111,7 @@ const Login = () => {
           '&state=' +
           encodeURIComponent(state as string) +
           '&uid=' +
-          currentUser.uid) as string,
+          currentUser?.uid || '') as string,
         { credentials: 'include' }
       )
         .then(async (res) => {

@@ -3,6 +3,7 @@ import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import firebase from '../../util/Firebase'
 import MatchCard from '../CompatibilityView/MatchCard'
 
@@ -10,7 +11,8 @@ const MatchContainer = () => {
   const history = useHistory()
   const [matches, setMatches] = useState([] as any)
   const [morePages, setMorePages] = useState(false)
-  const { currentUser, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
   const [lastDoc, setLastDoc] = useState(false as any)
   const [loadPage, setLoadPage] = useState(0)
   const [lastPage, setLastPage] = useState(0)
@@ -26,7 +28,7 @@ const MatchContainer = () => {
           matchRef = firebase.app
             .firestore()
             .collection('users')
-            .doc(currentUser.uid)
+            .doc(currentUser?.uid || '')
             .collection('matches')
             .orderBy('matchDate', 'desc')
             .limit(LIMIT)
@@ -34,7 +36,7 @@ const MatchContainer = () => {
           matchRef = firebase.app
             .firestore()
             .collection('users')
-            .doc(currentUser.uid)
+            .doc(currentUser?.uid || '')
             .collection('matches')
             .orderBy('matchDate', 'desc')
             .limit(LIMIT)
@@ -52,7 +54,7 @@ const MatchContainer = () => {
         setLoading(false)
       }
     }
-    if (loadPage !== lastPage && !loading) {
+    if (loadPage !== lastPage && !loading && userData) {
       loadMatches(userData)
     }
   }, [loadPage, userData, currentUser, lastDoc, matches, lastPage, loading])

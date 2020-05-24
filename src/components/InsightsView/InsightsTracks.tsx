@@ -18,7 +18,7 @@ const InsightsTracks = ({
           textData={{ code: 'lt', title: 'All-Time', lowercase: 'all-time' }}
           onCreatePlaylist={createPlaylist(
             userData.topTracksLongTerm.map((t) => t.id).slice(0, 50),
-            'All-Time Faves - musictaste.space'
+            'All-Time Faves'
           )}
         />
       ) : null}
@@ -42,7 +42,7 @@ const InsightsTracks = ({
           }}
           onCreatePlaylist={createPlaylist(
             userData.topTracksShortTerm.map((t) => t.id).slice(0, 50),
-            'Recent Favourites - musictaste.space'
+            'Current Favourites'
           )}
         />
       ) : null}

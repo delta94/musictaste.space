@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth'
+import { UserDataContext } from '../../contexts/UserData'
 import Footer from '../Footer'
 import LogInButton from '../Home/LogInButton'
 import Navbar from '../Navbars/Navbar'
@@ -11,9 +12,11 @@ import UserCodes from './UserCodes'
 
 function Compatibility() {
   const history = useHistory()
-  const { currentUser, userData } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  const { userData } = useContext(UserDataContext)
+
   useEffect(() => {
-    if (currentUser && Object.entries(userData).length) {
+    if (currentUser && userData) {
       if (userData.importData && !userData.importData.exists) {
         history.push('/dashboard')
       }
@@ -53,7 +56,7 @@ function Compatibility() {
                 Enter A Code
               </a>
             </div>
-            <EnterCode userData={userData} />
+            {userData ? <EnterCode userData={userData} /> : null}
             <MatchContainer />
             <Footer />
           </div>
