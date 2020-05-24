@@ -7,6 +7,7 @@ import SimpleCrypto from 'simple-crypto-js'
 const ENDPOINT_MATCH_USER = 'match-user'
 const ENDPOINT_TALLY = 'tally'
 const ENDPOINT_TOAST = 'toast'
+const ENDPOINT_REGION_AVERAGE = 'region-average'
 
 const cryp = new SimpleCrypto('spotify-compatibility')
 
@@ -21,6 +22,9 @@ export const getUserFromId = async (
       .then((res) => {
         if (res.success) {
           const data = res.user as IUsersLookupData
+          if (!data.userId) {
+            return null
+          }
           data.userId = cryp.decrypt(data.userId) as string
           return data
         }
@@ -38,6 +42,14 @@ export const getTally = async (): Promise<null | GlobalTally> => {
 
 export const getToast = async (): Promise<null | ToastNotification> => {
   return await fetch(`${process.env.REACT_APP_API_BASE}/${ENDPOINT_TOAST}`)
+    .then((res) => res.json())
+    .then((res) => (res.success ? res.data : null))
+}
+
+export const getAverages = async (region: string) => {
+  return await fetch(
+    `${process.env.REACT_APP_API_BASE}/${ENDPOINT_REGION_AVERAGE}?region=${region}`
+  )
     .then((res) => res.json())
     .then((res) => (res.success ? res.data : null))
 }

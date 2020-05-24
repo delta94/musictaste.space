@@ -6,7 +6,7 @@ import { SpotifyApiContext } from 'react-spotify-api'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
-import firebase from '../../util/Firebase'
+import { getAverages } from '../../util/api'
 import Navbar from '../Navbars/Navbar'
 import CovidAnthem from './CovidAnthem'
 import Genres from './InsightsGenres'
@@ -126,15 +126,12 @@ const Insights = () => {
           )
           setFeatureTracks(data)
         }
-        const region = await s
-          .getMe()
-          .then((d) => (d.country ? d.country : 'world'))
-          .catch(() => {
-            return 'world'
-          })
+        const region = userData.region || 'world'
         if (!Object.entries(averages).length) {
-          const avgData = await firebase.getAverages(region)
-          setAverages(avgData)
+          const avgData = await getAverages(region)
+          if (avgData) {
+            setAverages(avgData)
+          }
         }
 
         setLoading(false)
