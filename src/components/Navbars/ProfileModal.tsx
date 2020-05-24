@@ -135,16 +135,14 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
               </div>
               <div className="col-4 text-left d-flex flex-column">
                 <span className="data-title">
-                  <strong>Spotify</strong>
+                  <strong>Token</strong>
                 </span>
                 <span className="data">
                   {userData.accessTokenRefresh &&
-                  differenceInMinutes(
-                    new Date(),
-                    userData.accessTokenRefresh.toDate() as Date
-                  ) < 60
-                    ? 'Token OK'
-                    : 'Expired'}
+                    formatDistance(
+                      userData.accessTokenRefresh.toDate(),
+                      new Date()
+                    )}
                 </span>
               </div>
               <div className="col-4 text-left d-flex flex-column">

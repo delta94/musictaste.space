@@ -11,7 +11,7 @@ const Footer = () => (
     >
       @_kalpal
     </a>{' '}
-    in Melbourne, Australia. Support me with{' '}
+    in Melbourne, Australia. Support me with a{' '}
     <a
       href="https://ko-fi.com/kalpal"
       target="_blank"
