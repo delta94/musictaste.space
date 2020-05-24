@@ -85,6 +85,7 @@ const Insights = () => {
               }
               return []
             })
+            .filter((t) => t.length)
             .flat()
             .filter((t) => {
               if (tSet.has(t)) {
