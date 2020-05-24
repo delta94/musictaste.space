@@ -97,7 +97,7 @@ export const UserDataProvider = ({
           localData.accessTokenRefresh = toTimestamp(
             localData.accessTokenRefresh
           )
-          if (localData.importData && localData.importData.lastImport) {
+          if (localData.importData?.lastImport) {
             localData.importData.lastImport = toTimestamp(
               localData.importData.lastImport
             )
@@ -126,7 +126,7 @@ export const UserDataProvider = ({
                 setLastRefresh(data?.accessTokenRefresh.toDate())
                 const ld = cloneDeep(data)
                 ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-                if (ld.importData.lastImport) {
+                if (ld.importData?.lastImport) {
                   ld.importData.lastImport = toDateString(
                     ld.importData.lastImport
                   )
@@ -160,7 +160,7 @@ export const UserDataProvider = ({
               setLastRefresh(data?.accessTokenRefresh.toDate())
               const ld = cloneDeep(data)
               ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-              if (ld.importData.lastImport) {
+              if (ld.importData?.lastImport) {
                 ld.importData.lastImport = toDateString(
                   ld.importData.lastImport
                 )
@@ -191,9 +191,9 @@ export const UserDataProvider = ({
               setUserData(data as IUserProfile)
               const ld = cloneDeep(data) as IUserProfile
               ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-              if (ld.importData.lastImport) {
+              if (ld.importData?.lastImport) {
                 ld.importData.lastImport = toDateString(
-                  ld.importData.lastImport
+                  ld.importData?.lastImport
                 )
               }
               if (ld.created) {
@@ -213,7 +213,7 @@ export const UserDataProvider = ({
   }, [currentUser, userData, subStarted])
 
   useEffect(() => {
-    if (currentUser && userData && userData.importData.exists) {
+    if (currentUser && userData && userData?.importData?.exists) {
       const sd: null | string = localStorage.getItem('spotifyData')
       if (sd) {
         const spotifyData = JSON.parse(sd) as ISpotifyUserData
@@ -278,7 +278,7 @@ export const UserDataProvider = ({
             setLastRefresh(new Date())
             const ld = cloneDeep(userData)
             ld.accessTokenRefresh = (new Date().toISOString() as unknown) as FirebaseFirestore.Timestamp
-            if (ld.importData.lastImport) {
+            if (ld.importData?.lastImport) {
               ld.importData.lastImport = toDateString(ld.importData.lastImport)
             }
             if (ld.created) {
@@ -314,7 +314,7 @@ export const UserDataProvider = ({
                 setLastRefresh(new Date())
                 const ld = cloneDeep(userData)
                 ld.accessTokenRefresh = (new Date().toISOString() as unknown) as FirebaseFirestore.Timestamp
-                if (ld.importData.lastImport) {
+                if (ld.importData?.lastImport) {
                   ld.importData.lastImport = toDateString(
                     ld.importData.lastImport
                   )
