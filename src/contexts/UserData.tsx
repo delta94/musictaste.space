@@ -137,6 +137,11 @@ export const UserDataProvider = ({
                 localStorage.setItem('userProfile', JSON.stringify(ld))
                 localStorage.setItem('profileLoaded', new Date().toISOString())
               }
+              GoogleAnalytics.event({
+                category: 'Cache',
+                action: 'Pulled new data to refresh stale cache',
+                label: 'Stale Cache',
+              })
             })
         }
         GoogleAnalytics.set({ userId: currentUser?.uid || '' })
@@ -287,6 +292,11 @@ export const UserDataProvider = ({
                 new Date()
               ) as FirebaseFirestore.Timestamp,
             })
+            GoogleAnalytics.event({
+              category: 'Cache',
+              action: 'Refreshed Spotify token into cache on load',
+              label: 'Cache New Token',
+            })
             console.log('token refreshed.')
           }
         })
@@ -321,6 +331,11 @@ export const UserDataProvider = ({
                   ) as FirebaseFirestore.Timestamp,
                 })
                 console.log('token refreshed.')
+                GoogleAnalytics.event({
+                  category: 'Cache',
+                  action: 'Refreshed Spotify token into cache on interval',
+                  label: 'Cache New Token Interval',
+                })
               }
             })
         }
