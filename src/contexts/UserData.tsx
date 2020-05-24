@@ -3,8 +3,8 @@ import { differenceInHours, differenceInMinutes } from 'date-fns'
 import { firestore } from 'firebase/app'
 import cloneDeep from 'lodash/cloneDeep'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-// import SpotifyWebApi from 'spotify-web-api-js'
 import GoogleAnalytics from 'react-ga'
+import SpotifyWebApi from 'spotify-web-api-js'
 import firebase from '../util/Firebase'
 import { AuthContext } from './Auth'
 
@@ -47,15 +47,28 @@ export const UserDataProvider = ({
   const [importData, setImportData] = useState<null | ISpotifyUserData>(null)
   const [subStarted, setSubStarted] = useState(false)
   const [fromCache, setFromCache] = useState<null | Date>(null)
+  const [getMePassed, setGetMePassed] = useState(false)
+  const [getMeTried, setGetMeTried] = useState(false)
   const tokenRef = useRef(spotifyToken)
   const lastRefreshRef = useRef(lastRefresh)
   const uidRef = useRef(uid)
+  const getMePassedRef = useRef(getMePassed)
 
   useEffect(() => {
     tokenRef.current = spotifyToken
+  }, [spotifyToken])
+
+  useEffect(() => {
     uidRef.current = uid
+  }, [uid])
+
+  useEffect(() => {
     lastRefreshRef.current = lastRefresh
-  }, [spotifyToken, lastRefresh, uid])
+  }, [lastRefresh])
+
+  useEffect(() => {
+    getMePassedRef.current = getMePassed
+  }, [getMePassed])
 
   const forceSub = () => {
     setUserData({
@@ -270,41 +283,60 @@ export const UserDataProvider = ({
 
   useEffect(() => {
     if (userData) {
-      if (differenceInMinutes(new Date(), lastRefreshRef.current) > 30) {
-        console.log('spotify token expired, attempting to refresh.')
-        firebase.refreshSpotifyToken(uidRef.current as string).then((token) => {
-          if (token) {
-            setSpotifyToken(token)
-            setLastRefresh(new Date())
-            const ld = cloneDeep(userData)
-            ld.accessTokenRefresh = (new Date().toISOString() as unknown) as FirebaseFirestore.Timestamp
-            if (ld.importData?.lastImport) {
-              ld.importData.lastImport = toDateString(ld.importData.lastImport)
-            }
-            if (ld.created) {
-              ld.created = toDateString(ld.created)
-            }
-            localStorage.setItem('userProfile', JSON.stringify(ld))
-            setUserData({
-              ...userData,
-              accessToken: token,
-              accessTokenRefresh: firestore.Timestamp.fromDate(
-                new Date()
-              ) as FirebaseFirestore.Timestamp,
-            })
-            GoogleAnalytics.event({
-              category: 'Cache',
-              action: 'Refreshed Spotify token into cache on load',
-              label: 'Cache New Token',
-            })
-            console.log('token refreshed.')
-          }
-        })
-      } else {
-        setSpotifyToken(userData.accessToken)
+      if (!getMeTried) {
+        const s = new SpotifyWebApi()
+        s.setAccessToken(userData.accessToken)
+        console.log('checking access token.')
+        setGetMeTried(true)
+        s.getMe()
+          .then(() => {
+            setSpotifyToken(userData.accessToken)
+            setGetMePassed(true)
+            console.log('passed.')
+          })
+          .catch(() => {
+            console.log('refreshing token.')
+            firebase
+              .refreshSpotifyToken(uidRef.current as string)
+              .then((token) => {
+                if (token) {
+                  setGetMePassed(true)
+                  setSpotifyToken(token)
+                  setLastRefresh(new Date())
+                  const ld = cloneDeep(userData)
+                  ld.accessToken = token
+                  ld.accessTokenRefresh = (new Date().toISOString() as unknown) as FirebaseFirestore.Timestamp
+                  if (ld.importData?.lastImport) {
+                    ld.importData.lastImport = toDateString(
+                      ld.importData.lastImport
+                    )
+                  }
+                  if (ld.created) {
+                    ld.created = toDateString(ld.created)
+                  }
+                  localStorage.setItem('userProfile', JSON.stringify(ld))
+                  setUserData({
+                    ...userData,
+                    accessToken: token,
+                    accessTokenRefresh: firestore.Timestamp.fromDate(
+                      new Date()
+                    ) as FirebaseFirestore.Timestamp,
+                  })
+                  GoogleAnalytics.event({
+                    category: 'Cache',
+                    action: 'Refreshed Spotify token into cache on load',
+                    label: 'Cache New Token',
+                  })
+                  console.log('token refreshed.')
+                }
+              })
+          })
       }
       const ref = setInterval(() => {
-        if (differenceInMinutes(new Date(), lastRefreshRef.current) > 45) {
+        if (
+          !getMePassedRef.current ||
+          differenceInMinutes(new Date(), lastRefreshRef.current) > 45
+        ) {
           console.log('spotify token expired, attempting to refresh.')
           firebase
             .refreshSpotifyToken(uidRef.current as string)
@@ -313,6 +345,7 @@ export const UserDataProvider = ({
                 setSpotifyToken(token)
                 setLastRefresh(new Date())
                 const ld = cloneDeep(userData)
+                ld.accessToken = token
                 ld.accessTokenRefresh = (new Date().toISOString() as unknown) as FirebaseFirestore.Timestamp
                 if (ld.importData?.lastImport) {
                   ld.importData.lastImport = toDateString(
@@ -344,7 +377,7 @@ export const UserDataProvider = ({
         clearInterval(ref)
       }
     }
-  }, [userData, setLastRefresh])
+  }, [userData, getMeTried])
 
   return (
     <UserDataContext.Provider
