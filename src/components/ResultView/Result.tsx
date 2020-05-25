@@ -32,6 +32,7 @@ const Result = () => {
   const [matchUserId, setMatchUserId] = useState('')
   const [matchData, setMatchData] = useState<IMatchData | null>(null)
   const { matchId } = useParams()
+  const [isLSData, setIsLSData] = useState(false)
   const [error, setError] = useState({ state: false, message: <></> })
 
   useEffect(() => {
@@ -79,6 +80,7 @@ const Result = () => {
           setMatchUser(JSON.parse(match.matchUser))
           setMatchUserId(match.matchUserId)
           setMatchData(match)
+          setIsLSData(true)
           console.log('loaded match from local storage.')
           GoogleAnalytics.event({
             category: 'Cache',
@@ -99,7 +101,7 @@ const Result = () => {
   }, [currentUser, matchId])
 
   useEffect(() => {
-    if (matchUser && matchUserId && matchData && matchId) {
+    if (!isLSData && matchUser && matchUserId && matchData && matchId) {
       const md = cloneDeep(matchData) as any
       md.matchUser = JSON.stringify(matchUser)
       md.matchUserId = matchUserId
