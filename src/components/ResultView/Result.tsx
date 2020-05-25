@@ -10,6 +10,8 @@ import { UserDataContext } from '../../contexts/UserData'
 import { clearMatchStorage } from '../../util/clearLocalStorage'
 import firebase from '../../util/Firebase'
 import {
+  decryptArray,
+  encryptArray,
   getFromObject,
   setIntoObject,
 } from '../../util/fromObjectInLocalStorage'
@@ -73,6 +75,7 @@ const Result = () => {
           match.matchDate = firestore.Timestamp.fromDate(
             new Date(match.matchDate)
           )
+          match.users = decryptArray(match.users)
           setMatchUser(JSON.parse(match.matchUser))
           setMatchUserId(match.matchUserId)
           setMatchData(match)
@@ -101,7 +104,7 @@ const Result = () => {
       md.matchUser = JSON.stringify(matchUser)
       md.matchUserId = matchUserId
       md.matchDate = md.matchDate.toDate().toISOString()
-      delete md.users
+      md.users = encryptArray(matchData.users)
       const mdStr = JSON.stringify(md)
       setIntoObject('matches')(matchId, mdStr)
       console.log('stored match data in local storage.')
