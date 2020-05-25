@@ -24,6 +24,7 @@ const Match = () => {
   )
   const [rematch, setRematch] = useState(false)
   const [matchCode, setMatchCode] = useState('')
+  const [matchChecked, setMatchChecked] = useState(false)
   const query = qs.parse(location.search)
   const { width, height } = useWindowSize()
   if (
@@ -44,8 +45,9 @@ const Match = () => {
           history.push('/compatibility')
         }
       }
-      if (userData) {
+      if (userData && !matchChecked) {
         const m = await firebase.userHasMatchForId(currentUser?.uid || '', id)
+        setMatchChecked(true)
         if (m) {
           const match = m as IPreviewMatchData
           if (
