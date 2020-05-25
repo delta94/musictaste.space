@@ -1,5 +1,5 @@
-import formatDistance from 'date-fns/formatDistance'
 import format from 'date-fns/format'
+import formatDistance from 'date-fns/formatDistance'
 import React, { useContext, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
@@ -32,6 +32,8 @@ const ProfileModal = (props: { isOpen: boolean; toggleModal: () => void }) => {
       label: 'Sign Out',
       action: 'Signed out from modal',
     })
+    history.push('/')
+    window.location.reload()
   }
 
   const deleteAccount = () => {
