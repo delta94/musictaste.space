@@ -69,6 +69,7 @@ const DeleteAccountView = () => {
         action: 'Deleted user account',
       })
       clearStorage()
+      setTimeout(() => window.location.reload(), 3000)
     }
   }
   return (
