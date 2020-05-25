@@ -4,6 +4,7 @@ import Helmet from 'react-helmet'
 import { useHistory } from 'react-router'
 import { useToasts } from 'react-toast-notifications'
 import { Button } from 'reactstrap'
+import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 import { clearStorage } from '../../util/clearLocalStorage'
 import firebase from '../../util/Firebase'
@@ -14,6 +15,7 @@ const DeleteAccountView = () => {
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
   const { userData } = useContext(UserDataContext)
+  const { currentUser } = useContext(AuthContext)
   const history = useHistory()
   const { addToast } = useToasts()
   useEffect(() => {
@@ -38,6 +40,12 @@ const DeleteAccountView = () => {
         .firestore()
         .collection('users-lookup')
         .doc(anonMatchCode)
+        .delete()
+        .catch((err) => console.error(err))
+      await firebase.app
+        .firestore()
+        .collection('users')
+        .doc(currentUser?.uid)
         .delete()
         .catch((err) => console.error(err))
       console.log('deleting user')
