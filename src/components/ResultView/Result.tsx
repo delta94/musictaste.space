@@ -1,9 +1,10 @@
 import { firestore } from 'firebase/app'
 import cloneDeep from 'lodash/cloneDeep'
+import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import Helmet from 'react-helmet'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
@@ -34,6 +35,7 @@ const Result = () => {
   const { matchId } = useParams()
   const [isLSData, setIsLSData] = useState(false)
   const [error, setError] = useState({ state: false, message: <></> })
+  const query = qs.parse(useLocation().search)
 
   useEffect(() => {
     const getMatchData = async (id: string) => {
@@ -70,7 +72,7 @@ const Result = () => {
     }
     if (currentUser && matchId) {
       const matchStr = getFromObject('matches')(matchId)
-      if (matchStr) {
+      if (matchStr && !query.cc) {
         try {
           const match = JSON.parse(matchStr)
           match.matchDate = firestore.Timestamp.fromDate(
@@ -94,11 +96,15 @@ const Result = () => {
           getMatchData(matchId)
         }
       } else {
-        console.log('pulling match data from database.')
+        if (query.cc) {
+          console.log('force pulling match data from database.')
+        } else {
+          console.log('pulling match data from database.')
+        }
         getMatchData(matchId)
       }
     }
-  }, [currentUser, matchId])
+  }, [currentUser, matchId, query.cc])
 
   useEffect(() => {
     if (!isLSData && matchUser && matchUserId && matchData && matchId) {

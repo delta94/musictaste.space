@@ -51,7 +51,7 @@ function ConfirmOrLogInButton(props: any) {
         </>
       )
       t.then((code) => {
-        history.push(`/match/${code}`)
+        history.push(`/match/${code}${props.rematch.rematch ? '?cc=1' : ''}`)
       })
     }
   }
