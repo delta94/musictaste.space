@@ -166,11 +166,16 @@ class PagesNavbar extends React.Component {
                   About
                 </NavLink>
               </NavItem>
-              {/* <NavItem>
-                <NavLink tag={Link} to="/tally">
-                  Tally
+              <NavItem>
+                <NavLink
+                  href="https://ko-fi.com/kalpal"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  title="Donate to Kalana"
+                >
+                  Donate
                 </NavLink>
-              </NavItem> */}
+              </NavItem>
               <NavItem>
                 <NavLink tag={Link} to="/discord">
                   Discord
