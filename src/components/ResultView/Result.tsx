@@ -111,7 +111,7 @@ const Result = () => {
       setIntoObject('matches')(matchId, mdStr)
       console.log('stored match data in local storage.')
     }
-  }, [matchUser, matchUserId, matchData, matchId])
+  }, [matchUser, matchUserId, matchData, matchId, isLSData])
 
   const handleClick = () => {
     GoogleAnalytics.event({
