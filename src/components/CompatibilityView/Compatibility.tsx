@@ -17,7 +17,8 @@ function Compatibility() {
 
   useEffect(() => {
     if (currentUser && userData) {
-      if (userData.importData && !userData.importData.exists) {
+      console.log(userData.importData)
+      if (!userData.importData || !userData.importData?.exists) {
         history.push('/dashboard')
       }
     }

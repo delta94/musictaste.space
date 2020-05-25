@@ -1,12 +1,21 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 import Navbar from '../Navbars/Navbar'
 import LinkDiscordButton from './LinkDiscordButton'
+import { useHistory } from 'react-router-dom'
 
 const Discord = () => {
   const { currentUser } = useContext(AuthContext)
   const { userData } = useContext(UserDataContext)
+  const history = useHistory()
+  useEffect(() => {
+    if (userData && currentUser) {
+      if (!userData.importData || !userData.importData?.exists) {
+        history.push('/dashboard')
+      }
+    }
+  })
   return (
     <>
       <Navbar />
