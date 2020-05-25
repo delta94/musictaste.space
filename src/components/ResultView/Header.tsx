@@ -16,7 +16,7 @@ const Header = ({
   userData,
 }: {
   matchData: IMatchData
-  matchUser: IUsersLookupData
+  matchUser: IPreviewMatchData
   matchUserId: string
   userData: IUserProfile
 }) => {
@@ -143,7 +143,7 @@ const Header = ({
                   />
                 ) : (
                   <div
-                    style={{ backgroundImage: `url(${matchUser.imageURL})` }}
+                    style={{ backgroundImage: `url(${matchUser.photoURL})` }}
                     className="profile-img"
                   />
                 )}
