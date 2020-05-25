@@ -35,7 +35,7 @@ const Insights = () => {
   )
   useEffect(() => {
     if (userData && currentUser) {
-      if (userData.importData && !userData.importData.exists) {
+      if (!userData.importData || !userData.importData?.exists) {
         history.push('/dashboard')
       }
     }
