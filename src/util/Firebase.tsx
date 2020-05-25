@@ -287,7 +287,7 @@ class Firebase {
   public async userHasMatchForMatchId(
     user: string,
     matchId: string
-  ): Promise<{ exists: boolean; id?: string }> {
+  ): Promise<{ exists: boolean; id?: string; data?: IPreviewMatchData }> {
     const collection = await this.app
       .firestore()
       .collection('users')
@@ -298,7 +298,11 @@ class Firebase {
     if (collection.empty) {
       return { exists: false }
     } else {
-      return { exists: true, id: collection.docs[0].id }
+      return {
+        exists: true,
+        id: collection.docs[0].id,
+        data: collection.docs[0].data() as IPreviewMatchData,
+      }
     }
   }
 

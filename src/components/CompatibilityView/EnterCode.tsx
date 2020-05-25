@@ -3,7 +3,7 @@ import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
-import firebase from '../../util/Firebase'
+import { getUserFromId } from '../../util/api'
 
 const EnterCode = ({ userData }: { userData: IUserProfile }) => {
   const history = useHistory()
@@ -37,12 +37,15 @@ const EnterCode = ({ userData }: { userData: IUserProfile }) => {
 
   const validateCode = async (code: string) => {
     if (code !== userData.matchCode && code !== userData.anonMatchCode) {
-      const d = await firebase.app
-        .firestore()
-        .collection('users-lookup')
-        .doc(code)
-        .get()
-      if (d.exists) {
+      const d = await getUserFromId(code).catch((err) => {
+        console.error(err)
+        addToast('Error with look-up server', {
+          appearance: 'error',
+          autoDismiss: true,
+        })
+        return false
+      })
+      if (d) {
         GoogleAnalytics.event({
           category: 'Interaction',
           label: 'Match',

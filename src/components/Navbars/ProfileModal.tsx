@@ -1,5 +1,4 @@
-import differenceInMinutes from 'date-fns/differenceInMinutes'
-import { formatDistance } from 'date-fns/esm'
+import formatDistance from 'date-fns/formatDistance'
 import format from 'date-fns/format'
 import React, { useContext, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
