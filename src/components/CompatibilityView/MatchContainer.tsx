@@ -1,5 +1,4 @@
 import { Timestamp } from '@firebase/firestore-types'
-import firebase from 'firebase'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
@@ -10,58 +9,59 @@ import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 import Firebase from '../../util/Firebase'
 import MatchCard from './MatchCard'
+import MatchDataProvider from './MatchDataProvider'
 
 const MatchContainer = () => {
   const history = useHistory()
-  const [matches, setMatches] = useState([] as any)
+  const [matches, setMatches] = useState<Array<[string, IPreviewMatchData]>>([])
   const [morePages, setMorePages] = useState(false)
   const { currentUser } = useContext(AuthContext)
   const { userData } = useContext(UserDataContext)
   const { addToast } = useToasts()
-  const [lastDoc, setLastDoc] = useState(false as any)
-  const [lastPage, setLastPage] = useState(0)
   const [loadPage, setLoadPage] = useState(0)
+  const [lastPage, setLastPage] = useState(0)
   const [loading, setLoading] = useState(false)
   const [quickDelete, setQuickDelete] = useState(false)
+  const [MDP, setMDP] = useState<null | MatchDataProvider>(null)
 
   useEffect(() => {
     const loadMatches = async (user: IUserProfile) => {
-      const LIMIT = 5
+      const LIMIT = 10
       if (user.importData && user.importData.exists) {
         setLoading(true)
-        let matchRef
-        if (!lastDoc) {
-          matchRef = Firebase.app
+        if (!MDP) {
+          const latestMatch = await Firebase.app
             .firestore()
             .collection('users')
             .doc(currentUser?.uid || '')
             .collection('matches')
             .orderBy('matchDate', 'desc')
-            .limit(LIMIT)
+            .limit(1)
+            .get()
+            .then((d) => (d.empty ? null : d.docs[0].data()))
+
+          const mdp = new MatchDataProvider(
+            latestMatch as IPreviewMatchData,
+            currentUser?.uid || ''
+          )
+          setMDP(mdp)
+          const data = await mdp.initialise(LIMIT)
+          setMatches(data)
+          setMorePages(mdp.morePages)
+          setLastPage(loadPage)
         } else {
-          matchRef = Firebase.app
-            .firestore()
-            .collection('users')
-            .doc(currentUser?.uid || '')
-            .collection('matches')
-            .orderBy('matchDate', 'desc')
-            .limit(LIMIT)
-            .startAfter(lastDoc)
-        }
-        const docs = await matchRef.get()
-        setMatches(matches.concat(docs.docs))
-        if (docs.docs.length) {
-          setLastDoc(docs.docs[docs.docs.length - 1])
+          const data = await MDP.moreMatches(LIMIT)
+          setMatches(data)
+          setMorePages(MDP.morePages)
           setLastPage(loadPage)
         }
-        docs.docs.length < LIMIT ? setMorePages(false) : setMorePages(true)
         setLoading(false)
       }
     }
     if (loadPage !== lastPage && !loading && userData) {
       loadMatches(userData)
     }
-  }, [loadPage, userData, currentUser, lastDoc, matches, lastPage, loading])
+  }, [loadPage, userData, currentUser, matches, lastPage, loading, MDP])
 
   useEffect(() => {
     setLoadPage(1)
@@ -71,9 +71,9 @@ const MatchContainer = () => {
     e: React.MouseEvent<HTMLInputElement>
   ) => {
     e.stopPropagation()
-    setMatches(
-      matches.filter((m: firebase.firestore.DocumentSnapshot) => m.id !== id)
-    )
+    if (MDP) {
+      setMatches(MDP.deleteMatch(id))
+    }
     Firebase.deleteMatch(currentUser?.uid || '', id)
     GoogleAnalytics.event({
       category: 'Interaction',
@@ -182,21 +182,27 @@ const MatchContainer = () => {
       </div>
       <div className="matches">
         <div className="matches-container">
-          {matches.map((doc: firebase.firestore.DocumentSnapshot) => {
-            const data = doc.data() as IPreviewMatchData
-            if (data) {
-              return (
-                <MatchCard
-                  matchData={doc}
-                  key={doc.id}
-                  quickDelete={quickDelete}
-                  onRemove={removeMatch(doc.id, data.displayName)}
-                  onClick={onCardClick(data.matchId, data.matchDate, doc.id)}
-                />
-              )
-            }
-            return null
-          })}
+          {matches.length ? (
+            matches.map(([id, match]) => {
+              if (match) {
+                return (
+                  <MatchCard
+                    matchData={match}
+                    matchId={id}
+                    key={id}
+                    quickDelete={quickDelete}
+                    onRemove={removeMatch(id, match.displayName)}
+                    onClick={onCardClick(match.matchId, match.matchDate, id)}
+                  />
+                )
+              }
+              return null
+            })
+          ) : (
+            <div className="pl-3 pr-3 text-center">
+              If you had matches, they would appear here. Get machin'!
+            </div>
+          )}
         </div>
         {morePages ? (
           <div className="load-more">

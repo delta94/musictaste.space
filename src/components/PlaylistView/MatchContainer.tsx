@@ -6,62 +6,59 @@ import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 import firebase from '../../util/Firebase'
 import MatchCard from '../CompatibilityView/MatchCard'
+import MatchDataProvider from '../CompatibilityView/MatchDataProvider'
 
 const MatchContainer = () => {
   const history = useHistory()
-  const [matches, setMatches] = useState([] as any)
+  const [matches, setMatches] = useState<Array<[string, IPreviewMatchData]>>([])
   const [morePages, setMorePages] = useState(false)
   const { currentUser } = useContext(AuthContext)
   const { userData } = useContext(UserDataContext)
-  const [lastDoc, setLastDoc] = useState(false as any)
   const [loadPage, setLoadPage] = useState(0)
   const [lastPage, setLastPage] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [MDP, setMDP] = useState<null | MatchDataProvider>(null)
 
   useEffect(() => {
     const loadMatches = async (user: IUserProfile) => {
       const LIMIT = 10
-      if (user.importData) {
+      if (user.importData && user.importData.exists) {
         setLoading(true)
-        let matchRef
-        if (!lastDoc) {
-          matchRef = firebase.app
+        if (!MDP) {
+          const latestMatch = await firebase.app
             .firestore()
             .collection('users')
             .doc(currentUser?.uid || '')
             .collection('matches')
             .orderBy('matchDate', 'desc')
-            .limit(LIMIT)
+            .limit(1)
+            .get()
+            .then((d) => (d.empty ? null : d.docs[0].data()))
+
+          const mdp = new MatchDataProvider(
+            latestMatch as IPreviewMatchData,
+            currentUser?.uid || ''
+          )
+          setMDP(mdp)
+          const data = await mdp.initialise(LIMIT)
+          setMatches(data.filter((d) => d[1].score > 0.5))
+          setMorePages(mdp.morePages)
+          setLastPage(loadPage)
         } else {
-          matchRef = firebase.app
-            .firestore()
-            .collection('users')
-            .doc(currentUser?.uid || '')
-            .collection('matches')
-            .orderBy('matchDate', 'desc')
-            .limit(LIMIT)
-            .startAfter(lastDoc)
+          const data = await MDP.moreMatches(LIMIT)
+          setMatches(data.filter((d) => d[1].score > 0.5))
+          setMorePages(MDP.morePages)
+          setLastPage(loadPage)
         }
-        const docs = await matchRef.get()
-        setMatches(
-          matches.concat(docs.docs.filter((d) => d.data().score > 0.5))
-        )
-        setLastPage(loadPage)
-        if (docs.docs.length) {
-          setLastDoc(docs.docs[docs.docs.length - 1])
-        }
-        docs.docs.length < LIMIT ? setMorePages(false) : setMorePages(true)
         setLoading(false)
       }
     }
     if (loadPage !== lastPage && !loading && userData) {
       loadMatches(userData)
     }
-  }, [loadPage, userData, currentUser, lastDoc, matches, lastPage, loading])
+  }, [loadPage, userData, currentUser, lastPage, loading, MDP])
 
-  useEffect(() => {
-    setLoadPage(1)
-  }, [])
+  useEffect(() => setLoadPage(1), [])
 
   const onCardClick = (matchId: string) => (e: any) => {
     GoogleAnalytics.event({
@@ -79,12 +76,13 @@ const MatchContainer = () => {
     <>
       <div className="matches">
         <div className="matches-container">
-          {matches.map((doc: any) => {
+          {matches.map(([id, match]) => {
             return (
               <MatchCard
-                matchData={doc}
-                key={doc.id}
-                onClick={onCardClick(doc.data().matchId)}
+                matchId={id}
+                matchData={match}
+                key={id}
+                onClick={onCardClick(match.matchId)}
               />
             )
           })}
