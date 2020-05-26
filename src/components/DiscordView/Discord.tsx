@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 import Navbar from '../Navbars/Navbar'
 import LinkDiscordButton from './LinkDiscordButton'
-import { useHistory } from 'react-router-dom'
 
 const Discord = () => {
   const { currentUser } = useContext(AuthContext)
@@ -16,6 +16,7 @@ const Discord = () => {
       }
     }
   })
+
   return (
     <>
       <Navbar />
