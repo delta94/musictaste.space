@@ -182,21 +182,27 @@ const MatchContainer = () => {
       </div>
       <div className="matches">
         <div className="matches-container">
-          {matches.map(([id, match]) => {
-            if (match) {
-              return (
-                <MatchCard
-                  matchData={match}
-                  matchId={id}
-                  key={id}
-                  quickDelete={quickDelete}
-                  onRemove={removeMatch(id, match.displayName)}
-                  onClick={onCardClick(match.matchId, match.matchDate, id)}
-                />
-              )
-            }
-            return null
-          })}
+          {matches.length ? (
+            matches.map(([id, match]) => {
+              if (match) {
+                return (
+                  <MatchCard
+                    matchData={match}
+                    matchId={id}
+                    key={id}
+                    quickDelete={quickDelete}
+                    onRemove={removeMatch(id, match.displayName)}
+                    onClick={onCardClick(match.matchId, match.matchDate, id)}
+                  />
+                )
+              }
+              return null
+            })
+          ) : (
+            <div className="pl-3 pr-3 text-center">
+              If you had matches, they would appear here. Get machin'!
+            </div>
+          )}
         </div>
         {morePages ? (
           <div className="load-more">
