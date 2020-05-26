@@ -1,3 +1,5 @@
+import { firestore } from 'firebase/app'
+import cloneDeep from 'lodash/cloneDeep'
 import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
@@ -7,7 +9,14 @@ import { Button } from 'reactstrap'
 import Spotify from 'spotify-web-api-js'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
+import { clearMatchStorage } from '../../util/clearLocalStorage'
 import firebase from '../../util/Firebase'
+import {
+  decryptArray,
+  encryptArray,
+  getFromObject,
+  setIntoObject,
+} from '../../util/fromObjectInLocalStorage'
 import { Dot } from '../Aux/Dot'
 import Navbar from '../Navbars/Navbar'
 import Canvas from './Canvas'
@@ -24,7 +33,7 @@ const Create = () => {
     height: 0,
     width: 0,
   })
-  const [matchData, setMatchData] = useState({} as IMatchData)
+  const [matchData, setMatchData] = useState<null | IMatchData>(null)
   const { matchId } = useParams()
   const [playlistImage, setPlaylistImage] = useState('')
   const [error, setError] = useState({ state: false, message: '' })
@@ -32,6 +41,7 @@ const Create = () => {
   const location = useLocation()
   const query = qs.parse(location.search)
   const history = useHistory()
+  const [isLSData, setIsLSData] = useState(false)
 
   async function createPlaylist(): Promise<{
     success: boolean
@@ -166,20 +176,69 @@ const Create = () => {
       })
     }
     if (currentUser && matchId && userData) {
-      getMatchData(matchId).then((s) => {
-        if (s) {
-          getPlaylistImage(s)
+      const matchStr = getFromObject('matches')(matchId)
+      if (matchStr && !query.cc) {
+        try {
+          const match = JSON.parse(matchStr)
+          match.matchDate = firestore.Timestamp.fromDate(
+            new Date(match.matchDate)
+          )
+          match.users = decryptArray(match.users)
+          setMatchUser(JSON.parse(match.matchUser))
+          setMatchUserId(match.matchUserId)
+          setMatchData(match)
+          getPlaylistImage(match)
+          setIsLSData(true)
+          console.log('loaded match from local storage.')
+          GoogleAnalytics.event({
+            category: 'Cache',
+            label: 'Loaded Cached Match',
+            action: 'Loaded a cached match from local storage',
+          })
+        } catch (e) {
+          console.log('error with cache')
+          clearMatchStorage()
+          console.log('pulling match data from database.')
+          getMatchData(matchId).then((s) => {
+            if (s) {
+              getPlaylistImage(s)
+            }
+          })
         }
-      })
+      } else {
+        if (query.cc) {
+          console.log('force pulling match data from database.')
+        } else {
+          console.log('pulling match data from database.')
+        }
+        getMatchData(matchId).then((s) => {
+          if (s) {
+            getPlaylistImage(s)
+          }
+        })
+      }
       setLoading(false)
     }
-  }, [currentUser, matchId, userData])
+  }, [currentUser, matchId, userData, query.cc])
   let topTracks: IMatchedSpotifyPoint[] = []
-  if (Object.keys(matchData).length > 0) {
+  if (matchData) {
     topTracks = matchData.matchedTracksLongTerm
       .concat(matchData.matchedTracksMediumTerm)
       .concat(matchData.matchedTracksShortTerm)
   }
+
+  useEffect(() => {
+    if (!isLSData && matchUser && matchUserId && matchData && matchId) {
+      const md = cloneDeep(matchData) as any
+      md.matchUser = JSON.stringify(matchUser)
+      md.matchUserId = matchUserId
+      md.matchDate = md.matchDate.toDate().toISOString()
+      md.users = encryptArray(matchData.users)
+      const mdStr = JSON.stringify(md)
+      setIntoObject('matches')(matchId, mdStr)
+      console.log('stored match data in local storage.')
+    }
+  }, [matchUser, matchUserId, matchData, matchId, isLSData])
 
   return (
     <>

@@ -5,14 +5,13 @@ import Vibrant from 'node-vibrant'
 import React, { useContext, useEffect, useState } from 'react'
 import Spotify from 'spotify-web-api-js'
 import styled from 'styled-components'
-import RemoveModal from './RemoveModal'
 import { UserDataContext } from '../../contexts/UserData'
+import RemoveModal from './RemoveModal'
 
 interface IUserMatchData {
   anon: boolean
   displayName: string
   matchDate: Timestamp
-  matchId: string
   photoURL: string
   score: number
   bgCode: { type: 'artist' | 'track' | ''; id: string }
@@ -23,8 +22,10 @@ const MatchCard = ({
   onClick,
   onRemove,
   quickDelete,
+  matchId,
 }: {
-  matchData: firebase.firestore.DocumentSnapshot
+  matchData: IPreviewMatchData
+  matchId: string
   quickDelete?: boolean
   onClick: (e: React.MouseEvent<HTMLInputElement>) => void
   onRemove?: (e: React.MouseEvent<HTMLInputElement>) => void
@@ -33,7 +34,7 @@ const MatchCard = ({
   const [bgImageURL, setBgImageURL] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
-  const data = matchData.data() as IPreviewMatchData
+  const data = matchData
 
   useEffect(() => {
     const spotify = new Spotify()
@@ -143,7 +144,7 @@ const MatchCard = ({
             </p>
           </div>
           <div className="profile-code" onClick={onClick}>
-            {data.anon ? <></> : matchData.id}
+            {data.anon ? <></> : matchId}
           </div>
           <div
             className="score"
