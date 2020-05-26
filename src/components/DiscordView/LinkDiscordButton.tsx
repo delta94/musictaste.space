@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
 import { Button } from 'reactstrap'
@@ -10,10 +10,24 @@ import { Dot } from '../Aux/Dot'
 const LinkDiscordButton = () => {
   const history = useHistory()
   const { currentUser } = useContext(AuthContext)
-  const { userData } = useContext(UserDataContext)
+  const { userData, startSub, endSub } = useContext(UserDataContext)
   const [continueText, setContinueText] = useState(<>Connect Discord</>)
   const [started, setStarted] = useState(false)
   const [unlinked, setUnlinked] = useState(false)
+
+  useEffect(() => {
+    if (currentUser && started) {
+      startSub()
+    } else {
+      endSub()
+    }
+  }, [currentUser, started])
+
+  useEffect(() => {
+    if (userData?.discord && !unlinked) {
+      setStarted(false)
+    }
+  }, [setStarted, userData, unlinked])
 
   function handleClickLogin() {
     const isMobile = window.matchMedia('only screen and (max-width: 760px)')
@@ -54,6 +68,7 @@ const LinkDiscordButton = () => {
   }
 
   function handleClickDiscord() {
+    setUnlinked(false)
     const isMobile = window.matchMedia('only screen and (max-width: 760px)')
       .matches
     localStorage.setItem('redirectDiscord', 'true')

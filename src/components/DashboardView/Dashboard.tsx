@@ -54,9 +54,14 @@ const emptyImport = {
 
 export function Me() {
   const { currentUser } = useContext(AuthContext)
-  const { userData, spotifyToken, importData, forceSub } = useContext(
-    UserDataContext
-  )
+  const {
+    userData,
+    spotifyToken,
+    importData,
+    startSub,
+    endSub,
+    subExists,
+  } = useContext(UserDataContext)
   const history = useHistory()
   const [importStatus, setImportStatus] = useState({
     exists: false,
@@ -167,7 +172,26 @@ export function Me() {
     setMenuColor3(hex3)
   }
 
+  useEffect(() => {
+    if (userData) {
+      if (!userData.importData?.exists && !subExists) {
+        startSub()
+      }
+      if (userData.importData?.exists && subExists) {
+        if (
+          differenceInSeconds(
+            new Date(),
+            userData.importData.lastImport?.toDate() as Date
+          ) < 5
+        ) {
+          endSub()
+        }
+      }
+    }
+  }, [userData])
+
   const onGetSpotifyData = (e: any) => {
+    startSub()
     e.stopPropagation()
     const brokenImport =
       importStatus.loading &&
@@ -199,7 +223,7 @@ export function Me() {
     }
   }
   const onReimportSpotifyData = (e: any) => {
-    forceSub()
+    startSub()
     e.stopPropagation()
     if (!importStatus.loading) {
       setImportClick(true)

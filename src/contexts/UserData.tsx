@@ -8,18 +8,26 @@ import SpotifyWebApi from 'spotify-web-api-js'
 import firebase from '../util/Firebase'
 import { AuthContext } from './Auth'
 
+const _subHandle = (): void | null => null
+
 export const UserDataContext = React.createContext<{
   spotifyToken: string
   userData: IUserProfile | null
   importData: ISpotifyUserData | null
   fromCache: null | Date
-  forceSub: () => void | null
+  startSub: () => void | null
+  endSub: () => void | null
+  forceRefresh: () => Promise<void> | null
+  subExists: boolean
 }>({
   spotifyToken: '',
   userData: null,
   importData: null,
   fromCache: null,
-  forceSub: () => null,
+  endSub: () => null,
+  startSub: () => null,
+  forceRefresh: () => null,
+  subExists: false,
 })
 
 const toTimestamp = (time: FirebaseFirestore.Timestamp) => {
@@ -49,11 +57,14 @@ export const UserDataProvider = ({
   const [fromCache, setFromCache] = useState<null | Date>(null)
   const [getMePassed, setGetMePassed] = useState(false)
   const [getMeTried, setGetMeTried] = useState(false)
+  const [subbedThisSession, setSubbedThisSession] = useState(false)
+  const subHandle = useRef(_subHandle)
   const tokenRef = useRef(spotifyToken)
   const lastRefreshRef = useRef(lastRefresh)
   const uidRef = useRef(uid)
   const getMePassedRef = useRef(getMePassed)
 
+  subHandle.current = _subHandle
   tokenRef.current = spotifyToken
 
   uidRef.current = uid
@@ -62,30 +73,70 @@ export const UserDataProvider = ({
 
   getMePassedRef.current = getMePassed
 
-  const forceSub = () => {
-    setUserData({
-      ...userData,
-      importData: {
-        exists: false,
-        loading: true,
-        lastImport: firestore.Timestamp.fromDate(
-          new Date()
-        ) as FirebaseFirestore.Timestamp,
-        status: {
-          topTracks: false,
-          topArtists: false,
-          relatedArtists: false,
-          genres: false,
-          specialSauce: false,
-        },
-      },
-    } as IUserProfile)
+  const forceRefresh = async () => {
+    const data = await firebase.app
+      .firestore()
+      .collection('users')
+      .doc(currentUser?.uid)
+      .get()
+      .then((d) => d.data() as IUserProfile)
+    setUserData(data as IUserProfile)
+    setSpotifyToken(data?.accessToken)
+    setLastRefresh(data?.accessTokenRefresh.toDate())
+    const ld = cloneDeep(data)
+    ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
+    if (ld.importData?.lastImport) {
+      ld.importData.lastImport = toDateString(ld.importData.lastImport)
+    }
+    if (ld.created) {
+      ld.created = toDateString(ld.created)
+    }
+    localStorage.setItem('userProfile', JSON.stringify(ld))
+    localStorage.setItem('profileLoaded', new Date().toISOString())
+  }
+
+  const startSub = () => {
+    if (!subStarted) {
+      const sub = firebase.app
+        .firestore()
+        .collection('users')
+        .doc(currentUser?.uid || '')
+        .onSnapshot((doc) => {
+          const source = doc.metadata.hasPendingWrites
+          if (!source && doc.exists) {
+            const data = doc.data()
+            setSpotifyToken(data?.accessToken)
+            setLastRefresh(data?.accessTokenRefresh.toDate())
+            setUserData(data as IUserProfile)
+            const ld = cloneDeep(data) as IUserProfile
+            ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
+            if (ld.importData?.lastImport) {
+              ld.importData.lastImport = toDateString(ld.importData?.lastImport)
+            }
+            if (ld.created) {
+              ld.created = toDateString(ld.created)
+            }
+            localStorage.setItem('userProfile', JSON.stringify(ld))
+            localStorage.setItem('profileLoaded', new Date().toISOString())
+          }
+        })
+      console.log('subscription started.')
+      subHandle.current = sub
+      setSubStarted(true)
+      setSubbedThisSession(true)
+    }
+  }
+
+  const endSub = () => {
+    if (subStarted) {
+      setSubStarted(false)
+      subHandle.current()
+      console.log('subscription ended.')
+    }
   }
 
   useEffect(() => {
-    let sub: () => null | void = () => null
-
-    if (currentUser && !userData) {
+    if (currentUser && !userData && !subStarted && !subbedThisSession) {
       setUid(currentUser?.uid || '')
       // check local storage
       const ls: null | string = localStorage.getItem('userProfile')
@@ -178,47 +229,53 @@ export const UserDataProvider = ({
             }
           })
       }
-    } else {
-      // if data still needs to be imported, subscribe to document
-      if (currentUser && !userData?.importData?.exists && !subStarted) {
-        console.log('subscription began.')
-        setSubStarted(true)
-        sub = firebase.app
-          .firestore()
-          .collection('users')
-          .doc(currentUser?.uid || '')
-          .onSnapshot((doc) => {
-            const source = doc.metadata.hasPendingWrites
-            if (!source && doc.exists) {
-              const data = doc.data()
-              setSpotifyToken(data?.accessToken)
-              setLastRefresh(data?.accessTokenRefresh.toDate())
-              setUserData(data as IUserProfile)
-              const ld = cloneDeep(data) as IUserProfile
-              ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-              if (ld.importData?.lastImport) {
-                ld.importData.lastImport = toDateString(
-                  ld.importData?.lastImport
-                )
-              }
-              if (ld.created) {
-                ld.created = toDateString(ld.created)
-              }
-              localStorage.setItem('userProfile', JSON.stringify(ld))
-              localStorage.setItem('profileLoaded', new Date().toISOString())
-            }
-          })
-      } else if (userData?.importData?.exists && subStarted) {
-        // finish subscription
-        setSubStarted(false)
-        console.log('subscription ended.')
-        sub()
-      }
+      // } else {
+      //   // if data still needs to be imported, subscribe to document
+      //   if (currentUser && !userData?.importData?.exists && !subStarted) {
+      //     console.log('subscription began.')
+      //     setSubStarted(true)
+      //     sub = firebase.app
+      //       .firestore()
+      //       .collection('users')
+      //       .doc(currentUser?.uid || '')
+      //       .onSnapshot((doc) => {
+      //         const source = doc.metadata.hasPendingWrites
+      //         if (!source && doc.exists) {
+      //           const data = doc.data()
+      //           setSpotifyToken(data?.accessToken)
+      //           setLastRefresh(data?.accessTokenRefresh.toDate())
+      //           setUserData(data as IUserProfile)
+      //           const ld = cloneDeep(data) as IUserProfile
+      //           ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
+      //           if (ld.importData?.lastImport) {
+      //             ld.importData.lastImport = toDateString(
+      //               ld.importData?.lastImport
+      //             )
+      //           }
+      //           if (ld.created) {
+      //             ld.created = toDateString(ld.created)
+      //           }
+      //           localStorage.setItem('userProfile', JSON.stringify(ld))
+      //           localStorage.setItem('profileLoaded', new Date().toISOString())
+      //         }
+      //       })
+      //     setSubHandle(sub)
+      //   } else if (userData?.importData?.exists && subStarted) {
+      //     // finish subscription
+      //     setSubStarted(false)
+      //     console.log('subscription ended.')
+      //     sub()
+      //   }
     }
-  }, [currentUser, userData, subStarted])
+  }, [currentUser, userData])
 
   useEffect(() => {
-    if (currentUser && userData && userData?.importData?.exists) {
+    if (
+      currentUser &&
+      userData &&
+      userData?.importData?.exists &&
+      !subStarted
+    ) {
       const sd: null | string = localStorage.getItem('spotifyData')
       if (sd) {
         const spotifyData = JSON.parse(sd) as ISpotifyUserData
@@ -274,7 +331,7 @@ export const UserDataProvider = ({
   }, [userData, currentUser])
 
   useEffect(() => {
-    if (userData) {
+    if (userData && !subStarted) {
       if (!getMeTried) {
         const s = new SpotifyWebApi()
         s.setAccessToken(userData.accessToken)
@@ -378,7 +435,10 @@ export const UserDataProvider = ({
         userData,
         importData,
         fromCache,
-        forceSub,
+        startSub,
+        endSub,
+        forceRefresh,
+        subExists: subStarted,
       }}
     >
       {children}
