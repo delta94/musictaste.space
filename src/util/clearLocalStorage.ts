@@ -3,6 +3,7 @@ export const clearStorage = () => {
   localStorage.removeItem('userProfile')
   localStorage.removeItem('spotifyData')
   localStorage.removeItem('matches')
+  localStorage.removeItem('matchPreviews')
 }
 
 export const clearMatchStorage = () => {
