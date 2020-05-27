@@ -429,10 +429,11 @@ div.spotify-login {
   }
 }
 
+.modal-content {
+  background-color: #ffffff !important;
+}
+
 .donate-modal {
-  .modal-content {
-    background-color: #ffffff !important;
-  }
   &.modal.modal-mini p {
     text-align: justify !important;
     line-height: 1.5;
