@@ -10,25 +10,12 @@ import {
   WhatsappShareButton,
 } from 'react-share'
 import {
-  EmailIcon,
   FacebookIcon,
-  InstapaperIcon,
-  LineIcon,
-  LinkedinIcon,
-  LivejournalIcon,
-  MailruIcon,
-  OKIcon,
-  PinterestIcon,
-  PocketIcon,
   RedditIcon,
   TelegramIcon,
   TumblrIcon,
   TwitterIcon,
-  ViberIcon,
-  VKIcon,
-  WeiboIcon,
   WhatsappIcon,
-  WorkplaceIcon,
 } from 'react-share'
 import Switch from 'react-switch'
 import { useToasts } from 'react-toast-notifications'
