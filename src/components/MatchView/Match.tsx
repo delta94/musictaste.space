@@ -1,4 +1,3 @@
-import qs from 'query-string'
 import React, { useContext, useEffect, useState } from 'react'
 import Confetti from 'react-confetti'
 import GoogleAnalytics from 'react-ga'

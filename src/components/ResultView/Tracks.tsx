@@ -20,7 +20,11 @@ const Tracks = ({
           matchUserId={matchUserId}
           uid={uid}
           users={matchData.users}
-          textData={{ code: 'lt', title: 'Long Term', lowercase: 'long-term' }}
+          textData={{
+            code: 'lt',
+            title: 'Long Term',
+            lowercase: 'of all time',
+          }}
         />
       ) : null}
       {matchData.matchedTracksMediumTerm.length ? (
@@ -33,7 +37,7 @@ const Tracks = ({
           textData={{
             code: 'mt',
             title: 'Medium Term',
-            lowercase: 'medium-term',
+            lowercase: 'of the last six months',
           }}
         />
       ) : null}
@@ -47,7 +51,7 @@ const Tracks = ({
           textData={{
             code: 'st',
             title: 'Short Term',
-            lowercase: 'short-term',
+            lowercase: 'of the last month',
           }}
         />
       ) : null}
