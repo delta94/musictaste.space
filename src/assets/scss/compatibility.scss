@@ -48,6 +48,11 @@ div.main-container {
 
   .social-button {
     margin: 0em 0.5em;
+    transition: 0.2s;
+    transition-timing-function: ease-out;
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 
   .anon-id-row {
@@ -262,7 +267,8 @@ div.main-container {
     }
     .displayName {
       margin-left: 20px;
-      width: 200px;
+      width: 180px;
+      margin-right: 20px;
       @media (max-width: 600px) {
         margin-left: 10px;
         width: 150px;
@@ -331,7 +337,7 @@ div.main-container {
     }
     .bg-img-div {
       position: relative;
-      left: clamp(300px, 30vw, 600px);
+      left: clamp(300px, 30vw, 500px);
       top: 80px;
       z-index: -5;
       @media (max-width: 1360px) {

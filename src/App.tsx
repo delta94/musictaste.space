@@ -19,6 +19,7 @@ import Login from './components/Login'
 import Match from './components/MatchView/Match'
 import Create from './components/PlaylistView/Create'
 import Playlist from './components/PlaylistView/Playlist'
+import RedirectMatch from './components/RedirectView'
 import Result from './components/ResultView/Result'
 import Tally from './components/TallyView/Tally'
 
@@ -92,6 +93,11 @@ export default function SpotifyCompatibility() {
                   <Route
                     exact={true}
                     path="/match"
+                    component={withTracker(RedirectMatch)}
+                  />
+                  <Route
+                    exact={true}
+                    path="/request/:matchId"
                     component={withTracker(Match)}
                   />
                   <Route

@@ -20,7 +20,7 @@ const About = () => {
       label: 'Match',
       action: 'Match with Kalana from About page.',
     })
-    history.push('/match?request=kalana')
+    history.push('/request/kalana')
   }
 
   const [tallyData, setTallyData] = useState<GlobalTally | null>(null)

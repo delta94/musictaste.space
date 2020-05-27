@@ -25,14 +25,14 @@ import CreatePlaylistButton from './CreatePlaylistButton'
 const _log = (matchId: string) => (
   ...rest: Array<string | number | object>
 ) => {
-  console.log(`[MATCH 🤝] ${matchId}: `, ...rest)
+  console.log(`[MATCH 🤝] ${matchId}:`, ...rest)
 }
 
 const Create = () => {
   window.scrollTo(0, 0)
   const { currentUser } = useContext(AuthContext)
   const { spotifyToken, userData } = useContext(UserDataContext)
-  const [matchUser, setMatchUser] = useState({} as IUsersLookupData)
+  const [matchUser, setMatchUser] = useState<null | IPreviewMatchData>(null)
   const [matchUserId, setMatchUserId] = useState('')
   const [artistImage, setArtistImage] = useState({
     url: '',
@@ -67,7 +67,7 @@ const Create = () => {
         userData.serverState
       )
       .catch((err) => (playlistError = err))
-    if (res.success && res.tracks) {
+    if (res.success && res.tracks && matchUser) {
       const d = (await s
         .createPlaylist(userData.spotifyID, {
           name: `${matchUser.anon ? matchUserId : matchUser.displayName} × ${
@@ -135,35 +135,26 @@ const Create = () => {
 
   useEffect(() => {
     const getMatchData = async (id: string) => {
-      const e = await firebase.userHasMatchForMatchId(
-        currentUser?.uid || '',
-        id
-      )
-      if (e.exists) {
-        const d = await firebase.getMatch(id)
-        const u = await firebase.getUserFromID(e.id as string)
-        setMatchUserId(e.id as string)
-        if (u) {
-          setMatchUser(u)
-        }
-        if (!d) {
-          setError({
-            state: true,
-            message: 'Something went wrong retrieving this match.',
-          })
-        } else {
-          setMatchData(d)
-          return d
-        }
-      } else {
+      const d = await firebase.getMatch(id)
+      if (!d) {
         setError({
           state: true,
           message:
             "You don't have access to this match or the match does not exist.",
         })
+      } else {
+        setMatchData(d)
+        const matchUser = await firebase.userHasMatchForMatchId(
+          currentUser?.uid as string,
+          id
+        )
+        if (matchUser.data && matchUser.id) {
+          setMatchUserId(matchUser.id)
+          setMatchUser(matchUser.data)
+        }
       }
       setLoading(false)
-      return false
+      return d
     }
     const getPlaylistImage = async (data: IMatchData) => {
       if (!userData) {
@@ -259,7 +250,7 @@ const Create = () => {
           </div>
         ) : (
           <div className="playlist-container animated fadeInUp">
-            {topTracks.length ? (
+            {topTracks.length && matchUser ? (
               <div className="playlist">
                 {artistImage.url !== '' ? (
                   <Canvas

@@ -47,7 +47,7 @@ function UserCodes() {
     if (userData) {
       setUrl(
         (process.env.REACT_APP_MATCH_URL_BASE as string) +
-          '/match?request=' +
+          '/request/' +
           (anonIDDisplay ? userData.anonMatchCode : userData.matchCode)
       )
     }
@@ -134,7 +134,7 @@ function UserCodes() {
           </Col>
           <Col lg="1" md="1" className="d-block d-lg-none" />
           <Col lg="7" md="7" className="profile">
-            <p>Send a friend your URL:</p>
+            <p>Send a friend your link:</p>
             <InputGroup className="url-container">
               {userData ? (
                 <Input
@@ -143,7 +143,7 @@ function UserCodes() {
                   value={
                     userData.spotifyID
                       ? process.env.REACT_APP_MATCH_URL_BASE +
-                        '/match?request=' +
+                        '/request/' +
                         (anonIDDisplay
                           ? userData.anonMatchCode
                           : userData.matchCode)
