@@ -254,7 +254,11 @@ const Header = ({
             </div>
           </div>
           <div className="score-and-artist">
-            <div className="top-artist animated fadeInRightBig">
+            <div
+              className={`top-artist animated fadeInRightBig ${
+                query.r ? 'return' : 'initial'
+              }`}
+            >
               {matchData.matchedArtists.length > 1 ? (
                 <Artist id={matchData.matchedArtists[1].id}>
                   {(
@@ -280,7 +284,11 @@ const Header = ({
                 </Artist>
               ) : null}
             </div>
-            <div className="top-artist-2 animated fadeInRightBig">
+            <div
+              className={`top-artist-2 animated fadeInRightBig ${
+                query.r ? 'return' : 'initial'
+              }`}
+            >
               {matchData.matchedArtists.length > 2 ? (
                 <Artist id={matchData.matchedArtists[2].id}>
                   {(
@@ -303,7 +311,11 @@ const Header = ({
                 </Artist>
               ) : null}
             </div>
-            <div className="top-artist-3 animated fadeInRightBig">
+            <div
+              className={`top-artist-3 animated fadeInRightBig ${
+                query.r ? 'return' : 'initial'
+              }`}
+            >
               {matchData.matchedArtists.length > 3 ? (
                 <Artist id={matchData.matchedArtists[3].id}>
                   {(
@@ -327,7 +339,9 @@ const Header = ({
               ) : null}
             </div>
             <div
-              className="score animated slideInRight"
+              className={`score animated slideInRight ${
+                query.r ? 'return' : 'initial'
+              }`}
               style={{ color: altTextColor }}
             >
               <span>

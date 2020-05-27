@@ -115,7 +115,7 @@ const TracksContainer = ({
                 You and {matchUser.anon ? matchUserId : matchUser.displayName}{' '}
                 have <strong>{tracksData.length}</strong>{' '}
                 {tracksData.length === 1 ? 'track' : 'tracks'} in common in your{' '}
-                {textData.lowercase} top 100.
+                top 100 tracks {textData.lowercase}.
               </div>
             </div>
             <div className="rank-text" style={{ color: altBackgroundColor }}>
