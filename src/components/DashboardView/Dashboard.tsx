@@ -188,7 +188,7 @@ export function Me() {
         }
       }
     }
-  }, [userData])
+  }, [userData, subExists, startSub, endSub])
 
   const onGetSpotifyData = (e: any) => {
     startSub()

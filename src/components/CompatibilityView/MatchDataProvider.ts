@@ -6,6 +6,9 @@ import uniq from 'lodash/uniq'
 import firebase from '../../util/Firebase'
 import { getArrayWithNestedJSON } from '../../util/fromObjectInLocalStorage'
 
+const _log = (...rest: Array<string | number | object>) => {
+  console.log(`[PREVIEW 🔎]:`, ...rest)
+}
 class MatchDataProvider {
   public matches: Array<[string, IPreviewMatchData]>
   public latestMatch: IPreviewMatchData | null
@@ -52,29 +55,25 @@ class MatchDataProvider {
         this.latestMatch.matchDate.toMillis() >
         latestStoredMatch.matchDate.toMillis()
       ) {
-        console.log(
-          'MATCH PREVIEW: new match detected.',
-          'loaded until:',
-          latestStoredMatch.matchDate.toDate(),
-          '\nNew data from:',
-          this.latestMatch.matchDate.toDate()
+        _log(
+          'new match detected.',
+          '\nCache exists until:',
+          latestStoredMatch.matchDate.toDate().toTimeString(),
+          '\nDatabse reports match:',
+          this.latestMatch.matchDate.toDate().toTimeString()
         )
         await this.loadMatches(latestStoredMatch.matchDate.toDate(), count, '>')
       }
       if (this.matches.length < count) {
-        console.log('MATCH PREVIEW: need additional matches.')
+        _log('need additional matches.')
         await this.loadMatches(new Date(2020, 1, 1), count, '>')
       }
     } else if (this.latestMatch && !this.matches.length) {
-      console.log('MATCH PREVIEW: loading matches for empty storage.')
+      _log('loading matches for empty storage.')
       await this.loadMatches(new Date(2020, 1, 1), count, '>')
     }
     this.requestLength = Math.min(200, this.requestLength + count)
-    console.log(
-      'MATCH PREVIEW:',
-      this.matches.length,
-      'matches loaded from storage.'
-    )
+    _log(this.matches.length, 'matches loaded from storage.')
     if (this.matches.length >= count) {
       this.morePages = true
     }
@@ -103,7 +102,7 @@ class MatchDataProvider {
       this.morePages = false
       return this.matches.slice(0, this.requestLength)
     }
-    console.log('more matched called.')
+    _log('requesting', limit, 'more matches.')
     this.requestLength = Math.min(200, this.requestLength + limit)
     if (!this.matches.length) {
       await this.loadMatches(new Date(2020, 1, 1), limit, '>')
@@ -123,7 +122,7 @@ class MatchDataProvider {
   }
 
   private async loadMatches(startDate: Date, LIMIT = 5, operator: '>' | '<') {
-    console.log('MATCH PREVIEW: calling database for additional matches.')
+    _log('calling database for', LIMIT, 'additional matches.')
     let matchRef
     if (!this.lastDoc) {
       matchRef = firebase.app
@@ -156,7 +155,7 @@ class MatchDataProvider {
         matchData.length === LIMIT &&
         this.lastDoc.data()?.matchDate.toDate() > startDate
       ) {
-        console.log('MATCH PREVIEW: previews in storage too old, removing.')
+        _log('empty storage or previews in storage too old, clearing.')
         localStorage.removeItem('matchPreviews')
         this.matches = matchData
       } else {
@@ -180,6 +179,7 @@ class MatchDataProvider {
         .toISOString() as unknown) as FirebaseFirestore.Timestamp
     })
 
+    _log('wrote', cd?.length, 'matches to storage.')
     const arrOfStr = cd.map((m) => JSON.stringify(m))
     const arrStr = JSON.stringify(arrOfStr)
     localStorage.setItem('matchPreviews', arrStr)
@@ -190,9 +190,7 @@ class MatchDataProvider {
     for (const [i] of matchesA) {
       const index = ids.indexOf(i)
       if (index !== -1) {
-        console.log(
-          'MATCH PREVIEW: rematch detected. removing old match from storage.'
-        )
+        _log('rematch detected. removing duplicate.')
         this.matches.splice(index, 1)
       }
     }

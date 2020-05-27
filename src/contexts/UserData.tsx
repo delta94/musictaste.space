@@ -10,6 +10,18 @@ import { AuthContext } from './Auth'
 
 const _subHandle = (): void | null => null
 
+const _cacheLog = (...rest: Array<string | number | object>) => {
+  console.log(`[CACHE 🙆‍♂️]:`, ...rest)
+}
+
+const _spotifyLog = (...rest: Array<string | number | object>) => {
+  console.log(`[SPOTIFY 🎶]:`, ...rest)
+}
+
+const _firestoreLog = (...rest: Array<string | number | object>) => {
+  console.log(`[FIRESTORE 🔥]:`, ...rest)
+}
+
 export const UserDataContext = React.createContext<{
   spotifyToken: string
   userData: IUserProfile | null
@@ -120,7 +132,7 @@ export const UserDataProvider = ({
             localStorage.setItem('profileLoaded', new Date().toISOString())
           }
         })
-      console.log('subscription started.')
+      _firestoreLog('subscription started.')
       subHandle.current = sub
       setSubStarted(true)
       setSubbedThisSession(true)
@@ -131,7 +143,7 @@ export const UserDataProvider = ({
     if (subStarted) {
       setSubStarted(false)
       subHandle.current()
-      console.log('subscription ended.')
+      _firestoreLog('subscription ended.')
     }
   }
 
@@ -149,7 +161,7 @@ export const UserDataProvider = ({
           differenceInHours(new Date(), profileLoaded) < 48 &&
           localData
         ) {
-          console.log('attempting to serve data from local storage.')
+          _cacheLog('attempting to serve data from local storage.')
           localData.accessTokenRefresh = toTimestamp(
             localData.accessTokenRefresh
           )
@@ -168,7 +180,7 @@ export const UserDataProvider = ({
         } else {
           localStorage.removeItem('userProfile')
           localStorage.removeItem('profileLoaded')
-          console.log('stale data, pulled data from database.')
+          _cacheLog('stale data, pulled data from database.')
           firebase.app
             .firestore()
             .collection('users')
@@ -202,7 +214,7 @@ export const UserDataProvider = ({
         }
         GoogleAnalytics.set({ userId: currentUser?.uid || '' })
       } else {
-        console.log('pulling new user data.')
+        _firestoreLog('pulling new user data.')
         firebase.app
           .firestore()
           .collection('users')
@@ -229,45 +241,8 @@ export const UserDataProvider = ({
             }
           })
       }
-      // } else {
-      //   // if data still needs to be imported, subscribe to document
-      //   if (currentUser && !userData?.importData?.exists && !subStarted) {
-      //     console.log('subscription began.')
-      //     setSubStarted(true)
-      //     sub = firebase.app
-      //       .firestore()
-      //       .collection('users')
-      //       .doc(currentUser?.uid || '')
-      //       .onSnapshot((doc) => {
-      //         const source = doc.metadata.hasPendingWrites
-      //         if (!source && doc.exists) {
-      //           const data = doc.data()
-      //           setSpotifyToken(data?.accessToken)
-      //           setLastRefresh(data?.accessTokenRefresh.toDate())
-      //           setUserData(data as IUserProfile)
-      //           const ld = cloneDeep(data) as IUserProfile
-      //           ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-      //           if (ld.importData?.lastImport) {
-      //             ld.importData.lastImport = toDateString(
-      //               ld.importData?.lastImport
-      //             )
-      //           }
-      //           if (ld.created) {
-      //             ld.created = toDateString(ld.created)
-      //           }
-      //           localStorage.setItem('userProfile', JSON.stringify(ld))
-      //           localStorage.setItem('profileLoaded', new Date().toISOString())
-      //         }
-      //       })
-      //     setSubHandle(sub)
-      //   } else if (userData?.importData?.exists && subStarted) {
-      //     // finish subscription
-      //     setSubStarted(false)
-      //     console.log('subscription ended.')
-      //     sub()
-      //   }
     }
-  }, [currentUser, userData])
+  }, [currentUser, userData, subStarted, subbedThisSession])
 
   useEffect(() => {
     if (
@@ -289,7 +264,7 @@ export const UserDataProvider = ({
           spotifyData.importDate.toDate() <
             userData.importData.lastImport.toDate()
         ) {
-          console.log('data stale. fetched fresh import data.')
+          _cacheLog('data stale. fetched fresh import data.')
           firebase.app
             .firestore()
             .collection('spotify')
@@ -306,11 +281,11 @@ export const UserDataProvider = ({
               }
             })
         } else {
-          console.log('using import data from local cache.')
+          _cacheLog('using import data from local cache.')
           setImportData(spotifyData)
         }
       } else {
-        console.log('fetched fresh import data.')
+        _firestoreLog('fetched fresh import data.')
         firebase.app
           .firestore()
           .collection('spotify')
@@ -328,23 +303,23 @@ export const UserDataProvider = ({
           })
       }
     }
-  }, [userData, currentUser])
+  }, [userData, currentUser, subStarted])
 
   useEffect(() => {
     if (userData && !subStarted) {
       if (!getMeTried) {
         const s = new SpotifyWebApi()
         s.setAccessToken(userData.accessToken)
-        console.log('checking access token.')
+        _spotifyLog('checking access token.')
         setGetMeTried(true)
         s.getMe()
           .then(() => {
             setSpotifyToken(userData.accessToken)
             setGetMePassed(true)
-            console.log('passed.')
+            _spotifyLog('passed.')
           })
           .catch(() => {
-            console.log('refreshing token.')
+            _spotifyLog('refreshing token.')
             firebase
               .refreshSpotifyToken(uidRef.current as string)
               .then((token) => {
@@ -376,7 +351,11 @@ export const UserDataProvider = ({
                     action: 'Refreshed Spotify token into cache on load',
                     label: 'Cache New Token',
                   })
-                  console.log('token refreshed.')
+                  _spotifyLog('token refreshed.')
+                } else {
+                  _spotifyLog(
+                    'could not refresh token, is another tab open? will retry soon.'
+                  )
                 }
               })
           })
@@ -386,7 +365,7 @@ export const UserDataProvider = ({
           !getMePassedRef.current ||
           differenceInMinutes(new Date(), lastRefreshRef.current) > 45
         ) {
-          console.log('spotify token expired, attempting to refresh.')
+          _spotifyLog('spotify token expired, attempting to refresh.')
           firebase
             .refreshSpotifyToken(uidRef.current as string)
             .then((token) => {
@@ -412,7 +391,7 @@ export const UserDataProvider = ({
                     new Date()
                   ) as FirebaseFirestore.Timestamp,
                 })
-                console.log('token refreshed.')
+                _spotifyLog('token refreshed.')
                 GoogleAnalytics.event({
                   category: 'Cache',
                   action: 'Refreshed Spotify token into cache on interval',
@@ -426,7 +405,7 @@ export const UserDataProvider = ({
         clearInterval(ref)
       }
     }
-  }, [userData, getMeTried])
+  }, [userData, getMeTried, subStarted])
 
   return (
     <UserDataContext.Provider

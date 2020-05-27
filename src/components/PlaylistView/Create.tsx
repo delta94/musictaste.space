@@ -22,6 +22,12 @@ import Navbar from '../Navbars/Navbar'
 import Canvas from './Canvas'
 import CreatePlaylistButton from './CreatePlaylistButton'
 
+const _log = (matchId: string) => (
+  ...rest: Array<string | number | object>
+) => {
+  console.log(`[MATCH 🤝] ${matchId}: `, ...rest)
+}
+
 const Create = () => {
   window.scrollTo(0, 0)
   const { currentUser } = useContext(AuthContext)
@@ -176,6 +182,7 @@ const Create = () => {
       })
     }
     if (currentUser && matchId && userData) {
+      const _consoleLog = _log(matchId)
       const matchStr = getFromObject('matches')(matchId)
       if (matchStr && !query.cc) {
         try {
@@ -189,16 +196,16 @@ const Create = () => {
           setMatchData(match)
           getPlaylistImage(match)
           setIsLSData(true)
-          console.log('loaded match from local storage.')
+          _consoleLog('loaded match from local storage.')
           GoogleAnalytics.event({
             category: 'Cache',
             label: 'Loaded Cached Match',
             action: 'Loaded a cached match from local storage',
           })
         } catch (e) {
-          console.log('error with cache')
+          _consoleLog('error with cache')
           clearMatchStorage()
-          console.log('pulling match data from database.')
+          _consoleLog('pulling match data from database.')
           getMatchData(matchId).then((s) => {
             if (s) {
               getPlaylistImage(s)
@@ -207,9 +214,9 @@ const Create = () => {
         }
       } else {
         if (query.cc) {
-          console.log('force pulling match data from database.')
+          _consoleLog('force pulling match data from database.')
         } else {
-          console.log('pulling match data from database.')
+          _consoleLog('pulling match data from database.')
         }
         getMatchData(matchId).then((s) => {
           if (s) {
@@ -236,7 +243,7 @@ const Create = () => {
       md.users = encryptArray(matchData.users)
       const mdStr = JSON.stringify(md)
       setIntoObject('matches')(matchId, mdStr)
-      console.log('stored match data in local storage.')
+      _log(matchId)('stored match data in local storage.')
     }
   }, [matchUser, matchUserId, matchData, matchId, isLSData])
 
