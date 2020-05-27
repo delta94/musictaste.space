@@ -428,3 +428,29 @@ div.spotify-login {
     color: #ffffff !important;
   }
 }
+
+.modal-content {
+  background-color: #ffffff !important;
+}
+
+.donate-modal {
+  &.modal.modal-mini p {
+    text-align: justify !important;
+    line-height: 1.5;
+    font-size: 1em;
+  }
+}
+
+.donate-card {
+  font-weight: bold;
+  width: 300px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  cursor: pointer;
+  height: 40px;
+  margin-bottom: 1em;
+  transition: 0.3s;
+  &:hover {
+    transform: scale(1.1);
+  }
+}

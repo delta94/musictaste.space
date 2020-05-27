@@ -11,6 +11,8 @@ import styled from 'styled-components'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 import firebase from '../../util/Firebase'
+import DonateModal from '../DonateModal'
+import DonateCard from '../DonateModal/DonateCard'
 import LogInButton from '../Home/LogInButton'
 import Navbar from '../Navbars/Navbar'
 import { ArtistFloaters } from './Floaters'
@@ -69,6 +71,18 @@ export function Me() {
   } as IImportStatus)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<null | string>(null)
+  const [modalOpen, setModalOpen] = useState(false)
+  const toggleModal = () => {
+    setModalOpen(!modalOpen)
+    if (!modalOpen) {
+      GoogleAnalytics.event({
+        category: 'Donation',
+        action: 'CTA Opened',
+        label: 'Donation CTA opened on dashboard',
+      })
+    }
+  }
+
   useEffect(() => {
     if (userData) {
       if (!userData.importData) {
@@ -256,6 +270,7 @@ export function Me() {
   if (currentUser) {
     return (
       <>
+        <DonateModal isOpen={modalOpen} toggleModal={toggleModal} />
         <SpotifyApiContext.Provider value={spotifyToken}>
           <Navbar />
           <Helmet>
@@ -315,6 +330,16 @@ export function Me() {
                         </>
                       ) : importStatus.exists ? (
                         <>
+                          {userData &&
+                          (!userData.created ||
+                            (userData.created &&
+                              differenceInSeconds(
+                                new Date(),
+                                userData?.created.toDate()
+                              ) >
+                                30 * 60)) ? (
+                            <DonateCard onClick={toggleModal} />
+                          ) : null}
                           <Menu1 className="menu button1">
                             <span
                               id="menu-button-1"
