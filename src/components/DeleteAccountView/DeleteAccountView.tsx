@@ -28,14 +28,14 @@ const DeleteAccountView = () => {
       const matchCode = userData.matchCode
       const anonMatchCode = userData.anonMatchCode
       setLoading(true)
-      console.log('deleting', matchCode)
+      console.log('[ACCOUNT] deleting', matchCode)
       await firebase.app
         .firestore()
         .collection('users-lookup')
         .doc(matchCode)
         .delete()
         .catch((err) => console.error(err))
-      console.log('deleting', anonMatchCode)
+      console.log('[ACCOUNT] deleting', anonMatchCode)
       await firebase.app
         .firestore()
         .collection('users-lookup')
@@ -48,7 +48,7 @@ const DeleteAccountView = () => {
         .doc(currentUser?.uid)
         .delete()
         .catch((err) => console.error(err))
-      console.log('deleting user')
+      console.log('[ACCOUNT] deleting user')
       await firebase.app
         .auth()
         .currentUser?.delete()

@@ -21,7 +21,7 @@ const LinkDiscordButton = () => {
     } else {
       endSub()
     }
-  }, [currentUser, started])
+  }, [currentUser, started, startSub, endSub])
 
   useEffect(() => {
     if (userData?.discord && !unlinked) {
