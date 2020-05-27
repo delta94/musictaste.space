@@ -26,7 +26,7 @@ import Tracks from './Tracks'
 const _log = (matchId: string) => (
   ...rest: Array<string | number | object>
 ) => {
-  console.log(`[MATCH 🤝] ${matchId}: `, ...rest)
+  console.log(`[MATCH 🤝] ${matchId}:`, ...rest)
 }
 
 const Result = () => {

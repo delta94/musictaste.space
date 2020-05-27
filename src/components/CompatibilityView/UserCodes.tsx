@@ -1,6 +1,22 @@
 import copy from 'copy-to-clipboard'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
+import {
+  FacebookShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TumblrShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from 'react-share'
+import {
+  FacebookIcon,
+  RedditIcon,
+  TelegramIcon,
+  TumblrIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from 'react-share'
 import Switch from 'react-switch'
 import { useToasts } from 'react-toast-notifications'
 import {
@@ -15,11 +31,27 @@ import {
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 
+const SHARE_MESSAGE =
+  "Let's see how compatible our Spotify music tastes are on musictaste.space 🙌!"
+
+const SHARE_TITLE = 'Compare music tastes with me ✨!'
+
 function UserCodes() {
   const { currentUser } = useContext(AuthContext)
   const { userData } = useContext(UserDataContext)
   const [anonIDDisplay, setAnonIDDisplay] = useState(false)
+  const [url, setUrl] = useState('')
   const { addToast } = useToasts()
+
+  useEffect(() => {
+    if (userData) {
+      setUrl(
+        (process.env.REACT_APP_MATCH_URL_BASE as string) +
+          '/match?request=' +
+          (anonIDDisplay ? userData.anonMatchCode : userData.matchCode)
+      )
+    }
+  }, [url, anonIDDisplay, userData])
 
   const copyIdToClipboard = (e: any) => {
     if (!userData) {
@@ -77,11 +109,7 @@ function UserCodes() {
     document
       .getElementsByClassName('url-copy-icon')[0]
       .classList.remove('animated', 'tada')
-    copy(
-      (process.env.REACT_APP_MATCH_URL_BASE as string) +
-        '/match?request=' +
-        (anonIDDisplay ? userData.anonMatchCode : userData.matchCode)
-    )
+    copy(url)
     document
       .getElementsByClassName('url-copy-icon')[0]
       .classList.add('animated', 'tada')
@@ -134,6 +162,53 @@ function UserCodes() {
                 </InputGroupText>
               </InputGroupAddon>
             </InputGroup>
+            <div className="d-flex flex-row mt-2 mb-2 justify-content-center">
+              <FacebookShareButton
+                url={url}
+                className="social-button"
+                quote={SHARE_MESSAGE}
+              >
+                <FacebookIcon path={''} size={32} round={true} />
+              </FacebookShareButton>
+              <TwitterShareButton
+                url={url}
+                className="social-button"
+                title={SHARE_TITLE}
+                hashtags={['musictaste']}
+                related={['_kalpal']}
+              >
+                <TwitterIcon path={''} size={32} round={true} />
+              </TwitterShareButton>
+              <TelegramShareButton
+                url={url}
+                className="social-button"
+                title={SHARE_TITLE}
+              >
+                <TelegramIcon path={''} size={32} round={true} />
+              </TelegramShareButton>
+              <WhatsappShareButton
+                url={url}
+                className="social-button"
+                title={SHARE_TITLE}
+              >
+                <WhatsappIcon path={''} size={32} round={true} />
+              </WhatsappShareButton>
+              <TumblrShareButton
+                url={url}
+                className="social-button"
+                title={SHARE_TITLE}
+                caption={SHARE_MESSAGE}
+              >
+                <TumblrIcon path={''} size={32} round={true} />
+              </TumblrShareButton>
+              <RedditShareButton
+                url={url}
+                className="social-button"
+                title={SHARE_TITLE}
+              >
+                <RedditIcon path={''} size={32} round={true} />
+              </RedditShareButton>
+            </div>
             <p>Or share your code:</p>
             <div className="anon-id-row">
               <InputGroup

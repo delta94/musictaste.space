@@ -106,6 +106,28 @@ const Match = () => {
           content="Accept your invite to match your music taste based on your Spotify data! \
           musicmatch.space is an app to help you see how compatible your music taste is with your friends."
         />
+        <meta
+          name="og:title"
+          content={
+            'Match with ' +
+            (matchUser
+              ? matchUser?.anon
+                ? query.request
+                : matchUser?.displayName
+              : query.request) +
+            ' - musictaste.space'
+          }
+        />
+        <meta
+          name="og:description"
+          content={`Accept ${
+            matchUser
+              ? matchUser.anon
+                ? query.request
+                : matchUser.displayName
+              : 'this cool person'
+          }'s invite to match your music taste based on your Spotify data!`}
+        />
         <meta name="keywords" content="spotify,music,match,compatibility" />
       </Helmet>
       <div className="match main-div">

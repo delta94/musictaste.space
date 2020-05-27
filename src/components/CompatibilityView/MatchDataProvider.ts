@@ -145,6 +145,7 @@ class MatchDataProvider {
         .startAfter(this.lastDoc)
     }
     const docs = await matchRef.get()
+    _log('received', docs.docs.length, 'new results.')
     const matchData: Array<[string, IPreviewMatchData]> = docs.docs.map((d) => [
       d.id,
       d.data() as IPreviewMatchData,
