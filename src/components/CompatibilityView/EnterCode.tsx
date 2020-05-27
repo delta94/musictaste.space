@@ -51,7 +51,7 @@ const EnterCode = ({ userData }: { userData: IUserProfile }) => {
           label: 'Match',
           action: 'Code entered from Compatibility page',
         })
-        history.push('/match?request=' + code)
+        history.push('/request/' + code)
       } else {
         setExists(false)
         setFails(fails + 1)

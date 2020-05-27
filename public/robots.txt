@@ -5,3 +5,4 @@ Allow: /
 
 User-agent: Googlebot
 Disallow: /match
+Disallow: /request

@@ -99,7 +99,7 @@ export function Me() {
     if (importStatus.exists && currentUser) {
       if (redirectMatch) {
         localStorage.removeItem('redirectMatch')
-        history.push('/match?request=' + redirectMatch)
+        history.push('/request/' + redirectMatch)
       } else if (redirectPage) {
         localStorage.removeItem('redirectPage')
         history.push(redirectPage)

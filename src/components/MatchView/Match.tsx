@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Confetti from 'react-confetti'
 import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
@@ -15,7 +15,6 @@ import ConfirmOrLoginButton from './ConfirmOrLoginButton'
 
 const Match = () => {
   const history = useHistory()
-  const location = useLocation()
   window.scrollTo(0, 0)
   const { currentUser } = useContext(AuthContext)
   const { userData } = useContext(UserDataContext)
@@ -25,13 +24,13 @@ const Match = () => {
   const [rematch, setRematch] = useState(false)
   const [matchCode, setMatchCode] = useState('')
   const [matchChecked, setMatchChecked] = useState(false)
-  const query = qs.parse(location.search)
   const { width, height } = useWindowSize()
+  const { matchId } = useParams()
   if (
     userData &&
-    (!query.request ||
-      query.request === userData.matchCode ||
-      query.request === userData.anonMatchCode)
+    (!matchId ||
+      matchId === userData.matchCode ||
+      matchId === userData.anonMatchCode)
   ) {
     history.push('/compatibility')
   }
@@ -75,16 +74,16 @@ const Match = () => {
         }
       }
     }
-    if (currentUser && query.request && userData) {
+    if (currentUser && matchId && userData) {
       if (!userData.importData || !userData.importData.exists) {
-        localStorage.setItem('redirectMatch', query.request as string)
+        localStorage.setItem('redirectMatch', matchId as string)
         localStorage.setItem('redirectMatchDate', new Date().toString())
-        history.push(`/dashboard?callback=true&page=match&id=${query.request}`)
+        history.push(`/dashboard?callback=true&page=match&id=${matchId}`)
       } else {
-        getInfo(query.request as string)
+        getInfo(matchId as string)
       }
-    } else if (query.request) {
-      setDataOnly(query.request as string)
+    } else if (matchId) {
+      setDataOnly(matchId as string)
     }
   })
 
@@ -96,9 +95,9 @@ const Match = () => {
           Match with{' '}
           {matchUser
             ? matchUser.anon
-              ? query.request
+              ? matchId
               : matchUser.displayName
-            : query.request}{' '}
+            : matchId}{' '}
           - musictaste.space
         </title>
         <meta
@@ -112,9 +111,9 @@ const Match = () => {
             'Match with ' +
             (matchUser
               ? matchUser?.anon
-                ? query.request
+                ? matchId
                 : matchUser?.displayName
-              : query.request) +
+              : matchId) +
             ' - musictaste.space'
           }
         />
@@ -123,7 +122,7 @@ const Match = () => {
           content={`Accept ${
             matchUser
               ? matchUser.anon
-                ? query.request
+                ? matchId
                 : matchUser.displayName
               : 'this cool person'
           }'s invite to match your music taste based on your Spotify data!`}
@@ -207,7 +206,7 @@ const Match = () => {
                   {matchUser.anon ? ' anonymous user:' : ':'}
                 </p>
                 <p className="user-name">
-                  {matchUser.anon ? query.request : matchUser.displayName}
+                  {matchUser.anon ? matchId : matchUser.displayName}
                 </p>
               </>
             ) : (
@@ -217,7 +216,7 @@ const Match = () => {
             <>
               <p className="smaller-text">
                 {matchUser.anon
-                  ? 'Anonymous user ' + query.request
+                  ? 'Anonymous user ' + matchId
                   : matchUser.displayName}{' '}
                 wants to know how compatible your music tastes are. Sign in with
                 Spotify to get your own code and find out!
@@ -229,7 +228,7 @@ const Match = () => {
         </div>
         <div className="start-button animated fadeInUp">
           <ConfirmOrLoginButton
-            compareUser={query.request}
+            compareUser={matchId}
             anon={matchUser && matchUser.anon}
             rematch={{ rematch, matchCode }}
           />
