@@ -1,7 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 
-User-agent: Googlebot
-Disallow: /match/
-
 User-agent: *
 Allow: /
+
+User-agent: Googlebot
+Disallow: /match
