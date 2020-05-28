@@ -64,7 +64,7 @@ const Create = () => {
       .generatePlaylist(
         matchId as string,
         currentUser?.uid || '',
-        userData.serverState
+        userData.accessToken
       )
       .catch((err) => (playlistError = err))
     if (res.success && res.tracks && matchUser) {
