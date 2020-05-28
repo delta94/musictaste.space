@@ -337,7 +337,9 @@
         }
         @media (max-width: 1600px) {
           top: calc(#{'100vh - 300px'});
-          left: calc(#{'-30vw'});
+          left: -450px;
+          height: 280px;
+          width: 280px;
         }
         @media (max-width: 900px) {
           display: none;
