@@ -309,16 +309,18 @@ class Firebase {
   public async generatePlaylist(
     matchId: string,
     reqUser: string,
-    state: string
+    accessToken: string
   ): Promise<{
     success: boolean
     error?: string[]
     tracks?: string[]
   }> {
     const cf = this.functions.httpsCallable('createPlaylist')
-    const data = await cf({ matchId, userId: reqUser, state }).then(
-      (res) => res.data
-    )
+    const data = await cf({
+      matchId,
+      userId: reqUser,
+      token: accessToken,
+    }).then((res) => res.data)
     if (data) {
       return data
     } else {
