@@ -28,7 +28,7 @@ function ConfirmOrLogInButton(props: any) {
     // if mobile, redirect to login instead of pop up login
     isMobile
       ? history.push('/login')
-      : window.open('login', '_blank', 'height=585,width=500')
+      : window.open('/login', '_blank', 'height=585,width=500')
   }
 
   const startCompareUsers = async () => {
