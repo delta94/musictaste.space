@@ -23,9 +23,9 @@ import RedirectMatch from './components/RedirectView'
 import Result from './components/ResultView/Result'
 import Tally from './components/TallyView/Tally'
 
-import { withTracker } from './contexts/Analytics'
 import { AuthProvider } from './contexts/Auth'
 import { UserDataProvider } from './contexts/UserData'
+import { withTracker } from './hooks/withTracker'
 
 /// <reference path="./global.d.ts" />
 import { Helmet } from 'react-helmet'

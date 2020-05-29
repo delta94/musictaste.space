@@ -345,7 +345,7 @@ export const UserDataProvider = ({
                     }
                     localStorage.setItem('userProfile', JSON.stringify(ld))
                     setUserData({
-                      ...userData,
+                      ...freshUserData,
                     })
                     _spotifyLog('database token passed, no refresh needed.')
                   })
