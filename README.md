@@ -1,3 +1,13 @@
+# Compare Your Music Taste With Friends!
+
+This is the frontend repository for [musictaste.space](https://musictaste.space), a web app that lets users see insights into their listening habits and compare their music taste with friends (or strangers), utilising the Spotify API.
+
+This is the _frontend repository_ for the project, which leverages a fully serverless backend powered by [Firebase Auth](https://firebase.google.com/products/auth), [Firebase Firestore](https://firebase.google.com/products/firestore) and [Firebase Cloud Functions](hhttps://firebase.google.com/products/functions).
+
+To reduce on intensive document reads, many global level documents are cached through the [Vercel Cloud Function CDN](https://vercel.com/edge-network).
+
+**NOTE: Due to security concerns and protecting user data, the backend repository with the cloud function API services is currently private. You cannot develop on this repository without the relevant .env files, Vercel API development endpoints, and the Firebase emulator running. Once this project ends, I may make this repository public!**
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
