@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { Link, useHistory } from 'react-router-dom'
+import { useToasts } from 'react-toast-notifications'
 import { Button } from 'reactstrap'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 import firebase from '../../util/Firebase'
+
 import { Dot } from '../Aux/Dot'
 
 function ConfirmOrLogInButton(props: any) {
@@ -15,6 +17,7 @@ function ConfirmOrLogInButton(props: any) {
   const [started, setStarted] = useState(false)
   const anon = props.anon
 
+  const { addToast } = useToasts()
   function handleClickLogin() {
     const isMobile = window.matchMedia('only screen and (max-width: 760px)')
       .matches
@@ -50,8 +53,13 @@ function ConfirmOrLogInButton(props: any) {
           </div>
         </>
       )
-      t.then((code) => {
-        history.push(`/match/${code}${props.rematch.rematch ? '?cc=1' : ''}`)
+      t.then(({ success, code, error }) => {
+        if (success && code) {
+          history.push(`/match/${code}${props.rematch.rematch ? '?cc=1' : ''}`)
+        }
+        if (!success && error) {
+          addToast(error, { appearance: 'error', autoDismiss: false })
+        }
       })
     }
   }

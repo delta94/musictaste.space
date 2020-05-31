@@ -7,7 +7,12 @@ const DonateCard = ({ onClick }: { onClick: () => void }) => {
       onClick={onClick}
     >
       <div className="pl-2 pr-4 d-flex flex-row align-items-center justify-content-between">
-        <div>📫 a message from @_kalpal</div>
+        <div>
+          <span role="img" aria-label="mailbox">
+            📫
+          </span>{' '}
+          a message from @_kalpal
+        </div>
         <div className="icon">
           <i className="fas fa-chevron-right arrow submit-arrow" />
         </div>
