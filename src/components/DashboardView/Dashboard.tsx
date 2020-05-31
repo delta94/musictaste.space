@@ -6,6 +6,7 @@ import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
+import { useToasts } from 'react-toast-notifications'
 import { Col, Row } from 'reactstrap'
 import styled from 'styled-components'
 import { AuthContext } from '../../contexts/Auth'
@@ -54,7 +55,7 @@ const emptyImport = {
   },
 }
 
-export function Me() {
+export const Me = () => {
   const { currentUser } = useContext(AuthContext)
   const {
     userData,
@@ -63,7 +64,9 @@ export function Me() {
     startSub,
     endSub,
     subExists,
+    importDataExists,
   } = useContext(UserDataContext)
+  const { addToast } = useToasts()
   const history = useHistory()
   const [importStatus, setImportStatus] = useState({
     exists: false,
@@ -92,6 +95,15 @@ export function Me() {
       }
     }
   }, [userData])
+
+  useEffect(() => {
+    if (!importDataExists) {
+      addToast(
+        "⚠️ Due to database reset, you'll need to re-import your data from the Dashboard, sorry!",
+        { appearance: 'error', autoDismiss: false }
+      )
+    }
+  }, [importDataExists, addToast])
 
   useEffect(() => {
     if (
@@ -328,7 +340,7 @@ export function Me() {
                             Click here to retry
                           </a>
                         </>
-                      ) : importStatus.exists ? (
+                      ) : importDataExists && importStatus.exists ? (
                         <>
                           {userData &&
                           (!userData.created ||

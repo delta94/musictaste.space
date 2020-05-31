@@ -31,6 +31,7 @@ export const UserDataContext = React.createContext<{
   endSub: () => void | null
   forceRefresh: () => Promise<void> | null
   subExists: boolean
+  importDataExists: boolean
 }>({
   spotifyToken: '',
   userData: null,
@@ -40,6 +41,7 @@ export const UserDataContext = React.createContext<{
   startSub: () => null,
   forceRefresh: () => null,
   subExists: false,
+  importDataExists: true,
 })
 
 const toTimestamp = (time: FirebaseFirestore.Timestamp) => {
@@ -69,6 +71,7 @@ export const UserDataProvider = ({
   const [fromCache, setFromCache] = useState<null | Date>(null)
   const [getMePassed, setGetMePassed] = useState(false)
   const [getMeTried, setGetMeTried] = useState(false)
+  const [importDataExists, setImportDataExists] = useState(true)
   const [subbedThisSession, setSubbedThisSession] = useState(false)
   const subHandle = useRef(_subHandle)
   const tokenRef = useRef(spotifyToken)
@@ -272,12 +275,15 @@ export const UserDataProvider = ({
             .get()
             .then((d) => {
               if (d.exists) {
+                setImportDataExists(true)
                 const data = d.data() as ISpotifyUserData
                 const ld = cloneDeep(data) as ISpotifyUserData
                 // @ts-ignore
                 ld.importDate = ld.importDate.toDate().toISOString()
                 setImportData(ld as ISpotifyUserData)
                 localStorage.setItem('spotifyData', JSON.stringify(ld))
+              } else {
+                setImportDataExists(false)
               }
             })
         } else {
@@ -293,12 +299,15 @@ export const UserDataProvider = ({
           .get()
           .then((d) => {
             if (d.exists) {
+              setImportDataExists(true)
               const data = d.data()
               const ld = cloneDeep(data) as ISpotifyUserData
               // @ts-ignore
               ld.importDate = ld.importDate.toDate().toISOString()
               setImportData(ld as ISpotifyUserData)
               localStorage.setItem('spotifyData', JSON.stringify(ld))
+            } else {
+              setImportDataExists(false)
             }
           })
       }
@@ -455,6 +464,7 @@ export const UserDataProvider = ({
         endSub,
         forceRefresh,
         subExists: subStarted,
+        importDataExists,
       }}
     >
       {children}
