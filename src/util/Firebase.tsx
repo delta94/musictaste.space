@@ -137,7 +137,7 @@ class Firebase {
     uid: string,
     region: string,
     tries = 0
-  ): Promise<string | boolean> {
+  ): Promise<{ success: boolean; error?: string; code?: string }> {
     const cf = this.functions.httpsCallable('compareUsers')
     const res = await cf({
       userId: user,
@@ -146,20 +146,13 @@ class Firebase {
       uid,
       region,
     }).then((res) => res.data)
-    if (res) {
-      return res.matchId
+    if (res.success) {
+      return { success: true, code: res.matchId }
+    }
+    if (!res.success) {
+      return { success: false, error: res.error || 'Internal server error.' }
     } else {
-      if (tries === 2) {
-        return false
-      }
-      return await this.compareUsers(
-        user,
-        matchUser,
-        state,
-        uid,
-        region,
-        tries + 1
-      )
+      return { success: false, error: 'Internal server error.' }
     }
   }
 

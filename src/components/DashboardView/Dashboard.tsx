@@ -333,11 +333,10 @@ export function Me() {
                           {userData &&
                           (!userData.created ||
                             (userData.created &&
-                              differenceInSeconds(
+                              differenceInDays(
                                 new Date(),
                                 userData?.created.toDate()
-                              ) >
-                                30 * 60)) ? (
+                              ) > 7)) ? (
                             <DonateCard onClick={toggleModal} />
                           ) : null}
                           <Menu1 className="menu button1">
@@ -398,7 +397,7 @@ export function Me() {
                           <p className="menu menu-text">
                             {importStatus.loading
                               ? "Looks like something may have gone wrong, let's try that again..."
-                              : 'Hey, first timer! Before we continue...'}
+                              : 'Heya! Before we continue...'}
                           </p>
                           <Menu1
                             className="menu button1"
