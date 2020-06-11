@@ -4,7 +4,10 @@ import debounce from 'lodash/debounce'
 import throttle from 'lodash/throttle'
 import uniq from 'lodash/uniq'
 import firebase from '../../util/Firebase'
-import { getArrayWithNestedJSON } from '../../util/fromObjectInLocalStorage'
+import {
+  getArrayWithNestedJSON,
+  removeFromObject,
+} from '../../util/fromObjectInLocalStorage'
 
 const _log = (...rest: Array<string | number | object>) => {
   console.log(`[PREVIEW 🔎]:`, ...rest)
@@ -161,7 +164,7 @@ class MatchDataProvider {
         this.matches = matchData
       } else {
         this.removeDuplicates(matchData)
-
+        matchData.map((m) => removeFromObject('matches')(m[1].matchId))
         this.matches = this.matches.concat(matchData)
       }
       this.sortMatches()
