@@ -65,6 +65,22 @@ export const setIntoObject = (object: string) => (
   return
 }
 
+export const removeFromObject = (object: string) => (key: string) => {
+  const dataObjStr = localStorage.getItem(object)
+  if (dataObjStr) {
+    const dataObj = JSON.parse(dataObjStr)
+    if (dataObj[key]) {
+      console.log(
+        `[PREVIEW 🔎]: potentially stale match data for`,
+        key,
+        ', removed.'
+      )
+      delete dataObj[key]
+      localStorage.setItem(object, JSON.stringify(dataObj))
+    }
+  }
+}
+
 export const decrypt = (str: string) => {
   return cryp.decrypt(str)
 }
