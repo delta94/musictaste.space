@@ -75,6 +75,8 @@ export const Me = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<null | string>(null)
   const [modalOpen, setModalOpen] = useState(false)
+  const [displayModal, setDisplayModal] = useState(false)
+
   const toggleModal = () => {
     setModalOpen(!modalOpen)
     if (!modalOpen) {
@@ -83,8 +85,18 @@ export const Me = () => {
         action: 'CTA Opened',
         label: 'Donation CTA opened on dashboard',
       })
+    } else {
+      localStorage.setItem('donateModal', '0')
+      setDisplayModal(false)
     }
   }
+
+  useEffect(() => {
+    const donateModalClosed = localStorage.getItem('donateModal')
+    if (!donateModalClosed) {
+      setDisplayModal(true)
+    }
+  }, [])
 
   useEffect(() => {
     if (userData) {
@@ -343,6 +355,7 @@ export const Me = () => {
                       ) : importDataExists && importStatus.exists ? (
                         <>
                           {userData &&
+                          displayModal &&
                           (!userData.created ||
                             (userData.created &&
                               differenceInDays(

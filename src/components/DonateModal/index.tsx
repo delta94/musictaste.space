@@ -39,22 +39,23 @@ const DonateModal = (props: DonateModalProps) => {
         </p>
         <p>
           musictaste.space started off as a fun little summer project and has
-          now exploded into crunching over 50 thousand matches a day! With this
-          recent burst in love, costs have also skyrocketed.{' '}
+          now exploded into crunching matches for thousands of users every day!
+          With this recent burst in love, costs have also skyrocketed.{' '}
           <span role="img" aria-label="rocket">
             🚀
           </span>
         </p>
         <p>
-          musictaste.space runs no ads and doesn't sell your data, so it's left
-          to our amazing and generous community of users for keeping it alive -
-          people like yourself{' '}
+          musictaste.space doesn't run ads and doesn't sell your data, so it's
+          left to our amazing and generous community of users for keeping it
+          alive - people like yourself{' '}
           <span role="img" aria-label="hands in the air">
             🙌
           </span>
           ! Without them, the website would shut down in a matter of days. If
           you can spare a few dollarydoos to help keep the lights on, please
-          consider donating! If not, that's cool too!
+          consider donating! If not, that's cool too, this message will *poof*
+          when you click close!
         </p>
         <p>
           Stay safe, and happy comparing{' '}
