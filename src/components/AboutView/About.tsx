@@ -195,7 +195,10 @@ const About = () => {
             </Col>
             <Col xs="3">
               <p className="count">
-                {tallyData ? Math.floor(tallyData.matches / 1000) : '-'}K
+                {tallyData
+                  ? Math.floor((tallyData.matches * 100) / 1000 / 1000) / 100
+                  : '-'}
+                M
               </p>
               <p className="count-heading">Matches</p>
             </Col>
