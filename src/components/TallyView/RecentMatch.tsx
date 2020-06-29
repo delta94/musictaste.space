@@ -65,12 +65,12 @@ const RecentMatch = ({
         ) : null}
       </div>
       <div className="col-md-3 col-6 d-flex flex-column mt-3">
-        <div className="region-heading" style={{ color: textColor }}>
+        {/* <div className="region-heading" style={{ color: textColor }}>
           Region
         </div>
         <div className="region-name" style={{ color: altTextColor }}>
           {region ? region : 'n/a'}
-        </div>
+        </div> */}
         <div className="region-heading" style={{ color: textColor }}>
           Compatibility
         </div>
