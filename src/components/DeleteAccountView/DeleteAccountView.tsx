@@ -42,6 +42,22 @@ const DeleteAccountView = () => {
         .doc(anonMatchCode)
         .delete()
         .catch((err) => console.error(err))
+
+      await firebase.app
+        .firestore()
+        .collection('users')
+        .doc(currentUser?.uid)
+        .collection('matches')
+        .get()
+        .then((d) =>
+          d.docs.map((a) =>
+            firebase.app
+              .firestore()
+              .doc(`users/${currentUser?.uid}/matches/${a.id}`)
+              .delete()
+          )
+        )
+        .catch((err) => console.error(err))
       await firebase.app
         .firestore()
         .collection('users')
