@@ -4,6 +4,7 @@ import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory, useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import { useToasts } from 'react-toast-notifications'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 import useWindowSize from '../../hooks/useWindowSize'
@@ -11,6 +12,8 @@ import { getUserFromId } from '../../util/api'
 import firebase from '../../util/Firebase'
 import Navbar from '../Navbars/Navbar'
 import ConfirmOrLoginButton from './ConfirmOrLoginButton'
+
+let toasted = false
 
 const Match = () => {
   const history = useHistory()
@@ -25,6 +28,7 @@ const Match = () => {
   const [matchChecked, setMatchChecked] = useState(false)
   const { width, height } = useWindowSize()
   const { matchId } = useParams()
+  const { addToast } = useToasts()
   if (
     userData &&
     (!matchId ||
@@ -40,7 +44,15 @@ const Match = () => {
         if (d) {
           setMatchUser(d)
         } else {
-          history.push('/compatibility')
+          if (!toasted) {
+            addToast(
+              "Hmmmm, I couldn't find that user in my database. Ask them to check their code again!",
+              { appearance: 'error', autoDismiss: true }
+            )
+            history.push('/compatibility')
+            toasted = true
+            return
+          }
         }
       }
       if (userData && !matchChecked) {
