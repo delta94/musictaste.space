@@ -105,14 +105,14 @@ const Create = () => {
         .getPlaylistTracks(d.id)
         .catch((err) => (playlistError = err))
       if (tracks.total !== 0) {
-        firebase
-          .createPlaylistInUser(
-            currentUser?.uid || '',
-            matchUserId,
-            d.id,
-            playlistData
-          )
-          .catch()
+        // firebase
+        //   .createPlaylistInUser(
+        //     currentUser?.uid || '',
+        //     matchUserId,
+        //     d.id,
+        //     playlistData
+        //   )
+        //   .catch()
         GoogleAnalytics.event({
           category: 'Interaction',
           label: 'Create Playlist',
