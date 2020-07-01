@@ -4,10 +4,10 @@
 
 import SimpleCrypto from 'simple-crypto-js'
 
-const ENDPOINT_MATCH_USER = 'match-user'
-const ENDPOINT_TALLY = 'tally'
-const ENDPOINT_TOAST = 'toast'
-const ENDPOINT_REGION_AVERAGE = 'region-average'
+const ENDPOINT_MATCH_USER = 'getMatchUser'
+const ENDPOINT_TALLY = 'getTally'
+const ENDPOINT_TOAST = 'getToast'
+const ENDPOINT_REGION_AVERAGE = 'getRegionAverage'
 
 const cryp = new SimpleCrypto('spotify-compatibility')
 

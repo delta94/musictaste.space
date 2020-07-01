@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.1",
     "@now/node": "^1.6.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "animate.css": "^4.1.0",
     "color": "^3.1.2",
     "copy-to-clipboard": "^3.2.0",
     "date-fns": "^2.8.1",
@@ -44,9 +46,11 @@
     "styled-components": "^4.4.1",
     "tslint-eslint-rules": "^5.4.0",
     "tslint-react": "^4.1.0",
+    "typeface-montserrat": "^0.0.75",
     "typescript": "~3.7.2"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -90,6 +94,7 @@
     "eslint-plugin-react": "^7.19.0",
     "prettier": "^2.0.4",
     "tslint": "^5.20.1",
-    "tslint-config-prettier": "^1.18.0"
+    "tslint-config-prettier": "^1.18.0",
+    "webpack-bundle-analyzer": "^3.8.0"
   }
 }
