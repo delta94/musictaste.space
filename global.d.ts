@@ -55,7 +55,7 @@ interface ISpotifyUserData {
   shortTermAudioFeatures: IUserAudioFeatures
   obscurifyScoreLongTerm: number
   obscurifyScoreShortTerm: number
-  importDate: FirebaseFirestore.Timestamp
+  importDate: firebase.firestore.Timestamp
 }
 
 interface IUsersLookupData {
@@ -103,7 +103,7 @@ interface IMatchData {
 
 interface IUserProfile {
   accessToken: string
-  accessTokenRefresh: FirebaseFirestore.Timestamp
+  accessTokenRefresh: firebase.firestore.Timestamp
   matchCode: string
   anonMatchCode: string
   displayName: string
@@ -113,12 +113,12 @@ interface IUserProfile {
   photoURL: string
   state: string
   region?: string
-  created?: FirebaseFirestore.Timestamp
+  created?: firebase.firestore.Timestamp
   serverState: string
   discord?: { id: string; avatar: string }
   importData: {
     exists: boolean
-    lastImport?: FirebaseFirestore.Timestamp
+    lastImport?: firebase.firestore.Timestamp
     status?: {
       topTracks: boolean
       topArtists: boolean

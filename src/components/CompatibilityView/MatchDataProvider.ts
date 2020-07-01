@@ -180,7 +180,7 @@ class MatchDataProvider {
     cd.forEach((m) => {
       m[1].matchDate = (m[1].matchDate
         .toDate()
-        .toISOString() as unknown) as FirebaseFirestore.Timestamp
+        .toISOString() as unknown) as firebase.firestore.Timestamp
     })
 
     _log('wrote', cd?.length, 'matches to storage.')

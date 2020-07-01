@@ -44,15 +44,17 @@ export const UserDataContext = React.createContext<{
   importDataExists: true,
 })
 
-const toTimestamp = (time: FirebaseFirestore.Timestamp) => {
+const toTimestamp = (time: firebase.firestore.Timestamp) => {
   return firestore.Timestamp.fromDate(
     // @ts-ignore
     new Date(time)
-  ) as FirebaseFirestore.Timestamp
+  ) as firebase.firestore.Timestamp
 }
 
-const toDateString = (time: FirebaseFirestore.Timestamp) => {
-  return (time.toDate().toISOString() as unknown) as FirebaseFirestore.Timestamp
+const toDateString = (time: firebase.firestore.Timestamp) => {
+  return (time
+    .toDate()
+    .toISOString() as unknown) as firebase.firestore.Timestamp
 }
 
 export const UserDataProvider = ({
@@ -260,7 +262,7 @@ export const UserDataProvider = ({
         spotifyData.importDate = firestore.Timestamp.fromDate(
           // @ts-ignore
           new Date(spotifyData.importDate)
-        ) as FirebaseFirestore.Timestamp
+        ) as firebase.firestore.Timestamp
         if (
           spotifyData.importDate &&
           userData.importData?.lastImport &&
@@ -369,7 +371,7 @@ export const UserDataProvider = ({
                           setLastRefresh(new Date())
                           const ld = cloneDeep(userData)
                           ld.accessToken = token
-                          ld.accessTokenRefresh = (new Date().toISOString() as unknown) as FirebaseFirestore.Timestamp
+                          ld.accessTokenRefresh = (new Date().toISOString() as unknown) as firebase.firestore.Timestamp
                           if (ld.importData?.lastImport) {
                             ld.importData.lastImport = toDateString(
                               ld.importData.lastImport
@@ -387,7 +389,7 @@ export const UserDataProvider = ({
                             accessToken: token,
                             accessTokenRefresh: firestore.Timestamp.fromDate(
                               new Date()
-                            ) as FirebaseFirestore.Timestamp,
+                            ) as firebase.firestore.Timestamp,
                           })
                           GoogleAnalytics.event({
                             category: 'Cache',
@@ -420,7 +422,7 @@ export const UserDataProvider = ({
                 setLastRefresh(new Date())
                 const ld = cloneDeep(userData)
                 ld.accessToken = token
-                ld.accessTokenRefresh = (new Date().toISOString() as unknown) as FirebaseFirestore.Timestamp
+                ld.accessTokenRefresh = (new Date().toISOString() as unknown) as firebase.firestore.Timestamp
                 if (ld.importData?.lastImport) {
                   ld.importData.lastImport = toDateString(
                     ld.importData.lastImport
@@ -435,7 +437,7 @@ export const UserDataProvider = ({
                   accessToken: token,
                   accessTokenRefresh: firestore.Timestamp.fromDate(
                     new Date()
-                  ) as FirebaseFirestore.Timestamp,
+                  ) as firebase.firestore.Timestamp,
                 })
                 _spotifyLog('token refreshed.')
                 GoogleAnalytics.event({
