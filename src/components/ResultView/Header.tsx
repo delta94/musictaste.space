@@ -2,12 +2,13 @@ import Color from 'color'
 import differenceInDays from 'date-fns/differenceInDays'
 import Vibrant from 'node-vibrant'
 import qs from 'query-string'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CountUp from 'react-countup'
-import Reward from 'react-rewards'
 import { useLocation } from 'react-router'
 import { Artist, Track } from 'react-spotify-api'
 import { useToasts } from 'react-toast-notifications'
+import useWindowSize from '../../hooks/useWindowSize'
+import SizedConfetti from '../../util/SizedConfetti'
 
 const Header = ({
   matchData,
@@ -20,15 +21,16 @@ const Header = ({
   matchUserId: string
   userData: IUserProfile
 }) => {
-  const percentageRef = useRef(null)
   const [artistBackgroundURL, setArtistBackgroundURL] = useState('')
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
   const [textColor, setTextColor] = useState('black')
   const [altTextColor, setAltTextColor] = useState('black')
   const [altBackgroundColor, setAltBackgroundColor] = useState('#dff9fb')
   const [toastSent, setToastSent] = useState(false)
+  const [displayConfetti, setDisplayConfetti] = useState(false)
   const query = qs.parse(useLocation().search)
   const { addToast } = useToasts()
+  const { width, height } = useWindowSize()
   useEffect(() => {
     const setColors = async (image: any) => {
       await Vibrant.from(image)
@@ -85,25 +87,14 @@ const Header = ({
     }
   }, [toastSent, query.rp, matchData, addToast])
 
-  const shootConfetti = (e: any) => {
+  const shootConfetti = () => {
     if (matchData.score > 0.7) {
-      ;(percentageRef.current as any).rewardMe()
-    } else {
-      ;(percentageRef.current as any).punishMe()
+      setDisplayConfetti(true)
     }
   }
 
-  const onClickHandle = (url: string) => (e: any) => window.open(url, 'name')
+  const onClickHandle = (url: string) => () => window.open(url, 'name')
 
-  const config = {
-    lifetime: 135,
-    angle: 110,
-    decay: 0.96,
-    spread: 100,
-    startVelocity: 35,
-    elementCount: 20,
-    elementSize: 100,
-  }
   const topTracks = []
   if (matchData.matchedTracksLongTerm.length) {
     topTracks.push(matchData.matchedTracksLongTerm[0])
@@ -121,6 +112,21 @@ const Header = ({
   return (
     <>
       <div className="header-container" style={{ backgroundColor }}>
+        <SizedConfetti
+          // @ts-ignore
+          confettiSource={{
+            w: 100,
+            h: 10,
+            x:
+              (width as number) > 900
+                ? (width as number) / 2 - 450
+                : (width as number) / 2 - 50,
+            y: (height as number) / 4,
+          }}
+          run={displayConfetti}
+          recycle={false}
+        />
+
         <div className="flex-container">
           <div className="user-results-container">
             <div
@@ -345,16 +351,16 @@ const Header = ({
               style={{ color: altTextColor }}
             >
               <span>
-                <Reward type="emoji" config={config} ref={percentageRef}>
-                  <CountUp
-                    delay={query.r ? 0 : 5}
-                    start={0}
-                    end={Math.round(matchData.score * 100)}
-                    duration={query.r ? 1 : 5}
-                    onEnd={shootConfetti}
-                  />
-                  <span className="percent-symbol">%</span>
-                </Reward>
+                {/* <Reward type="emoji" config={config} ref={percentageRef}> */}
+                <CountUp
+                  delay={query.r ? 0 : 5}
+                  start={0}
+                  end={Math.round(matchData.score * 100)}
+                  duration={query.r ? 1 : 5}
+                  onEnd={shootConfetti}
+                />
+                <span className="percent-symbol">%</span>
+                {/* </Reward> */}
               </span>
             </div>
           </div>
