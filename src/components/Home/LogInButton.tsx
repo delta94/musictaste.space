@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import React, { useContext } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { Link, useHistory } from 'react-router-dom'
@@ -21,28 +22,35 @@ function LogInButton() {
     history.push('/dashboard')
   }
 
-  return currentUser ? (
-    <Button
-      className="btn-round sign-in-button"
-      size="md"
-      onClick={handleClickDashboard}
+  return (
+    <motion.div
+      animate={true}
+      className={`about d-flex flex-column justify-content-center align-items-center`}
     >
-      Go To Dashboard
-    </Button>
-  ) : (
-    <div className="about d-flex flex-column align-items-center justify-content-center">
-      <Button
-        className="btn-round sign-in-button"
-        size="md"
-        onClick={handleClickLogin}
-      >
-        Sign In With Spotify
-      </Button>
-      <p style={{ fontSize: '0.8em' }}>
-        By signing in you agree to the{' '}
-        <Link to="/privacy-policy">Privacy Policy</Link>.
-      </p>
-    </div>
+      {currentUser ? (
+        <Button
+          className="btn-round sign-in-button"
+          size="md"
+          onClick={handleClickDashboard}
+        >
+          Go To Dashboard
+        </Button>
+      ) : (
+        <>
+          <Button
+            className="btn-round sign-in-button"
+            size="md"
+            onClick={handleClickLogin}
+          >
+            Sign In With Spotify
+          </Button>
+          <p style={{ fontSize: '0.8em' }}>
+            By signing in you agree to the{' '}
+            <Link to="/privacy-policy">Privacy Policy</Link>.
+          </p>
+        </>
+      )}
+    </motion.div>
   )
 }
 

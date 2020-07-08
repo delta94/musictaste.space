@@ -1,14 +1,16 @@
 import Color from 'color'
 import differenceInDays from 'date-fns/differenceInDays'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
-import React, { useContext, useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
 import { SpotifyApiContext } from 'react-spotify-api'
 import { useToasts } from 'react-toast-notifications'
-import { Col, Row } from 'reactstrap'
+import { Col } from 'reactstrap'
 import styled from 'styled-components'
+import { fromBottom, fromLeft } from '../../constants/animationVariants'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 import firebase from '../../util/Firebase'
@@ -20,8 +22,7 @@ import { ArtistFloaters } from './Floaters'
 import ImportStatus from './ImportStatus'
 
 const NameDiv = styled.div`
-  width: 100vw;
-  padding-left: 180px;
+  width: min(100vw, 1140px);
   @media only screen and (max-width: 1280px) {
     padding-left: 100px;
   }
@@ -260,34 +261,51 @@ export const Me = () => {
       })
     }
   }
-  const onReimportSpotifyData = (e: any) => {
-    startSub()
-    e.stopPropagation()
-    if (!importStatus.loading) {
-      setImportClick(true)
-      setImportStatus({ ...emptyImport, loading: true })
-      firebase.importSpotifyData(currentUser?.uid || '', true).then((data) => {
-        if (!data.success) {
-          GoogleAnalytics.event({
-            category: 'Error',
-            action: 'Import Data Error',
-            label: 'Not enough Spotify data displayed',
+  const onReimportSpotifyData = useCallback(
+    (e: any) => {
+      startSub()
+      if (e) {
+        e.stopPropagation()
+      }
+      if (!importStatus.loading) {
+        setImportClick(true)
+        setImportStatus({ ...emptyImport, loading: true })
+        firebase
+          .importSpotifyData(currentUser?.uid || '', true)
+          .then((data) => {
+            setImportClick(false)
+            if (!data.success) {
+              GoogleAnalytics.event({
+                category: 'Error',
+                action: 'Import Data Error',
+                label: 'Not enough Spotify data displayed',
+              })
+              if (data.error) {
+                setError(data.error)
+              } else {
+                setError('Unknown server error.')
+              }
+            } else {
+              GoogleAnalytics.event({
+                category: 'Interaction',
+                action: 'Re-imported Spotify data',
+                label: 'Re-import Data',
+              })
+            }
           })
-          if (data.error) {
-            setError(data.error)
-          } else {
-            setError('Unknown server error.')
-          }
-        } else {
-          GoogleAnalytics.event({
-            category: 'Interaction',
-            action: 'Re-imported Spotify data',
-            label: 'Re-import Data',
-          })
-        }
-      })
+      }
+    },
+    [currentUser, importStatus.loading, startSub]
+  )
+
+  useEffect(() => {
+    const lastImport = userData?.importData?.lastImport
+    if (lastImport && !importClick) {
+      if (differenceInDays(new Date(), lastImport.toDate()) >= 7) {
+        onReimportSpotifyData(null)
+      }
     }
-  }
+  }, [userData, importClick, onReimportSpotifyData])
 
   const onClickHandle = (route: string) => (e: any) => history.push(route)
 
@@ -321,11 +339,22 @@ export const Me = () => {
               ) : null}
               <NameBox className="me">
                 <NameDiv>
-                  <Row className="row-grid text-left me-max">
-                    <Col lg="7" md="8">
-                      <h1 className="mb-8" style={{ color: `${titleColor}` }}>
+                  <div className="row-grid text-left me-max">
+                    <motion.div
+                      variants={fromBottom(0.8)}
+                      initial="initial"
+                      animate="enter"
+                      className="col-lg-7 col-md-8"
+                    >
+                      <motion.h1
+                        className="mb-8"
+                        style={{ color: `${titleColor}` }}
+                        variants={fromLeft(1)}
+                        initial="initial"
+                        animate="enter"
+                      >
                         <strong>{currentUser.displayName}</strong>
-                      </h1>
+                      </motion.h1>
                       {error ? (
                         <>
                           <p
@@ -352,7 +381,9 @@ export const Me = () => {
                             Click here to retry
                           </a>
                         </>
-                      ) : importDataExists && importStatus.exists ? (
+                      ) : !importClick &&
+                        importDataExists &&
+                        importStatus.exists ? (
                         <>
                           {userData &&
                           displayModal &&
@@ -408,14 +439,13 @@ export const Me = () => {
                             </>
                           ) : null}
                         </>
-                      ) : importStatus.loading &&
-                        importStatus.lastImport &&
-                        differenceInSeconds(
-                          new Date(),
-                          importStatus.lastImport.toDate()
-                        ) < 4 ? (
-                        <ImportStatus importStatus={importStatus} />
-                      ) : importStatus.loading && importClick ? (
+                      ) : importClick ||
+                        (importStatus.loading &&
+                          importStatus.lastImport &&
+                          differenceInSeconds(
+                            new Date(),
+                            importStatus.lastImport.toDate()
+                          ) < 4) ? (
                         <ImportStatus importStatus={importStatus} />
                       ) : userData ? (
                         <>
@@ -434,9 +464,9 @@ export const Me = () => {
                       ) : (
                         <p className="menu menu-text">Loading...</p>
                       )}
-                    </Col>
+                    </motion.div>
                     <Col lg="3" md="3" />
-                  </Row>
+                  </div>
                 </NameDiv>
               </NameBox>
             </div>

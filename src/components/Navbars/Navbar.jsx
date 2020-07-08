@@ -13,6 +13,7 @@ import {
   Col,
 } from 'reactstrap'
 import NavbarLoginStatus from './NavbarLoginStatus'
+import { motion } from 'framer-motion'
 
 class PagesNavbar extends React.Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class PagesNavbar extends React.Component {
         expand="lg"
       >
         <Container>
-          <div className="navbar-translate">
+          <motion.div className="navbar-translate" animate={true}>
             <NavbarBrand
               data-placement="bottom"
               to="/"
@@ -89,7 +90,7 @@ class PagesNavbar extends React.Component {
               <span className="navbar-toggler-bar bar2" />
               <span className="navbar-toggler-bar bar3" />
             </button>
-          </div>
+          </motion.div>
           <Collapse
             className={'justify-content-end ' + this.state.collapseOut}
             navbar
@@ -101,16 +102,15 @@ class PagesNavbar extends React.Component {
               <Row>
                 <Col className="collapse-brand" xs="6">
                   <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    <div
+                    <motion.div
                       role="img"
                       className="nav-logo"
                       style={{
                         backgroundImage: 'url(/logo-sml.png)',
                       }}
                       aria-label="coolboy"
+                      animate={true}
                     />
-                    {/* 👨‍🎤
-                    </span> */}
                   </a>
                 </Col>
                 <Col className="collapse-close text-right" xs="6">
@@ -162,39 +162,51 @@ class PagesNavbar extends React.Component {
                 </NavLink>
               </NavItem> */}
               <NavItem>
-                <NavLink tag={Link} to="/about">
-                  About
-                </NavLink>
+                <motion.div animate={true}>
+                  <Link tag={Link} to="/about">
+                    About
+                  </Link>
+                </motion.div>
               </NavItem>
               <NavItem>
-                <NavLink
-                  href="https://ko-fi.com/kalpal"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  title="Donate to Kalana"
-                >
-                  Donate
-                </NavLink>
+                <motion.div animate={true}>
+                  <NavLink
+                    href="https://ko-fi.com/kalpal"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    title="Donate to Kalana"
+                  >
+                    Donate
+                  </NavLink>
+                </motion.div>
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} to="/discord">
-                  Discord
-                </NavLink>
+                <motion.div animate={true}>
+                  <Link tag={Link} to="/discord">
+                    Discord
+                  </Link>
+                </motion.div>
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} to="/compatibility">
-                  Compatibility
-                </NavLink>
+                <motion.div animate={true}>
+                  <NavLink tag={Link} to="/compatibility">
+                    Compatibility
+                  </NavLink>
+                </motion.div>
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} to="/insights">
-                  Insights
-                </NavLink>
+                <motion.div animate={true}>
+                  <NavLink tag={Link} to="/insights">
+                    Insights
+                  </NavLink>
+                </motion.div>
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} to="/dashboard">
-                  Dashboard
-                </NavLink>
+                <motion.div animate={true}>
+                  <NavLink tag={Link} to="/dashboard">
+                    Dashboard
+                  </NavLink>
+                </motion.div>
               </NavItem>
 
               <NavbarLoginStatus />

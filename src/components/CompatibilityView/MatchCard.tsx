@@ -1,6 +1,7 @@
 import { Timestamp } from '@firebase/firestore-types'
 import Color from 'color'
 import { formatDistance } from 'date-fns'
+import { motion } from 'framer-motion'
 import Vibrant from 'node-vibrant'
 import React, { useContext, useEffect, useState } from 'react'
 import Spotify from 'spotify-web-api-js'
@@ -54,7 +55,7 @@ const MatchCard = ({
 
   const [textColor, setTextColor] = useState('#130f40')
   const [altTextColor, setAltTextColor] = useState('#130f40')
-  const [gradientColor, setGradientColor] = useState('white')
+  const [gradientColor, setGradientColor] = useState('#dff9fb')
 
   useEffect(() => {
     const setColors = async (image: any) => {
@@ -116,7 +117,7 @@ const MatchCard = ({
         // @ts-ignore
         deleteMatch={onRemove}
       />
-      <div className="a-match animated fadeInUp">
+      <motion.div className="a-match" animate={true}>
         <div className="text-div">
           {data.anon ? (
             <i
@@ -179,7 +180,7 @@ const MatchCard = ({
         <div className="bg-img-div">
           <img className="bg-img" src={bgImageURL} alt="" />
         </div>
-      </div>
+      </motion.div>
     </>
   )
 }

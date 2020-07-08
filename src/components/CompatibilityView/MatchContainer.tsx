@@ -1,4 +1,5 @@
 import { Timestamp } from '@firebase/firestore-types'
+import { motion } from 'framer-motion'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
@@ -181,7 +182,7 @@ const MatchContainer = () => {
         </div>
       </div>
       <div className="matches">
-        <div className="matches-container">
+        <motion.div className="matches-container" animate={true}>
           {matches.length ? (
             matches.map(([id, match]) => {
               if (match) {
@@ -199,11 +200,11 @@ const MatchContainer = () => {
               return null
             })
           ) : (
-            <div className="pl-3 pr-3 text-center">
-              If you had matches, they would appear here. Get machin'!
+            <div className="pl-3 pr-3 text-center animated fadeInUp delay-2s">
+              If you had matches, they would appear here. Get machin&apos;!
             </div>
           )}
-        </div>
+        </motion.div>
         {morePages ? (
           <div className="load-more">
             <Button

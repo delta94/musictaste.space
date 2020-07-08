@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { translateInX } from '../../constants/animationVariants'
 
 const Genres = ({ genreData }: { genreData: IGenreDict }) => {
   let genres = Object.entries(genreData)
@@ -25,7 +27,7 @@ const Genres = ({ genreData }: { genreData: IGenreDict }) => {
         </div>
         <div className="genre-columns">
           <div className="genre-bar-container">
-            {genres.slice(0, genres.length / 2).map((genre) => {
+            {genres.slice(0, genres.length / 2).map((genre, index) => {
               return (
                 <div className="genre-container" key={genre[1]}>
                   <div
@@ -36,13 +38,20 @@ const Genres = ({ genreData }: { genreData: IGenreDict }) => {
                       }px`,
                     }}
                   />
-                  <div className="genre-text genre-title">{genre[1]}</div>
+                  <motion.div
+                    className="genre-text genre-title"
+                    initial="initial"
+                    animate="translate"
+                    variants={translateInX(10, index / 2)}
+                  >
+                    {genre[1]}
+                  </motion.div>
                 </div>
               )
             })}
           </div>
           <div className="genre-bar-container">
-            {genres.slice(genres.length / 2).map((genre) => {
+            {genres.slice(genres.length / 2).map((genre, index) => {
               return (
                 <div className="genre-container" key={genre[1]}>
                   <div
@@ -53,7 +62,14 @@ const Genres = ({ genreData }: { genreData: IGenreDict }) => {
                       }px`,
                     }}
                   />
-                  <div className="genre-text genre-title">{genre[1]}</div>
+                  <motion.div
+                    className="genre-text genre-title"
+                    initial="initial"
+                    animate="translate"
+                    variants={translateInX(10, index / 2)}
+                  >
+                    {genre[1]}
+                  </motion.div>
                 </div>
               )
             })}

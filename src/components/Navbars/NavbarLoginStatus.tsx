@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import React from 'react'
 import GoogleAnalytics from 'react-ga'
 import { Button, NavItem } from 'reactstrap'
@@ -35,34 +36,34 @@ class NavbarLoginStatus extends React.Component<{}, { modalOpen: boolean }> {
     return (
       <AuthContext.Consumer>
         {(props: { currentUser: null | firebase.User }) => {
-          if (props.currentUser) {
-            return (
-              <NavItem>
-                <div
-                  className="profile-pic-div shadow-lg img-fluid"
-                  style={{
-                    backgroundImage: `url(${props.currentUser.photoURL})`,
-                  }}
-                  onClick={this.toggleModal}
-                />
-                <ProfileModal
-                  isOpen={this.state.modalOpen}
-                  toggleModal={this.toggleModal}
-                />
-              </NavItem>
-            )
-          } else {
-            return (
-              <NavItem>
-                <Button
-                  onClick={this.handleClickLogin}
-                  className="nav-link d-lg-block nav-login btn-round"
-                >
-                  Sign In
-                </Button>
-              </NavItem>
-            )
-          }
+          return (
+            <motion.div animate={true}>
+              {props.currentUser ? (
+                <NavItem>
+                  <div
+                    className="profile-pic-div shadow-lg img-fluid"
+                    style={{
+                      backgroundImage: `url(${props.currentUser.photoURL})`,
+                    }}
+                    onClick={this.toggleModal}
+                  />
+                  <ProfileModal
+                    isOpen={this.state.modalOpen}
+                    toggleModal={this.toggleModal}
+                  />
+                </NavItem>
+              ) : (
+                <NavItem>
+                  <Button
+                    onClick={this.handleClickLogin}
+                    className="nav-link d-lg-block nav-login btn-round"
+                  >
+                    Sign In
+                  </Button>
+                </NavItem>
+              )}
+            </motion.div>
+          )
         }}
       </AuthContext.Consumer>
     )
