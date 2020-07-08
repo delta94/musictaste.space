@@ -1,6 +1,8 @@
+import { motion } from 'framer-motion'
 import Vibrant from 'node-vibrant'
 import React from 'react'
 import { Artist } from 'react-spotify-api'
+import { float, zoomFadeIn } from '../../constants/animationVariants'
 
 export const ArtistFloaters = (props: {
   spotifyData: ISpotifyUserData
@@ -29,7 +31,7 @@ export const ArtistFloaters = (props: {
     hex2: '#130f40',
     hex3: '#130f40',
   }
-  const updateColors = async (artists: any) => {
+  const updateColors = async (artists: SpotifyApi.ArtistObjectFull[]) => {
     await Vibrant.from(artists[0].images[0]?.url)
       .getPalette()
       .then((palette) => {
@@ -56,20 +58,35 @@ export const ArtistFloaters = (props: {
     )
   }
 
-  const createDivs = (artists: any) => {
+  const createDivs = (artists: SpotifyApi.ArtistObjectFull[]) => {
     updateColors(artists)
-    return artists.map((artist: any, index: any) => (
-      <div
+    return artists.map((artist, index) => (
+      <motion.div
         className={'spotify-cards card' + (index + 1).toString()}
         key={'artist.id' + index.toString()}
-        style={{ backgroundImage: `url(${artist.images[0]?.url})` }}
-      />
+        animate="float"
+        style={{ backgroundColor: 'unset' }}
+        variants={float((index + 1) / 2, 3)}
+      >
+        <motion.div
+          style={{
+            height: '100%',
+            width: '100%',
+            backgroundSize: 'contain',
+            backgroundImage: `url(${artist.images[0]?.url})`,
+          }}
+          key={'artistFloat' + index.toString()}
+          initial="initial"
+          animate="enter"
+          variants={zoomFadeIn((index + 1) / 4)}
+        />
+      </motion.div>
     ))
   }
   return (
     <div className="me">
       <Artist key={artistURIs[0]} id={artistURIs}>
-        {(artists: any, loading: any, error: any) =>
+        {(artists: SpotifyApi.MultipleArtistsResponse) =>
           artists ? createDivs(artists.artists) : null
         }
       </Artist>

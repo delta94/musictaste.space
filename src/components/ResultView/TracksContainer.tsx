@@ -1,7 +1,9 @@
 import Color from 'color'
+import { motion } from 'framer-motion'
 import Vibrant from 'node-vibrant'
 import React, { useEffect, useState } from 'react'
 import { Track } from 'react-spotify-api'
+import { growAndShrink, shrinkOnHover } from '../../constants/animationVariants'
 
 const TracksContainer = ({
   tracksData,
@@ -20,8 +22,8 @@ const TracksContainer = ({
 }) => {
   const [artistBackgroundURL, setArtistBackgroundURL] = useState('')
   const [backgroundColor, setBackgroundColor] = useState('#c7ecee')
-  const [textColor, setTextColor] = useState('black')
-  const [altTextColor, setAltTextColor] = useState('black')
+  const [textColor, setTextColor] = useState('#c7ecee')
+  const [altTextColor, setAltTextColor] = useState('#c7ecee')
   const [altBackgroundColor, setAltBackgroundColor] = useState('#dff9fb')
   useEffect(() => {
     const setColors = async (image: any) => {
@@ -70,17 +72,16 @@ const TracksContainer = ({
     <>
       <div className="tracks" style={{ backgroundColor: altTextColor }}>
         <Track id={tracksData[0].id}>
-          {(
-            track: SpotifyApi.SingleTrackResponse,
-            loading: boolean,
-            error: SpotifyApi.ErrorObject
-          ) => {
+          {(track: SpotifyApi.SingleTrackResponse) => {
             if (track) {
               return (
-                <img
+                <motion.img
                   src={track.album.images[0]?.url}
                   className="track-hover-image"
                   alt=""
+                  animate="growAndShrink"
+                  style={{ backgroundColor: 'unset' }}
+                  variants={growAndShrink(1.05, tracksData[0].indexA % 5, 5)}
                 />
               )
             } else {
@@ -136,11 +137,15 @@ const TracksContainer = ({
                         )
                       }
                       return tracks.tracks.map((track, index) => (
-                        <div
+                        <motion.div
                           className="spotify-container shadow-lg"
                           style={{ backgroundColor: textColor }}
                           key={track.id}
                           onClick={onClickHandle(track.uri)}
+                          whileHover="hover"
+                          initial="initial"
+                          animate="enter"
+                          variants={shrinkOnHover()}
                         >
                           <img
                             src={track.album.images[0]?.url}
@@ -163,7 +168,7 @@ const TracksContainer = ({
                               ? tracksData[index].indexA + 1
                               : tracksData[index].indexB + 1}
                           </p>
-                        </div>
+                        </motion.div>
                       ))
                     } else {
                       return null

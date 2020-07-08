@@ -88,7 +88,7 @@ nav {
 }
 
 .wrapper {
-  transition: 2s ease-out;
+  // transition: 2s ease-out;
   z-index: -10;
 }
 
@@ -179,10 +179,10 @@ div.spotify-login {
   }
 
   .spotify-cards {
-    animation: fadein 2s;
+    // animation: fadein 2s;
     // @include linear-gradient($primary-states, $primary);
     position: absolute;
-    transition: 5s ease-out;
+    // transition: 5s ease-out;
     overflow: hidden;
     border-radius: 20%;
     pointer-events: none;
@@ -193,7 +193,7 @@ div.spotify-login {
       height: 400px;
       width: 400px;
       opacity: 1;
-      right: 5%;
+      left: calc(50% + 300px);
       top: 15%;
 
       @media screen and (max-width: 1100px) {
@@ -211,6 +211,7 @@ div.spotify-login {
         animation: none;
         height: 200px;
         width: 200px;
+        left: calc(50% - 30px);
       }
     }
 
@@ -218,7 +219,7 @@ div.spotify-login {
       height: 300px;
       width: 300px;
       opacity: 1;
-      right: 30%;
+      left: calc(50% + 50px);
       top: 50%;
 
       @media screen and (max-width: 1100px) {
@@ -245,8 +246,8 @@ div.spotify-login {
       height: 200px;
       width: 200px;
       opacity: 1;
-      right: 18%;
-      top: 60%;
+      left: calc(50% + 370px);
+      top: 65%;
       @media screen and (max-width: 900px) {
         display: none;
       }

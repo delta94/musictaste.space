@@ -7,7 +7,12 @@ export default React.forwardRef(
   (passedProps, ref: React.Ref<HTMLCanvasElement>) => {
     const { width, height } = useWindowSize()
     return (
-      <ReactConfetti width={width} height={height} {...passedProps} ref={ref} />
+      <ReactConfetti
+        width={(width as number) - 20}
+        height={height}
+        {...passedProps}
+        ref={ref}
+      />
     )
   }
 )

@@ -1,8 +1,10 @@
 import Color from 'color'
+import { motion } from 'framer-motion'
 import Vibrant from 'node-vibrant'
 import React, { useEffect, useState } from 'react'
 import { Button } from 'reactstrap'
 import Spotify from 'spotify-web-api-js'
+import { shrinkOnHover } from '../../constants/animationVariants'
 import Canvas from '../PlaylistView/Canvas'
 
 export default function Playlist(props: {
@@ -66,11 +68,19 @@ export default function Playlist(props: {
   return (
     <div className="playlist-area" style={{ backgroundColor }}>
       {artist ? (
-        <Canvas
-          text="Hello world!"
-          image={artist.images[0]}
-          setPlaylistImage={doNothing}
-        />
+        <motion.div
+          whileHover="hover"
+          initial="initial"
+          animate="enter"
+          variants={shrinkOnHover()}
+          onClick={props.handleClick}
+        >
+          <Canvas
+            text="Hello world!"
+            image={artist.images[0]}
+            setPlaylistImage={doNothing}
+          />
+        </motion.div>
       ) : null}
       <div className="playlist-text" style={{ color: '#30336b' }}>
         We made you a playlist of the tracks you have in common with{' '}

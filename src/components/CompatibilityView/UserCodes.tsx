@@ -1,4 +1,5 @@
 import copy from 'copy-to-clipboard'
+import { motion } from 'framer-motion'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import {
@@ -28,6 +29,7 @@ import {
   Row,
   UncontrolledTooltip,
 } from 'reactstrap'
+import { float } from '../../constants/animationVariants'
 import { AuthContext } from '../../contexts/Auth'
 import { UserDataContext } from '../../contexts/UserData'
 
@@ -124,9 +126,11 @@ function UserCodes() {
           <Col lg="1" md="1" className="d-none d-lg-block" />
           <Col lg="4" md="4" className="profile-col">
             {currentUser ? (
-              <div
+              <motion.div
                 className="profile-img-div shadow-lg"
                 style={{ backgroundImage: `url(${currentUser.photoURL})` }}
+                animate="float"
+                variants={float(0, 2)}
               />
             ) : (
               <></>

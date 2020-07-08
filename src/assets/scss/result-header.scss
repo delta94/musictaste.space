@@ -270,10 +270,6 @@
         height: 400px;
         width: 400px;
         border-radius: 10px;
-        animation-delay: 3s;
-        &.return {
-          animation-delay: 1s;
-        }
         @media (max-width: 1140px) {
           height: 300px;
           width: 300px;
@@ -281,10 +277,6 @@
           left: 100px;
         }
         @media (max-width: 600px) {
-          &.return {
-            animation-delay: 0s;
-          }
-          animation-delay: 1.5s;
           height: 250px;
           width: 250px;
           top: calc(#{'100vh - 180px'});
@@ -300,10 +292,6 @@
         left: 350px;
         top: -50px;
         border-radius: 10px;
-        animation-delay: 3.5s;
-        &.return {
-          animation-delay: 1.5s;
-        }
         @media (max-width: 900px) {
           height: 200px;
           width: 200px;
@@ -311,10 +299,6 @@
           top: -300px;
         }
         @media (max-width: 600px) {
-          &.return {
-            animation-delay: 1.5s;
-          }
-          animation-delay: 0s;
           display: none;
           height: 150px;
           width: 150px;
@@ -331,10 +315,6 @@
         top: calc(#{'500px'});
         left: calc(#{'-30vw'});
         border-radius: 10px;
-        animation-delay: 4s;
-        &.return {
-          animation-delay: 2s;
-        }
         @media (max-width: 1600px) {
           top: calc(#{'100vh - 300px'});
           left: -450px;
@@ -345,10 +325,6 @@
           display: none;
         }
         @media (max-width: 600px) {
-          &.return {
-            animation-delay: 2s;
-          }
-          animation-delay: 3s;
           display: none;
         }
       }

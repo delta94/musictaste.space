@@ -1,10 +1,14 @@
+import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Col, Row } from 'reactstrap'
-// import Firebase from '../Firebase'
-// import DemoMatch from './DemoMatch'
 import LogInButton from './LogInButton'
 
+import {
+  float,
+  shrinkOnHover,
+  zoomFadeIn,
+} from '../../constants/animationVariants'
 // core components
 import { getTally } from '../../util/api'
 import Footer from '../Footer'
@@ -25,16 +29,32 @@ const LandingPage = () => {
           content="Sign in with Spotify and get a unique code to share with your friends and find out how compatible your music tastes are! See insights into your listening habits, which tracks are most matched right now, and more!"
         />
       </Helmet>
-      <div className="wrapper landing-page container">
+      <motion.div
+        className="wrapper landing-page container"
+        initial="initial"
+        animate="enter"
+        variants={zoomFadeIn(0)}
+      >
         <div className="page-header">
           <div className="content-center">
             <Row className="row-grid justify-content-between align-items-center text-left">
               <Col lg="4" md="5">
-                <img
-                  alt="musictaste.space logo"
-                  className="img-fluid"
-                  src={'/logo.png'}
-                />
+                <motion.div
+                  className="frame"
+                  animate="float"
+                  initial={{ opacity: 1 }}
+                  variants={float()}
+                >
+                  <motion.img
+                    whileHover="hover"
+                    initial="initial"
+                    animate="enter"
+                    alt="musictaste.space logo"
+                    className="img-fluid"
+                    src={'/logo.png'}
+                    variants={shrinkOnHover()}
+                  />
+                </motion.div>
               </Col>
               <Col lg="8" md="8">
                 <h1 className="text-white">
@@ -75,8 +95,9 @@ const LandingPage = () => {
             </Row>
           </div>
         </div>
-        <Footer />
-      </div>
+      </motion.div>
+      <Footer />
+
       {/* <div className="demo" style={{ zIndex: 1000 }}>
         <div className="result-container">
           {demoData ? <DemoMatch demoData={demoData as any} /> : null}

@@ -1,7 +1,9 @@
 import Color from 'color'
+import { motion } from 'framer-motion'
 import Vibrant from 'node-vibrant'
 import React, { useEffect, useState } from 'react'
 import { Track } from 'react-spotify-api'
+import { growAndShrink, shrinkOnHover } from '../../constants/animationVariants'
 import CreatePlaylistFromTracksButton from '../PlaylistView/CreatePlaylistButton'
 
 const InsightsTracksContainer = ({
@@ -70,10 +72,13 @@ const InsightsTracksContainer = ({
           ) => {
             if (track) {
               return (
-                <img
+                <motion.img
                   src={track.album.images[0]?.url}
                   className="track-hover-image"
                   alt=""
+                  animate="growAndShrink"
+                  style={{ backgroundColor: 'unset' }}
+                  variants={growAndShrink(1.05, (Math.random() * 5) % 5, 5)}
                 />
               )
             } else {
@@ -132,11 +137,15 @@ const InsightsTracksContainer = ({
                         )
                       }
                       return tracks.tracks.map((track, index) => (
-                        <div
+                        <motion.div
                           className="spotify-container shadow-lg"
                           style={{ backgroundColor: textColor }}
                           key={track.id}
                           onClick={onClickHandle(track.uri)}
+                          whileHover="hover"
+                          initial="initial"
+                          animate="enter"
+                          variants={shrinkOnHover()}
                         >
                           <img
                             src={track.album.images[0]?.url}
@@ -153,7 +162,7 @@ const InsightsTracksContainer = ({
                             <br />
                             {index + 1}
                           </p>
-                        </div>
+                        </motion.div>
                       ))
                     } else {
                       return null

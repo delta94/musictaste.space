@@ -1,5 +1,6 @@
 import React from 'react'
 import ArtistsContainer from './InsightsArtistsContainer'
+
 const InsightsArtists = ({ userData }: { userData: ISpotifyUserData }) => {
   return (
     <>

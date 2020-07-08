@@ -1,5 +1,6 @@
 import Color from 'color'
 import differenceInDays from 'date-fns/differenceInDays'
+import { motion } from 'framer-motion'
 import Vibrant from 'node-vibrant'
 import qs from 'query-string'
 import React, { useEffect, useState } from 'react'
@@ -7,6 +8,11 @@ import CountUp from 'react-countup'
 import { useLocation } from 'react-router'
 import { Artist, Track } from 'react-spotify-api'
 import { useToasts } from 'react-toast-notifications'
+import {
+  float,
+  zoomFadeIn,
+  shrinkOnHover,
+} from '../../constants/animationVariants'
 import useWindowSize from '../../hooks/useWindowSize'
 import SizedConfetti from '../../util/SizedConfetti'
 
@@ -184,12 +190,16 @@ const Header = ({
                     ) => {
                       if (artist) {
                         return (
-                          <div
+                          <motion.div
                             className="spotify-container shadow-lg"
                             style={{ backgroundColor: altBackgroundColor }}
                             onClick={onClickHandle(
                               artist.external_urls.spotify
                             )}
+                            whileHover="hover"
+                            initial="initial"
+                            animate="enter"
+                            variants={shrinkOnHover()}
                           >
                             <img
                               src={artist.images[0]?.url}
@@ -202,7 +212,7 @@ const Header = ({
                             >
                               {artist.name}
                             </p>
-                          </div>
+                          </motion.div>
                         )
                       } else {
                         return null
@@ -228,10 +238,14 @@ const Header = ({
                     ) => {
                       if (track) {
                         return (
-                          <div
+                          <motion.div
                             className="spotify-container shadow-lg"
                             style={{ backgroundColor: altBackgroundColor }}
                             onClick={onClickHandle(track.external_urls.spotify)}
+                            whileHover="hover"
+                            initial="initial"
+                            animate="enter"
+                            variants={shrinkOnHover()}
                           >
                             <img
                               src={track.album.images[0]?.url}
@@ -248,7 +262,7 @@ const Header = ({
                                 {track.artists.map((v) => v.name).join(', ')}
                               </strong>
                             </p>
-                          </div>
+                          </motion.div>
                         )
                       } else {
                         return null
@@ -260,27 +274,27 @@ const Header = ({
             </div>
           </div>
           <div className="score-and-artist">
-            <div
-              className={`top-artist animated fadeInRightBig ${
-                query.r ? 'return' : 'initial'
-              }`}
+            <motion.div
+              className="top-artist"
+              animate="float"
+              style={{ backgroundColor: 'unset' }}
+              variants={float(1 / 2, 3)}
             >
               {matchData.matchedArtists.length > 1 ? (
                 <Artist id={matchData.matchedArtists[1].id}>
-                  {(
-                    artist: SpotifyApi.SingleArtistResponse,
-                    loading: boolean,
-                    error: SpotifyApi.ErrorObject
-                  ) => {
+                  {(artist: SpotifyApi.SingleArtistResponse) => {
                     if (artist) {
                       setArtistBackgroundURL(
                         artist.images[0]?.url ? artist.images[0]?.url : ''
                       )
                       return (
-                        <img
+                        <motion.img
                           src={artist.images[0]?.url}
                           className="artist"
                           alt=""
+                          initial="initial"
+                          animate="enter"
+                          variants={zoomFadeIn(query.r ? 1 : 2)}
                         />
                       )
                     } else {
@@ -289,25 +303,25 @@ const Header = ({
                   }}
                 </Artist>
               ) : null}
-            </div>
-            <div
-              className={`top-artist-2 animated fadeInRightBig ${
-                query.r ? 'return' : 'initial'
-              }`}
+            </motion.div>
+            <motion.div
+              className="top-artist-2"
+              animate="float"
+              style={{ backgroundColor: 'unset' }}
+              variants={float(1, 3)}
             >
               {matchData.matchedArtists.length > 2 ? (
                 <Artist id={matchData.matchedArtists[2].id}>
-                  {(
-                    artist: SpotifyApi.SingleArtistResponse,
-                    loading: boolean,
-                    error: SpotifyApi.ErrorObject
-                  ) => {
+                  {(artist: SpotifyApi.SingleArtistResponse) => {
                     if (artist) {
                       return (
-                        <img
+                        <motion.img
                           src={artist.images[0]?.url}
                           className="artist"
                           alt=""
+                          initial="initial"
+                          animate="enter"
+                          variants={zoomFadeIn(query.r ? 1.2 : 2.5)}
                         />
                       )
                     } else {
@@ -316,25 +330,25 @@ const Header = ({
                   }}
                 </Artist>
               ) : null}
-            </div>
-            <div
-              className={`top-artist-3 animated fadeInRightBig ${
-                query.r ? 'return' : 'initial'
-              }`}
+            </motion.div>
+            <motion.div
+              className="top-artist-3"
+              animate="float"
+              style={{ backgroundColor: 'unset' }}
+              variants={float(1.5, 3)}
             >
               {matchData.matchedArtists.length > 3 ? (
                 <Artist id={matchData.matchedArtists[3].id}>
-                  {(
-                    artist: SpotifyApi.SingleArtistResponse,
-                    loading: boolean,
-                    error: SpotifyApi.ErrorObject
-                  ) => {
+                  {(artist: SpotifyApi.SingleArtistResponse) => {
                     if (artist) {
                       return (
-                        <img
+                        <motion.img
                           src={artist.images[0]?.url}
                           className="artist"
                           alt=""
+                          initial="initial"
+                          animate="enter"
+                          variants={zoomFadeIn(query.r ? 1.4 : 3)}
                         />
                       )
                     } else {
@@ -343,7 +357,7 @@ const Header = ({
                   }}
                 </Artist>
               ) : null}
-            </div>
+            </motion.div>
             <div
               className={`score animated slideInRight ${
                 query.r ? 'return' : 'initial'

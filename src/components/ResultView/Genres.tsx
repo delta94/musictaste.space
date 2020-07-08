@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion'
 import React from 'react'
 import { Button } from 'reactstrap'
+import { translateInX } from '../../constants/animationVariants'
 
 const Genres = ({
   history,
@@ -22,16 +24,23 @@ const Genres = ({
             ? 'These are the genres you had most in common:'
             : 'You had no genres in common.'}
         </div>
-        {genres.map((genre) => {
+        {genres.map((genre, index) => {
           return (
             <div className="genre-container" key={genre.genre}>
-              <div
+              <motion.div
                 className="bar"
                 style={{
                   width: `${80 + ((genre.rank as number) / maxCount) * 200}px`,
                 }}
               />
-              <div className="genre-title genre-text">{genre.genre}</div>
+              <motion.div
+                className="genre-title genre-text"
+                initial="initial"
+                animate="translate"
+                variants={translateInX(10, index / 2)}
+              >
+                {genre.genre}
+              </motion.div>
             </div>
           )
         })}

@@ -1,7 +1,9 @@
 import Color from 'color'
+import { motion } from 'framer-motion'
 import Vibrant from 'node-vibrant'
 import React, { useEffect, useState } from 'react'
 import { Artist } from 'react-spotify-api'
+import { shrinkOnHover } from '../../constants/animationVariants'
 
 const InsightsArtistsContainer = ({
   data,
@@ -104,11 +106,15 @@ const InsightsArtistsContainer = ({
                   setArtistBackgroundURL(artists.artists[0].images[0]?.url)
                 }
                 return artists.artists.map((artist, index) => (
-                  <div
+                  <motion.div
                     className="spotify-container shadow-lg"
                     style={{ backgroundColor: textColor }}
                     key={artist.id}
                     onClick={onClickArtist(artist.uri)}
+                    whileHover="hover"
+                    initial="initial"
+                    animate="enter"
+                    variants={shrinkOnHover()}
                   >
                     <img
                       src={artist.images[0]?.url}
@@ -123,7 +129,7 @@ const InsightsArtistsContainer = ({
                       <br />
                       {index + 1}
                     </p>
-                  </div>
+                  </motion.div>
                 ))
               } else {
                 return null
