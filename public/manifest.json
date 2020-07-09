@@ -1,5 +1,5 @@
 {
-  "short_name": "musictaste.space",
+  "short_name": "musictaste",
   "name": "musictaste.space",
   "icons": [
     {
@@ -18,8 +18,9 @@
       "sizes": "512x512"
     }
   ],
+  "gcm_sender_id": "103953800507",
   "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "display": "minimal-ui",
+  "theme_color": "#c7ecee",
+  "background_color": "#c7ecee"
 }
