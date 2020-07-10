@@ -337,7 +337,7 @@ div.main-container {
     }
     .bg-img-div {
       position: relative;
-      left: clamp(300px, 30vw, 500px);
+      left: clamp(300px, 35vw, 500px);
       top: 50px;
       z-index: -5;
       @media (max-width: 1360px) {

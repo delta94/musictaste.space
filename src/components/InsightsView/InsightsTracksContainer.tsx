@@ -179,4 +179,4 @@ const InsightsTracksContainer = ({
   )
 }
 
-export default InsightsTracksContainer
+export default React.memo(InsightsTracksContainer)

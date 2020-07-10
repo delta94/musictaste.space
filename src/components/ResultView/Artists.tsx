@@ -150,4 +150,4 @@ const Artists = ({
   )
 }
 
-export default Artists
+export default React.memo(Artists)

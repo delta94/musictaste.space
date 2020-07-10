@@ -143,4 +143,4 @@ const InsightsArtistsContainer = ({
   )
 }
 
-export default InsightsArtistsContainer
+export default React.memo(InsightsArtistsContainer)

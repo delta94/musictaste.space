@@ -1,8 +1,10 @@
 import { DocumentData } from '@firebase/firestore-types'
 import firebase from 'firebase/app'
+import { firestore } from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/functions'
+import 'firebase/messaging'
 
 interface IUserData extends DocumentData {
   data?: {
@@ -31,6 +33,7 @@ interface IUserData extends DocumentData {
 
 class Firebase {
   public app: firebase.app.App
+  public messaging: firebase.messaging.Messaging
   private functions: {
     httpsCallable: (s: string) => firebase.functions.HttpsCallable
   }
@@ -51,6 +54,7 @@ class Firebase {
       functions.useFunctionsEmulator('http://localhost:5001')
       this.functions = functions
     }
+    this.messaging = this.app.messaging()
   }
 
   /**
@@ -321,23 +325,6 @@ class Firebase {
     }
   }
 
-  public async createPlaylistInUser(
-    userId: string,
-    matchUser: string,
-    playlistId: string,
-    data: any
-  ) {
-    return await this.app
-      .firestore()
-      .collection('users')
-      .doc(userId)
-      .collection('matches')
-      .doc(matchUser)
-      .collection('playlists')
-      .doc(playlistId)
-      .set({ data })
-  }
-
   public async getAverages(
     region: string
   ): Promise<{
@@ -384,6 +371,56 @@ class Firebase {
       .collection('matches')
       .doc(id)
       .delete()
+  }
+
+  /**
+   * Requests permission to send notifications to the user and
+   * updates the relevant Firestore document.
+   * @param uid user's musictaste uid
+   */
+  public async requestNotificationPermission(uid: string) {
+    return this.messaging.requestPermission().then(async () => {
+      const token = await this.messaging.getToken()
+      console.log('token', token)
+      const currentTokens = await this.app
+        .firestore()
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((d) => d.data() as IUserProfile)
+        .then((profile) => profile.notificationTokens)
+
+      if (currentTokens) {
+        let index = -1
+        for (const [i, device] of Array.from(currentTokens.entries())) {
+          if (device.title === navigator.userAgent) {
+            index = i
+          }
+        }
+        currentTokens.splice(index, 1)
+        currentTokens.push({
+          token,
+          dateCreated: firestore.Timestamp.fromDate(new Date()),
+          title: navigator.userAgent,
+        })
+      }
+      console.log('writing', currentTokens)
+      await this.app.firestore().collection('users').doc(uid).set(
+        {
+          notificationTokens: currentTokens,
+          notifications: true,
+        },
+        { merge: true }
+      )
+    })
+  }
+
+  public async disableNotifications(uid: string) {
+    return this.app
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .set({ notificationTokens: [], notifications: false }, { merge: true })
   }
 }
 

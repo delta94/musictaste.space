@@ -118,6 +118,7 @@ export const Me = () => {
     }
   }, [importDataExists, addToast])
 
+  console.log(importStatus)
   useEffect(() => {
     if (
       importStatus.exists &&
@@ -240,6 +241,7 @@ export const Me = () => {
       setImportClick(true)
       setImportStatus({ ...emptyImport, loading: true })
       firebase.importSpotifyData(currentUser?.uid || '').then((data) => {
+        setImportClick(false)
         if (!data.success) {
           GoogleAnalytics.event({
             category: 'Error',
@@ -390,9 +392,9 @@ export const Me = () => {
                           (!userData.created ||
                             (userData.created &&
                               differenceInDays(
-                                new Date(),
-                                userData?.created.toDate()
-                              ) > 7)) ? (
+                                userData?.created.toDate(),
+                                new Date()
+                              ) > 1)) ? (
                             <DonateCard onClick={toggleModal} />
                           ) : null}
                           <Menu1 className="menu button1">

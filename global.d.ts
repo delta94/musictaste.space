@@ -115,7 +115,12 @@ interface IUserProfile {
   region?: string
   created?: firebase.firestore.Timestamp
   serverState: string
-  discord?: { id: string; avatar: string }
+  discord?: {
+    id: string
+    avatar: string
+    username: string
+    discriminator: string
+  }
   importData: {
     exists: boolean
     lastImport?: firebase.firestore.Timestamp
@@ -128,6 +133,10 @@ interface IUserProfile {
     }
     loading?: boolean
   }
+  notifications?: boolean
+  notificationTokens?: [
+    { token: string; dateCreated: firebase.firestore.Timestamp; title: string }
+  ]
 }
 
 interface IDemoMatch {

@@ -75,7 +75,7 @@ class PagesNavbar extends React.Component {
               data-placement="bottom"
               to="/"
               rel="noopener noreferrer"
-              title="Designed and Coded by @_kalpal"
+              title="Designed and Developed by @_kalpal"
               tag={Link}
             >
               <span>musictaste.space</span>
@@ -163,9 +163,9 @@ class PagesNavbar extends React.Component {
               </NavItem> */}
               <NavItem>
                 <motion.div animate={true}>
-                  <Link tag={Link} to="/about">
+                  <NavLink tag={Link} to="/about">
                     About
-                  </Link>
+                  </NavLink>
                 </motion.div>
               </NavItem>
               <NavItem>
@@ -182,9 +182,9 @@ class PagesNavbar extends React.Component {
               </NavItem>
               <NavItem>
                 <motion.div animate={true}>
-                  <Link tag={Link} to="/discord">
+                  <NavLink tag={Link} to="/discord">
                     Discord
-                  </Link>
+                  </NavLink>
                 </motion.div>
               </NavItem>
               <NavItem>

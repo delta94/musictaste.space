@@ -4,7 +4,7 @@ import React from 'react'
 import { Artist } from 'react-spotify-api'
 import { float, zoomFadeIn } from '../../constants/animationVariants'
 
-export const ArtistFloaters = (props: {
+const _ArtistFloaters = (props: {
   spotifyData: ISpotifyUserData
   setMenuColors: (
     bg: string,
@@ -93,3 +93,5 @@ export const ArtistFloaters = (props: {
     </div>
   )
 }
+
+export const ArtistFloaters = React.memo(_ArtistFloaters, () => true)

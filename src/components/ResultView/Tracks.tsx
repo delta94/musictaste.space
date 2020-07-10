@@ -59,4 +59,4 @@ const Tracks = ({
   )
 }
 
-export default Tracks
+export default React.memo(Tracks)
