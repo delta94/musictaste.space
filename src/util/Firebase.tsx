@@ -397,7 +397,9 @@ class Firebase {
             index = i
           }
         }
-        currentTokens.splice(index, 1)
+        if (index !== -1) {
+          currentTokens.splice(index, 1)
+        }
         currentTokens.push({
           token,
           dateCreated: firestore.Timestamp.fromDate(new Date()),
