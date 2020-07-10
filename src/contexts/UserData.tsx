@@ -90,6 +90,30 @@ export const UserDataProvider = ({
 
   getMePassedRef.current = getMePassed
 
+  const setUserDataIntoLocalStorage = (
+    data: IUserProfile,
+    setProfileLoaded = true
+  ) => {
+    const ld = cloneDeep(data)
+    ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
+    if (ld.importData?.lastImport) {
+      ld.importData.lastImport = toDateString(ld.importData.lastImport)
+    }
+    if (ld.created) {
+      ld.created = toDateString(ld.created)
+    }
+    if (ld.notificationTokens?.length) {
+      ld.notificationTokens = ld.notificationTokens.map((device) => ({
+        ...device,
+        dateCreated: toDateString(device.dateCreated),
+      })) as any
+    }
+    localStorage.setItem('userProfile', JSON.stringify(ld))
+    if (setProfileLoaded) {
+      localStorage.setItem('profileLoaded', new Date().toISOString())
+    }
+  }
+
   const forceRefresh = async () => {
     const data = await firebase.app
       .firestore()
@@ -100,16 +124,7 @@ export const UserDataProvider = ({
     setUserData(data as IUserProfile)
     setSpotifyToken(data?.accessToken)
     setLastRefresh(data?.accessTokenRefresh.toDate())
-    const ld = cloneDeep(data)
-    ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-    if (ld.importData?.lastImport) {
-      ld.importData.lastImport = toDateString(ld.importData.lastImport)
-    }
-    if (ld.created) {
-      ld.created = toDateString(ld.created)
-    }
-    localStorage.setItem('userProfile', JSON.stringify(ld))
-    localStorage.setItem('profileLoaded', new Date().toISOString())
+    setUserDataIntoLocalStorage(data)
   }
 
   const startSub = () => {
@@ -125,16 +140,7 @@ export const UserDataProvider = ({
             setSpotifyToken(data?.accessToken)
             setLastRefresh(data?.accessTokenRefresh.toDate())
             setUserData(data as IUserProfile)
-            const ld = cloneDeep(data) as IUserProfile
-            ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-            if (ld.importData?.lastImport) {
-              ld.importData.lastImport = toDateString(ld.importData?.lastImport)
-            }
-            if (ld.created) {
-              ld.created = toDateString(ld.created)
-            }
-            localStorage.setItem('userProfile', JSON.stringify(ld))
-            localStorage.setItem('profileLoaded', new Date().toISOString())
+            setUserDataIntoLocalStorage(data as IUserProfile)
           }
         })
       _firestoreLog('subscription started.')
@@ -178,6 +184,15 @@ export const UserDataProvider = ({
           if (localData.created) {
             localData.created = toTimestamp(localData.created)
           }
+          if (localData.notificationTokens?.length) {
+            // @ts-ignore
+            localData.notificationTokens = localData.notificationTokens.map(
+              (device) => ({
+                ...device,
+                dateCreated: toTimestamp(device.dateCreated),
+              })
+            )
+          }
           setUserData(localData)
           setSpotifyToken(localData?.accessToken)
           setLastRefresh(localData.accessTokenRefresh.toDate())
@@ -197,24 +212,13 @@ export const UserDataProvider = ({
                 setUserData(data as IUserProfile)
                 setSpotifyToken(data?.accessToken)
                 setLastRefresh(data?.accessTokenRefresh.toDate())
-                const ld = cloneDeep(data)
-                ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-                if (ld.importData?.lastImport) {
-                  ld.importData.lastImport = toDateString(
-                    ld.importData.lastImport
-                  )
-                }
-                if (ld.created) {
-                  ld.created = toDateString(ld.created)
-                }
-                localStorage.setItem('userProfile', JSON.stringify(ld))
-                localStorage.setItem('profileLoaded', new Date().toISOString())
+                setUserDataIntoLocalStorage(data)
+                GoogleAnalytics.event({
+                  category: 'Cache',
+                  action: 'Pulled new data to refresh stale cache',
+                  label: 'Stale Cache',
+                })
               }
-              GoogleAnalytics.event({
-                category: 'Cache',
-                action: 'Pulled new data to refresh stale cache',
-                label: 'Stale Cache',
-              })
             })
         }
         GoogleAnalytics.set({ userId: currentUser?.uid || '' })
@@ -231,18 +235,7 @@ export const UserDataProvider = ({
               setUserData(data as IUserProfile)
               setSpotifyToken(data?.accessToken)
               setLastRefresh(data?.accessTokenRefresh.toDate())
-              const ld = cloneDeep(data)
-              ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-              if (ld.importData?.lastImport) {
-                ld.importData.lastImport = toDateString(
-                  ld.importData.lastImport
-                )
-              }
-              if (ld.created) {
-                ld.created = toDateString(ld.created)
-              }
-              localStorage.setItem('userProfile', JSON.stringify(ld))
-              localStorage.setItem('profileLoaded', new Date().toISOString())
+              setUserDataIntoLocalStorage(data)
             }
           })
       }
@@ -344,17 +337,7 @@ export const UserDataProvider = ({
                     setSpotifyToken(freshUserData.accessToken)
                     setLastRefresh(freshUserData.accessTokenRefresh.toDate())
                     setGetMePassed(true)
-                    const ld = cloneDeep(freshUserData)
-                    ld.accessTokenRefresh = toDateString(ld.accessTokenRefresh)
-                    if (ld.importData?.lastImport) {
-                      ld.importData.lastImport = toDateString(
-                        ld.importData.lastImport
-                      )
-                    }
-                    if (ld.created) {
-                      ld.created = toDateString(ld.created)
-                    }
-                    localStorage.setItem('userProfile', JSON.stringify(ld))
+                    setUserDataIntoLocalStorage(freshUserData)
                     setUserData({
                       ...freshUserData,
                     })
@@ -371,19 +354,10 @@ export const UserDataProvider = ({
                           setLastRefresh(new Date())
                           const ld = cloneDeep(userData)
                           ld.accessToken = token
-                          ld.accessTokenRefresh = (new Date().toISOString() as unknown) as firebase.firestore.Timestamp
-                          if (ld.importData?.lastImport) {
-                            ld.importData.lastImport = toDateString(
-                              ld.importData.lastImport
-                            )
-                          }
-                          if (ld.created) {
-                            ld.created = toDateString(ld.created)
-                          }
-                          localStorage.setItem(
-                            'userProfile',
-                            JSON.stringify(ld)
+                          ld.accessTokenRefresh = firestore.Timestamp.fromDate(
+                            new Date()
                           )
+                          setUserDataIntoLocalStorage(ld, false)
                           setUserData({
                             ...userData,
                             accessToken: token,
@@ -391,6 +365,7 @@ export const UserDataProvider = ({
                               new Date()
                             ) as firebase.firestore.Timestamp,
                           })
+                          setLastRefresh(new Date())
                           GoogleAnalytics.event({
                             category: 'Cache',
                             action:
@@ -422,22 +397,12 @@ export const UserDataProvider = ({
                 setLastRefresh(new Date())
                 const ld = cloneDeep(userData)
                 ld.accessToken = token
-                ld.accessTokenRefresh = (new Date().toISOString() as unknown) as firebase.firestore.Timestamp
-                if (ld.importData?.lastImport) {
-                  ld.importData.lastImport = toDateString(
-                    ld.importData.lastImport
-                  )
-                }
-                if (ld.created) {
-                  ld.created = toDateString(ld.created)
-                }
-                localStorage.setItem('userProfile', JSON.stringify(ld))
+                ld.accessTokenRefresh = firestore.Timestamp.fromDate(new Date())
+                setUserDataIntoLocalStorage(ld, false)
                 setUserData({
                   ...userData,
                   accessToken: token,
-                  accessTokenRefresh: firestore.Timestamp.fromDate(
-                    new Date()
-                  ) as firebase.firestore.Timestamp,
+                  accessTokenRefresh: firestore.Timestamp.fromDate(new Date()),
                 })
                 _spotifyLog('token refreshed.')
                 GoogleAnalytics.event({
@@ -448,7 +413,7 @@ export const UserDataProvider = ({
               }
             })
         }
-      }, 60e3)
+      }, 120e3)
       return () => {
         clearInterval(ref)
       }

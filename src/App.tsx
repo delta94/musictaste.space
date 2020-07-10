@@ -6,6 +6,7 @@ import { ToastProvider } from 'react-toast-notifications'
 import AppWideToast from './AppWideToast'
 import About from './components/AboutView/About'
 import PrivacyPolicy from './components/AboutView/PrivacyPolicy'
+import Account from './components/AccountView'
 import Compatibility from './components/CompatibilityView/Compatibility'
 import Dashboard from './components/DashboardView/Dashboard'
 import DeleteAccountView from './components/DeleteAccountView/DeleteAccountView'
@@ -152,6 +153,11 @@ export default function SpotifyCompatibility() {
                       exact={true}
                       path="/lockdown"
                       component={withTracker(Lockdown)}
+                    />
+                    <Route
+                      exact={true}
+                      path="/account"
+                      component={withTracker(Account)}
                     />
                   </div>
                 </Router>
