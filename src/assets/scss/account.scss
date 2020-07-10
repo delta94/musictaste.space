@@ -224,6 +224,16 @@ $button-good: #15cd72;
       background: 0 0;
     }
   }
+
+  &.good-muted {
+    border: 1px solid $button-good;
+    color: $button-good;
+    &:hover {
+      background: $button-good;
+      border: 1px solid $button-good;
+      color: #fff;
+    }
+  }
 }
 span.view-hide {
   cursor: pointer;
