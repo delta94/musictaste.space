@@ -32,15 +32,17 @@ const Account = () => {
     setCacheCleared(true)
   }
 
+  const tokens = userData?.notificationTokens
+
   useEffect(() => {
-    if (userData?.notificationTokens) {
-      for (const device of userData.notificationTokens) {
+    if (tokens) {
+      for (const device of tokens) {
         if (device.title === navigator.userAgent) {
           setDeviceRegistered(true)
         }
       }
     }
-  }, [userData?.notificationTokens])
+  }, [tokens])
 
   const deleteAccount = () => {
     history.push('/account/delete')

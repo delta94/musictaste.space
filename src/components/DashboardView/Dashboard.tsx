@@ -118,7 +118,6 @@ export const Me = () => {
     }
   }, [importDataExists, addToast])
 
-  console.log(importStatus)
   useEffect(() => {
     if (
       importStatus.exists &&
