@@ -45,6 +45,9 @@ export const ServiceWorkerProvider = ({
 
   useEffect(() => {
     serviceWorker.register(config)
+  }, [config])
+
+  useEffect(() => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register(`${window.location.origin}/firebase-messaging-sw.js`)
@@ -55,7 +58,8 @@ export const ServiceWorkerProvider = ({
           console.log('Service worker registration failed, error:', err)
         })
     }
-  }, [config])
+  }, [])
+
   return (
     <ServiceWorker.Provider
       value={{
