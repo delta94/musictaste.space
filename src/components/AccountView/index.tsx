@@ -153,7 +153,7 @@ const Account = () => {
                       {!deviceRegistered ? (
                         <motion.button
                           animate={true}
-                          onClick={disableNotifications}
+                          onClick={enableNotifications}
                           className="do-button good-muted"
                         >
                           Register This Device

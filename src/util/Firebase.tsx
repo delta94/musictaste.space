@@ -398,6 +398,11 @@ class Firebase {
           }
         }
         currentTokens.splice(index, 1)
+        currentTokens.push({
+          token,
+          dateCreated: firestore.Timestamp.fromDate(new Date()),
+          title: navigator.userAgent,
+        })
       } else {
         currentTokens = [
           {
