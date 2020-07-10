@@ -128,6 +128,7 @@ $button-good: #15cd72;
         text-align: center;
       }
       #display-name {
+        text-align: center;
         color: $default-color !important;
         font-weight: 600;
         font-size: 2em;
@@ -221,6 +222,16 @@ $button-good: #15cd72;
       border: 1px solid $button-good;
       color: $button-good;
       background: 0 0;
+    }
+  }
+
+  &.good-muted {
+    border: 1px solid $button-good;
+    color: $button-good;
+    &:hover {
+      background: $button-good;
+      border: 1px solid $button-good;
+      color: #fff;
     }
   }
 }

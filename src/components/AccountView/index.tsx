@@ -1,7 +1,7 @@
 import format from 'date-fns/format'
 import formatDistance from 'date-fns/formatDistance'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { Helmet } from 'react-helmet'
 import { useHistory } from 'react-router-dom'
@@ -22,6 +22,7 @@ const Account = () => {
 
   const [cacheCleared, setCacheCleared] = useState(false)
 
+  const [deviceRegistered, setDeviceRegistered] = useState(false)
   const [viewDevices, setViewDevices] = useState(false)
 
   const [showDebug, setShowDebug] = useState(false)
@@ -30,6 +31,18 @@ const Account = () => {
     addToast('Cache cleared 👍. Refresh the page.', { appearance: 'success' })
     setCacheCleared(true)
   }
+
+  const tokens = userData?.notificationTokens
+
+  useEffect(() => {
+    if (tokens) {
+      for (const device of tokens) {
+        if (device.title === navigator.userAgent) {
+          setDeviceRegistered(true)
+        }
+      }
+    }
+  }, [tokens])
 
   const deleteAccount = () => {
     history.push('/account/delete')
@@ -137,6 +150,16 @@ const Account = () => {
                       >
                         Disable Notifications
                       </motion.button>
+                      {!deviceRegistered ? (
+                        <motion.button
+                          animate={true}
+                          onClick={disableNotifications}
+                          className="do-button good-muted"
+                        >
+                          Register This Device
+                        </motion.button>
+                      ) : null}
+
                       <p className="text-center m1">
                         Number of devices subscribed:{' '}
                         <strong>{userData.notificationTokens?.length}</strong>.

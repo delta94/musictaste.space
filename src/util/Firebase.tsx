@@ -381,8 +381,8 @@ class Firebase {
   public async requestNotificationPermission(uid: string) {
     return this.messaging.requestPermission().then(async () => {
       const token = await this.messaging.getToken()
-      console.log('token', token)
-      const currentTokens = await this.app
+      console.log('[Notifications 📲] token:', token)
+      let currentTokens = await this.app
         .firestore()
         .collection('users')
         .doc(uid)
@@ -398,13 +398,16 @@ class Firebase {
           }
         }
         currentTokens.splice(index, 1)
-        currentTokens.push({
-          token,
-          dateCreated: firestore.Timestamp.fromDate(new Date()),
-          title: navigator.userAgent,
-        })
+      } else {
+        currentTokens = [
+          {
+            token,
+            dateCreated: firestore.Timestamp.fromDate(new Date()),
+            title: navigator.userAgent,
+          },
+        ]
       }
-      console.log('writing', currentTokens)
+      console.log('[Notifications 📲] writing:', currentTokens)
       await this.app.firestore().collection('users').doc(uid).set(
         {
           notificationTokens: currentTokens,
