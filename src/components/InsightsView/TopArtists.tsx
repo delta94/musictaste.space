@@ -93,6 +93,9 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
                   className="artist-image"
                   style={{
                     backgroundImage: `url(${artists[0].images[0]?.url})`,
+                    width: '100%',
+                    paddingBottom: '100%',
+                    backgroundSize: 'cover',
                   }}
                 />
               </div>
@@ -192,4 +195,4 @@ const TopArtists = ({ artists, loaded }: TopArtistProps) => {
     </div>
   )
 }
-export default TopArtists
+export default React.memo(TopArtists)
