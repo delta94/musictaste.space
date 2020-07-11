@@ -34,6 +34,7 @@ const MatchCard = ({
   const { spotifyToken } = useContext(UserDataContext)
   const [bgImageURL, setBgImageURL] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
   const toggleModal = () => setModalOpen(!modalOpen)
   const data = matchData
 
@@ -49,6 +50,8 @@ const MatchCard = ({
         spotify.getTrack(data.bgCode.id).then((res) => {
           setBgImageURL(res.album.images[0]?.url)
         })
+      } else {
+        setLoading(false)
       }
     }
   }, [data, spotifyToken])
@@ -77,6 +80,7 @@ const MatchCard = ({
             setTextColor(t.hex())
             setGradientColor(c.hex())
             setAltTextColor(palette.DarkVibrant.hex)
+            setLoading(false)
           }
         })
     }
@@ -117,70 +121,74 @@ const MatchCard = ({
         // @ts-ignore
         deleteMatch={onRemove}
       />
-      <motion.div className="a-match" animate={true}>
-        <div className="text-div">
-          {data.anon ? (
-            <i
-              className="fas fa-user-secret anon-profile"
-              aria-hidden="true"
-              style={{ color: altTextColor }}
-            />
-          ) : (
+      {!loading ? (
+        <motion.div className="a-match" animate={true}>
+          <div className="text-div">
+            {data.anon ? (
+              <i
+                className="fas fa-user-secret anon-profile"
+                aria-hidden="true"
+                style={{ color: altTextColor }}
+              />
+            ) : (
+              <div
+                className="profile-img-div"
+                style={{ backgroundImage: `url(${data.photoURL})` }}
+                onClick={onClick}
+              />
+            )}
+
+            <div className="text-stack" onClick={onClick}>
+              <p className="displayName" style={{ color: textColor }}>
+                {data.displayName}
+              </p>
+              <p
+                className="displayName"
+                style={{ color: textColor, fontSize: '1em', marginTop: '-5px' }}
+              >
+                {formatDistance(data.matchDate.toDate(), new Date())} ago
+              </p>
+            </div>
+            <div className="profile-code" onClick={onClick}>
+              {data.anon ? <></> : matchId}
+            </div>
             <div
-              className="profile-img-div"
-              style={{ backgroundImage: `url(${data.photoURL})` }}
+              className="score"
+              style={{
+                color: altTextColor,
+                textShadow: '0 0 15px ' + gradientColor.toString(),
+              }}
+              onClick={onClick}
+            >
+              {(data.score * 100).toFixed(0)}
+            </div>
+
+            <i
+              className="fas fa-chevron-right arrow"
+              aria-hidden="true"
+              style={{ color: textColor }}
               onClick={onClick}
             />
-          )}
-
-          <div className="text-stack" onClick={onClick}>
-            <p className="displayName" style={{ color: textColor }}>
-              {data.displayName}
-            </p>
-            <p
-              className="displayName"
-              style={{ color: textColor, fontSize: '1em', marginTop: '-5px' }}
+          </div>
+          {onRemove ? (
+            <div
+              className="trash-container d-flex align-items-center justify-content-center"
+              onClick={quickDelete ? onRemove : toggleModal}
             >
-              {formatDistance(data.matchDate.toDate(), new Date())} ago
-            </p>
+              <i
+                style={{ color: textColor }}
+                className="far fa-trash-alt trash"
+              />
+            </div>
+          ) : null}
+          <BgColorDiv className="bg-color" onClick={onClick} />
+          <div className="bg-img-div">
+            <img className="bg-img" src={bgImageURL} alt="" />
           </div>
-          <div className="profile-code" onClick={onClick}>
-            {data.anon ? <></> : matchId}
-          </div>
-          <div
-            className="score"
-            style={{
-              color: altTextColor,
-              textShadow: '0 0 15px ' + gradientColor.toString(),
-            }}
-            onClick={onClick}
-          >
-            {(data.score * 100).toFixed(0)}
-          </div>
-
-          <i
-            className="fas fa-chevron-right arrow"
-            aria-hidden="true"
-            style={{ color: textColor }}
-            onClick={onClick}
-          />
-        </div>
-        {onRemove ? (
-          <div
-            className="trash-container d-flex align-items-center justify-content-center"
-            onClick={quickDelete ? onRemove : toggleModal}
-          >
-            <i
-              style={{ color: textColor }}
-              className="far fa-trash-alt trash"
-            />
-          </div>
-        ) : null}
-        <BgColorDiv className="bg-color" onClick={onClick} />
-        <div className="bg-img-div">
-          <img className="bg-img" src={bgImageURL} alt="" />
-        </div>
-      </motion.div>
+        </motion.div>
+      ) : (
+        <motion.div className="a-match loading-animation" animate={true} />
+      )}
     </>
   )
 }

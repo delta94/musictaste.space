@@ -1,5 +1,5 @@
 import { Timestamp } from '@firebase/firestore-types'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import React, { useContext, useEffect, useState } from 'react'
 import GoogleAnalytics from 'react-ga'
 import { useHistory } from 'react-router-dom'
@@ -17,7 +17,7 @@ const MatchContainer = () => {
   const [matches, setMatches] = useState<Array<[string, IPreviewMatchData]>>([])
   const [morePages, setMorePages] = useState(false)
   const { currentUser } = useContext(AuthContext)
-  const { userData } = useContext(UserDataContext)
+  const { userData, matchesExist } = useContext(UserDataContext)
   const { addToast } = useToasts()
   const [loadPage, setLoadPage] = useState(0)
   const [lastPage, setLastPage] = useState(0)
@@ -29,7 +29,6 @@ const MatchContainer = () => {
     const loadMatches = async (user: IUserProfile) => {
       const LIMIT = 10
       if (user.importData && user.importData.exists) {
-        setLoading(true)
         if (!MDP) {
           const latestMatch = await Firebase.app
             .firestore()
@@ -60,6 +59,7 @@ const MatchContainer = () => {
       }
     }
     if (loadPage !== lastPage && !loading && userData) {
+      setLoading(true)
       loadMatches(userData)
     }
   }, [loadPage, userData, currentUser, matches, lastPage, loading, MDP])
@@ -86,7 +86,6 @@ const MatchContainer = () => {
       autoDismiss: true,
     })
   }
-
   const handleLoadMore = () => {
     setLoadPage(loadPage + 1)
   }
@@ -147,13 +146,46 @@ const MatchContainer = () => {
           <div className="d-flex flex-row">
             <div className="trash-container d-flex align-items-center justify-content-center">
               <i
+                id="notification-icon"
+                style={{
+                  color: '#16264c',
+                  fontSize: '1.5em',
+                  transition: '0.1s',
+                }}
+                className="far fa-bell trash ml-1 mr-2"
+              />
+              <UncontrolledTooltip
+                placement="bottom"
+                target="notification-icon"
+                delay={0}
+              >
+                Receive notifications for new matches
+              </UncontrolledTooltip>
+              <Switch
+                checked={!!userData?.notifications}
+                onChange={() => history.push('/account')}
+                onColor="#3c6382"
+                onHandleColor="#2c3e50"
+                handleDiameter={25}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                height={20}
+                width={40}
+                className="react-switch"
+                id="auto-delete-switch"
+              />
+            </div>
+            <div className="trash-container d-flex align-items-center justify-content-center">
+              <i
                 id="auto-delete-icon"
                 style={{
                   color: quickDelete ? '#c0392b' : '#16264c',
                   fontSize: '1.5em',
                   transition: '0.1s',
                 }}
-                className="far fa-trash-alt trash ml-1 mr-3"
+                className="far fa-trash-alt trash ml-3 mr-2"
               />
               <UncontrolledTooltip
                 placement="bottom"
@@ -182,40 +214,60 @@ const MatchContainer = () => {
         </div>
       </div>
       <div className="matches">
-        <motion.div className="matches-container" animate={true}>
-          {matches.length ? (
-            matches.map(([id, match]) => {
-              if (match) {
-                return (
-                  <MatchCard
-                    matchData={match}
-                    matchId={id}
-                    key={id}
-                    quickDelete={quickDelete}
-                    onRemove={removeMatch(id, match.displayName)}
-                    onClick={onCardClick(match.matchId, match.matchDate, id)}
-                  />
-                )
-              }
-              return null
-            })
-          ) : (
-            <div className="pl-3 pr-3 text-center animated fadeInUp delay-2s">
+        {matchesExist && matches.length ? (
+          <>
+            <AnimatePresence>
+              <motion.div className="matches-container" animate={true}>
+                {matches.length
+                  ? matches.map(([id, match]) => {
+                      if (match) {
+                        return (
+                          <MatchCard
+                            matchData={match}
+                            matchId={id}
+                            key={id}
+                            quickDelete={quickDelete}
+                            onRemove={removeMatch(id, match.displayName)}
+                            onClick={onCardClick(
+                              match.matchId,
+                              match.matchDate,
+                              id
+                            )}
+                          />
+                        )
+                      }
+                      return null
+                    })
+                  : null}
+              </motion.div>
+            </AnimatePresence>
+            {morePages ? (
+              <div className="load-more">
+                <Button
+                  className="btn-round sign-in-button"
+                  size="lg"
+                  onClick={handleLoadMore}
+                >
+                  Load More
+                </Button>
+              </div>
+            ) : null}
+          </>
+        ) : loading ? (
+          <div
+            style={{ height: '40vh' }}
+            className="w-100 pb-3 matches-container loading-animation"
+          />
+        ) : (
+          <div
+            style={{ height: '30vh' }}
+            className="w-100 pb-3 matches-container bg-light"
+          >
+            <div className="pl-3 pr-3 d-flex h-100 w-100 justify-content-center align-items-center text-center animated fadeInUp">
               If you had matches, they would appear here. Get machin&apos;!
             </div>
-          )}
-        </motion.div>
-        {morePages ? (
-          <div className="load-more">
-            <Button
-              className="btn-round sign-in-button"
-              size="lg"
-              onClick={handleLoadMore}
-            >
-              Load More
-            </Button>
           </div>
-        ) : null}
+        )}
       </div>
     </>
   )
