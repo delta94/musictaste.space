@@ -80,6 +80,11 @@ class MatchDataProvider {
     if (this.matches.length >= count) {
       this.morePages = true
     }
+    if (this.matches.length) {
+      localStorage.setItem('matchesExist', '1')
+    } else {
+      localStorage.removeItem('matchesExist')
+    }
     return this.matches.slice(0, this.requestLength)
   }
 
@@ -181,12 +186,6 @@ class MatchDataProvider {
         .toDate()
         .toISOString() as unknown) as firebase.firestore.Timestamp
     })
-
-    if (cd.length) {
-      localStorage.setItem('matchesExist', '1')
-    } else {
-      localStorage.removeItem('matchesExist')
-    }
     _log('wrote', cd?.length, 'matches to storage.')
     const arrOfStr = cd.map((m) => JSON.stringify(m))
     const arrStr = JSON.stringify(arrOfStr)
