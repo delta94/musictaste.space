@@ -33,7 +33,7 @@ interface IUserData extends DocumentData {
 
 class Firebase {
   public app: firebase.app.App
-  public messaging: firebase.messaging.Messaging
+  public messaging: null | firebase.messaging.Messaging
   private functions: {
     httpsCallable: (s: string) => firebase.functions.HttpsCallable
   }
@@ -54,7 +54,9 @@ class Firebase {
       functions.useFunctionsEmulator('http://localhost:5001')
       this.functions = functions
     }
-    this.messaging = this.app.messaging()
+    this.messaging = firebase.messaging.isSupported()
+      ? this.app.messaging()
+      : null
   }
 
   /**
@@ -379,50 +381,57 @@ class Firebase {
    * @param uid user's musictaste uid
    */
   public async requestNotificationPermission(uid: string) {
-    return this.messaging.requestPermission().then(async () => {
-      const token = await this.messaging.getToken()
-      console.log('[Notifications 📲] token:', token)
-      let currentTokens = await this.app
-        .firestore()
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((d) => d.data() as IUserProfile)
-        .then((profile) => profile.notificationTokens)
+    if (this.messaging) {
+      return this.messaging.requestPermission().then(async () => {
+        if (!this.messaging) {
+          throw Error('Unsupported browser.')
+        }
+        const token = await this.messaging.getToken()
+        console.log('[Notifications 📲] token:', token)
+        let currentTokens = await this.app
+          .firestore()
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then((d) => d.data() as IUserProfile)
+          .then((profile) => profile.notificationTokens)
 
-      if (currentTokens) {
-        let index = -1
-        for (const [i, device] of Array.from(currentTokens.entries())) {
-          if (device.title === navigator.userAgent) {
-            index = i
+        if (currentTokens) {
+          let index = -1
+          for (const [i, device] of Array.from(currentTokens.entries())) {
+            if (device.title === navigator.userAgent) {
+              index = i
+            }
           }
-        }
-        if (index !== -1) {
-          currentTokens.splice(index, 1)
-        }
-        currentTokens.push({
-          token,
-          dateCreated: firestore.Timestamp.fromDate(new Date()),
-          title: navigator.userAgent,
-        })
-      } else {
-        currentTokens = [
-          {
+          if (index !== -1) {
+            currentTokens.splice(index, 1)
+          }
+          currentTokens.push({
             token,
             dateCreated: firestore.Timestamp.fromDate(new Date()),
             title: navigator.userAgent,
+          })
+        } else {
+          currentTokens = [
+            {
+              token,
+              dateCreated: firestore.Timestamp.fromDate(new Date()),
+              title: navigator.userAgent,
+            },
+          ]
+        }
+        console.log('[Notifications 📲] writing:', currentTokens)
+        await this.app.firestore().collection('users').doc(uid).set(
+          {
+            notificationTokens: currentTokens,
+            notifications: true,
           },
-        ]
-      }
-      console.log('[Notifications 📲] writing:', currentTokens)
-      await this.app.firestore().collection('users').doc(uid).set(
-        {
-          notificationTokens: currentTokens,
-          notifications: true,
-        },
-        { merge: true }
-      )
-    })
+          { merge: true }
+        )
+      })
+    } else {
+      throw Error('Unsupported browser.')
+    }
   }
 
   public async disableNotifications(uid: string) {

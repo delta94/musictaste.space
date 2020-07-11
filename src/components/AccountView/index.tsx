@@ -150,7 +150,7 @@ const Account = () => {
                       >
                         Disable Notifications
                       </motion.button>
-                      {!deviceRegistered ? (
+                      {!deviceRegistered && firebase.messaging ? (
                         <motion.button
                           animate={true}
                           onClick={enableNotifications}
@@ -158,8 +158,11 @@ const Account = () => {
                         >
                           Register This Device
                         </motion.button>
-                      ) : null}
-
+                      ) : (
+                        <motion.div className="text-center m-3">
+                          This browser does not support notifications.
+                        </motion.div>
+                      )}
                       <p className="text-center m1">
                         Number of devices subscribed:{' '}
                         <strong>{userData.notificationTokens?.length}</strong>.
