@@ -260,7 +260,7 @@ const MatchContainer = () => {
           />
         ) : (
           <div
-            style={{ height: '30vh' }}
+            style={{ height: '30vh', overflow: 'hidden' }}
             className="w-100 pb-3 matches-container bg-light"
           >
             <div className="pl-3 pr-3 d-flex h-100 w-100 justify-content-center align-items-center text-center animated fadeInUp">
