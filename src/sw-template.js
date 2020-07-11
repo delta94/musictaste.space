@@ -51,36 +51,37 @@ workbox.routing.registerNavigationRoute(
 )
 
 firebase.initializeApp(firebaseConfig)
+if (firebase.messaging.isSupported()) {
+  const messaging = firebase.messaging()
 
-const messaging = firebase.messaging()
+  messaging.setBackgroundMessageHandler(function (payload) {
+    console.log(
+      '[firebase-messaging-sw.js] Received background message ',
+      JSON.stringify(payload)
+    )
+    const notificationTitle = payload.data.title
+    const notificationOptions = {
+      actions: [{ action: 'view', title: 'View' }],
+      body: payload.data.body,
+      icon: payload.data.icon,
+      requireInteraction: true,
+      data: { type: payload.data.type, payload: payload.data.payload },
+    }
 
-messaging.setBackgroundMessageHandler(function (payload) {
-  console.log(
-    '[firebase-messaging-sw.js] Received background message ',
-    JSON.stringify(payload)
-  )
-  const notificationTitle = payload.data.title
-  const notificationOptions = {
-    actions: [{ action: 'view', title: 'View' }],
-    body: payload.data.body,
-    icon: payload.data.icon,
-    requireInteraction: true,
-    data: { type: payload.data.type, payload: payload.data.payload },
-  }
+    return self.registration.showNotification(
+      notificationTitle,
+      notificationOptions
+    )
+  })
 
-  return self.registration.showNotification(
-    notificationTitle,
-    notificationOptions
-  )
-})
+  self.addEventListener('notificationclick', function (event) {
+    console.log('EVENT', event.notification.data)
+    const data = event.notification.data
+    const notification = event.notification
 
-self.addEventListener('notificationclick', function (event) {
-  console.log('EVENT', event.notification.data)
-  const data = event.notification.data
-  const notification = event.notification
-
-  if (data.type === 'NEW_MATCH') {
-    notification.close()
-    clients.openWindow(`/match/${data.payload}`)
-  }
-})
+    if (data.type === 'NEW_MATCH') {
+      notification.close()
+      clients.openWindow(`/match/${data.payload}`)
+    }
+  })
+}
