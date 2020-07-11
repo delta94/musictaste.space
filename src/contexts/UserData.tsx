@@ -32,6 +32,7 @@ export const UserDataContext = React.createContext<{
   forceRefresh: () => Promise<void> | null
   subExists: boolean
   importDataExists: boolean
+  matchesExist: boolean
 }>({
   spotifyToken: '',
   userData: null,
@@ -42,6 +43,7 @@ export const UserDataContext = React.createContext<{
   forceRefresh: () => null,
   subExists: false,
   importDataExists: true,
+  matchesExist: true,
 })
 
 const toTimestamp = (time: firebase.firestore.Timestamp) => {
@@ -75,6 +77,7 @@ export const UserDataProvider = ({
   const [getMeTried, setGetMeTried] = useState(false)
   const [importDataExists, setImportDataExists] = useState(true)
   const [subbedThisSession, setSubbedThisSession] = useState(false)
+  const [matchesExist, setMatchesExist] = useState(true)
   const subHandle = useRef(_subHandle)
   const tokenRef = useRef(spotifyToken)
   const lastRefreshRef = useRef(lastRefresh)
@@ -164,6 +167,7 @@ export const UserDataProvider = ({
       // check local storage
       const ls: null | string = localStorage.getItem('userProfile')
       const pl: null | string = localStorage.getItem('profileLoaded')
+      const matchExists = Boolean(localStorage.getItem('matchesExist'))
       if (ls && pl) {
         const profileLoaded = new Date(pl)
         const localData: IUserProfile = JSON.parse(ls)
@@ -197,6 +201,7 @@ export const UserDataProvider = ({
           setSpotifyToken(localData?.accessToken)
           setLastRefresh(localData.accessTokenRefresh.toDate())
           setFromCache(profileLoaded)
+          setMatchesExist(matchExists)
         } else {
           localStorage.removeItem('userProfile')
           localStorage.removeItem('profileLoaded')
@@ -432,6 +437,7 @@ export const UserDataProvider = ({
         forceRefresh,
         subExists: subStarted,
         importDataExists,
+        matchesExist,
       }}
     >
       {children}

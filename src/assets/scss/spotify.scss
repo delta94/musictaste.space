@@ -455,3 +455,31 @@ div.spotify-login {
     transform: scale(1.1);
   }
 }
+
+.loading-animation {
+  background: linear-gradient(
+    270deg,
+    #dff9fb,
+    #dff9fb,
+    #dff9fb,
+    #9fcfd2,
+    #dff9fb
+  );
+  background-size: 1000% 1000%;
+
+  -webkit-animation: AnimationName 1.5s ease infinite;
+  -moz-animation: AnimationName 1.5s ease infinite;
+  animation: AnimationName 1.5s ease infinite;
+}
+@keyframes AnimationName {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.bg-light {
+  background-color: #dff9fb;
+}

@@ -72,7 +72,7 @@ const Match = () => {
               action: 'Follow request link to existing match',
               label: 'Match Redirect',
             })
-            // history.push(`/match/${match.matchId}?r=1`)
+            history.push(`/match/${match.matchId}?r=1`)
           }
         }
       }

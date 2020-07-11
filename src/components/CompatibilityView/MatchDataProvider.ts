@@ -176,13 +176,17 @@ class MatchDataProvider {
   private writeMatchesToStorage() {
     // only store at most 200 matches to storage
     const cd = cloneDeep(this.matches).slice(0, 200)
-
     cd.forEach((m) => {
       m[1].matchDate = (m[1].matchDate
         .toDate()
         .toISOString() as unknown) as firebase.firestore.Timestamp
     })
 
+    if (cd.length) {
+      localStorage.setItem('matchesExist', '1')
+    } else {
+      localStorage.removeItem('matchesExist')
+    }
     _log('wrote', cd?.length, 'matches to storage.')
     const arrOfStr = cd.map((m) => JSON.stringify(m))
     const arrStr = JSON.stringify(arrOfStr)
