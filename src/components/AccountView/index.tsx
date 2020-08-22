@@ -23,6 +23,8 @@ const Account = () => {
   const [cacheCleared, setCacheCleared] = useState(false)
 
   const [deviceRegistered, setDeviceRegistered] = useState(false)
+  const [registrationLoading, setRegistrationLoading] = useState(false)
+
   const [viewDevices, setViewDevices] = useState(false)
 
   const [showDebug, setShowDebug] = useState(false)
@@ -55,6 +57,7 @@ const Account = () => {
 
   const enableNotifications = async () => {
     if (currentUser && userData) {
+      setRegistrationLoading(true)
       addToast(
         "Click the 'Allow' button on your window if it shows up to give permissions.",
         { appearance: 'info', autoDismiss: true }
@@ -75,6 +78,7 @@ const Account = () => {
             { appearance: 'error', autoDismiss: true }
           )
         })
+        .finally(() => setRegistrationLoading(false))
     }
   }
 
@@ -156,13 +160,15 @@ const Account = () => {
                           onClick={enableNotifications}
                           className="do-button good-muted"
                         >
-                          Register This Device
+                          {registrationLoading
+                            ? 'Please Wait'
+                            : 'Register This Device'}
                         </motion.button>
-                      ) : (
+                      ) : !firebase.messaging ? (
                         <motion.div className="text-center m-3">
                           This browser does not support notifications.
                         </motion.div>
-                      )}
+                      ) : null}
                       <p className="text-center m1">
                         Number of devices subscribed:{' '}
                         <strong>{userData.notificationTokens?.length}</strong>.
@@ -397,7 +403,7 @@ const Account = () => {
                             <br />
                             {process.env.VERCEL_GITHUB_COMMIT_SHA
                               ? process.env.VERCEL_GITHUB_COMMIT_SHA.slice(0, 6)
-                              : 'unknown'}
+                              : '🤷‍♂️'}
                           </p>
                         </div>
                       </div>
