@@ -141,7 +141,9 @@ const Match = () => {
         <meta name="keywords" content="spotify,music,match,compatibility" />
       </Helmet>
       <div className="match main-div">
-        {matchUser?.donor ? <Confetti width={width} height={height} /> : null}
+        {matchUser?.donor ? (
+          <Confetti width={width} height={height} numberOfPieces={50} />
+        ) : null}
         <div className="profile-container">
           {currentUser ? (
             <>
