@@ -35,9 +35,7 @@ import './assets/css/nucleo-icons.css'
 import './assets/scss/blk-design-system-react.scss'
 
 export default function SpotifyCompatibility() {
-  GoogleAnalytics.initialize(
-    process.env.REACT_APP_FIREBASE_MEASUREMENT_ID as string
-  )
+  GoogleAnalytics.initialize(process.env.REACT_APP_TRACKING_ID as string)
   const isMobile = window.matchMedia('only screen and (max-width: 350px)')
     .matches
   return (
